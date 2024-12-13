@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - ims-network
+
+  web:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - .:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    networks:
+      - ims-network
+
+  db:
+    image: mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=password
+      interval: 5s
+      retries: 5
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: smartfix_db  # Changed to smartfix_db
+      MYSQL_USER: ims
+      MYSQL_PASSWORD: password
+    ports:
+      - "3308:3306"  # Changed port to avoid conflicts
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/db/mariadb/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - ims-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "8082:80"
+    depends_on:
+      - db
+    networks:
+      - ims-network
+
+networks:
+  ims-network:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
