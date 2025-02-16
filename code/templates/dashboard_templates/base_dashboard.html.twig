@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+    <!-- AdminLTE & Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('dashboard/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        {% include 'dashboard_templates/components/navbar.html.twig' %}
+        {% include 'dashboard_templates/components/sidebar.html.twig' %}
+
+        <div class="content-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% include 'dashboard_templates/components/footer.html.twig' %}
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('dashboard/plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('dashboard/js/main.js') }}"></script>
+</body>
+</html>

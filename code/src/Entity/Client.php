@@ -1,0 +1,313 @@
+<?php
+
+namespace App\Entity;
+
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+#[ORM\Entity]
+#[ORM\InheritanceType("JOINED")]
+#[ORM\DiscriminatorColumn(name: "discr", type: "string")]
+#[ORM\DiscriminatorMap(["client" => "Client", "verifiedClient" => "VerifiedClient"])]
+#[ORM\Table(name: "clients")]
+class Client implements UserInterface
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: "integer")]
+    private int $id;
+
+    #[ORM\Column(type: "boolean")]
+    private bool $verificationStatus = false;
+
+    #[ORM\Column(type: "datetime_immutable")]
+    private \DateTimeImmutable $dateInscription;
+
+    #[ORM\Column(type: "integer")]
+    private int $loyaltyPoints = 0;
+
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
+    private Collection $reservations;
+
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
+    private Collection $reviews;
+
+    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: "client")]
+    private Collection $vehicules;
+
+    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "client")]
+    private Collection $critiques;
+
+    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: "client")]
+    private Collection $carts;
+
+    #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
+    private Collection $complaints;
+
+    #[ORM\Column(type: "string", length: 255)]
+    private string $address;
+
+    #[ORM\Column(type: "string", length: 255)]
+    private string $name;
+
+    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: "client")]
+    private Collection $cars;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Vehicule", inversedBy="reservations")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $vehicule;
+
+    public function __construct()
+    {
+        $this->dateInscription = new \DateTimeImmutable();
+        $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+        $this->vehicules = new ArrayCollection();
+        $this->critiques = new ArrayCollection();
+        $this->carts = new ArrayCollection();
+        $this->complaints = new ArrayCollection();
+        $this->cars = new ArrayCollection();
+    }
+
+    public function getVerificationStatus(): bool
+    {
+        return $this->verificationStatus;
+    }
+
+    public function setVerificationStatus(bool $verificationStatus): self
+    {
+        $this->verificationStatus = $verificationStatus;
+        return $this;
+    }
+
+    public function getDateInscription(): \DateTimeImmutable
+    {
+        return $this->dateInscription;
+    }
+
+    public function setDateInscription(\DateTimeImmutable $dateInscription): self
+    {
+        $this->dateInscription = $dateInscription;
+        return $this;
+    }
+
+    public function getLoyaltyPoints(): int
+    {
+        return $this->loyaltyPoints;
+    }
+
+    public function setLoyaltyPoints(int $loyaltyPoints): self
+    {
+        $this->loyaltyPoints = $loyaltyPoints;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getClient() === $this) {
+                $review->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Vehicule[]
+     */
+    public function getVehicules(): Collection
+    {
+        return $this->vehicules;
+    }
+
+    public function addVehicule(Vehicule $vehicule): self
+    {
+        if (!$this->vehicules->contains($vehicule)) {
+            $this->vehicules[] = $vehicule;
+            $vehicule->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeVehicule(Vehicule $vehicule): self
+    {
+        if ($this->vehicules->removeElement($vehicule)) {
+            // set the owning side to null (unless already changed)
+            if ($vehicule->getClient() === $this) {
+                $vehicule->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Critique[]
+     */
+    public function getCritiques(): Collection
+    {
+        return $this->critiques;
+    }
+
+    public function addCritique(Critique $critique): self
+    {
+        if (!$this->critiques->contains($critique)) {
+            $this->critiques[] = $critique;
+            $critique->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeCritique(Critique $critique): self
+    {
+        if ($this->critiques->removeElement($critique)) {
+            // set the owning side to null (unless already changed)
+            if ($critique->getClient() === $this) {
+                $critique->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cart[]
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
+            $cart->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->removeElement($cart)) {
+            // set the owning side to null (unless already changed)
+            if ($cart->getClient() === $this) {
+                $cart->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Complaint[]
+     */
+    public function getComplaints(): Collection
+    {
+        return $this->complaints;
+    }
+
+    public function addComplaint(Complaint $complaint): self
+    {
+        if (!$this->complaints->contains($complaint)) {
+            $this->complaints[] = $complaint;
+            $complaint->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeComplaint(Complaint $complaint): self
+    {
+        if ($this->complaints->removeElement($complaint)) {
+            // set the owning side to null (unless already changed)
+            if ($complaint->getClient() === $this) {
+                $complaint->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Car[]
+     */
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars[] = $car;
+            $car->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeCar(Car $car): self
+    {
+        if ($this->cars->removeElement($car)) {
+            // set the owning side to null (unless already changed)
+            if ($car->getClient() === $this) {
+                $car->setClient(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
+    }
+}
