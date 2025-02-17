@@ -7,6 +7,13 @@
 /public/bundles/
 /var/
 /vendor/
+compose.yaml
+# Fichiers générés par Composer
+composer.lock
+symfony.lock
+
+# Fichiers de polices et CSS générés
+code/assets/fonts/bootstrap-icons-1.1/font/bootstrap-icons.min.css
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###
@@ -23,3 +30,10 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
