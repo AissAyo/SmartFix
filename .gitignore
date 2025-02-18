@@ -1,2 +1,8 @@
 .idea/
 .idea/code/.idea
+# Fichiers générés par Composer
+composer.lock
+symfony.lock
+
+# Fichiers de polices et CSS générés
+code/assets/fonts/bootstrap-icons-1.1/font/bootstrap-icons.min.css
