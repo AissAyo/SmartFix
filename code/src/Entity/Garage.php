@@ -39,4 +39,62 @@ class Garage
     }
 
     // Getters and setters for the properties
+    // Getter and Setter for $id
+    public function getId(): int
+    {
+        return $this->Id;
+    }
+    public function setId(int $Id): self
+    {
+         $this->Id = $Id;
+         return $this;
+    }
+
+    // Getter and Setter for $rating
+    public function getRating(): float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(float $rating): self
+    {
+        $this->rating = $rating;
+        return $this;
+    }
+
+    // Getter and Setter for $status
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    // Getter and Setter for $name
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    // Getter and Setter for $location
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): self
+    {
+        $this->location = $location;
+        return $this;
+    }
 }
