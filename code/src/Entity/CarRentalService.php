@@ -1,14 +1,14 @@
 <?php
 
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
-#[ORM\Entity]
+#[ORM\Entity] 
+#[ORM\Table(name: "car_rental_services")]  
 class CarRentalService extends Garagiste implements UserInterface
 {
    
@@ -44,16 +44,7 @@ class CarRentalService extends Garagiste implements UserInterface
         $this->vehicules = new ArrayCollection();
     }
 
-    public function getServiceId(): int
-    {
-        return $this->serviceId;
-    }
-
-    public function setServiceId(int $serviceId): self
-    {
-        $this->serviceId = $serviceId;
-        return $this;
-    }
+    
 
     public function getContactInfo(): string
     {
@@ -137,7 +128,7 @@ class CarRentalService extends Garagiste implements UserInterface
         return ['ROLE_USER'];
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return null; // Assuming CarRentalService does not have a password
     }

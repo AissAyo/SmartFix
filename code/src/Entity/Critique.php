@@ -27,22 +27,21 @@ class Critique
     #[ORM\JoinColumn(nullable: false)]
     private Service $service;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Garagiste")]
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Mechanic")]
     #[ORM\JoinColumn(nullable: false)]
-    private Garagiste $garagiste;
+    private mechanic $mechanic;
 
     #[ORM\OneToMany(targetEntity: "App\Entity\Comment", mappedBy: "critique")]
     private Collection $comments;
 
-    public function __construct(Client $client, Reservation $reservation, Service $service, Garagiste $garagiste)
-    {
-        $this->client = $client;
-        $this->reservation = $reservation;
-        $this->service = $service;
-        $this->garagiste = $garagiste;
-        $this->comments = new ArrayCollection();
-    }
-
+    public function __construct(Client $client, Reservation $reservation, Service $service, Mechanic $mechanic)
+{
+    $this->client = $client;
+    $this->reservation = $reservation;
+    $this->service = $service;
+    $this->mechanic = $mechanic;
+    $this->comments = new ArrayCollection();
+}
     public function addComment(Comment $comment): void
     {
         if (!$this->comments->contains($comment)) {

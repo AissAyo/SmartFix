@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class ServiceClient extends User implements UserInterface
 {
+
+    
     #[ORM\Column(type: 'string', length: 255)]
     private string $serviceDetails;
 

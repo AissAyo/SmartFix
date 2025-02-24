@@ -32,4 +32,7 @@ class Comment
         $this->content = $content;
         return $this;
     }
+    public function setCritique (Critique $critique){
+        
+    }
 }
