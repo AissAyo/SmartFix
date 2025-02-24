@@ -32,6 +32,11 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private Cart $cart;
 
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "products")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Order $order;
+
+
     public function getProductId(): int
     {
         return $this->productId;
