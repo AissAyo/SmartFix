@@ -19,9 +19,13 @@ class Car
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "cars")]
+    #[ORM\ManyToOne(targetEntity: CarRentalService::class, inversedBy: "cars")]
     #[ORM\JoinColumn(nullable: false)]
-    private Client $client;
+    private CarRentalService $carRentalService;
+    
+    #[ORM\OneToMany(targetEntity: Rental::class, mappedBy: "car")]
+    private Collection $rentals;
+
 
     public function getId(): int
     {

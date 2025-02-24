@@ -15,8 +15,9 @@ abstract class User
     #[ORM\Column(type: "string", length: 255)]
     protected string $username;
 
-    #[ORM\Column(type: "string", length: 255)]
-    protected string $password;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+
+    protected ?string $password = null;
 
     // Other common properties and methods for User
 }
