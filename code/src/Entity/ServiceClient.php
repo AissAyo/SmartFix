@@ -13,6 +13,16 @@ class ServiceClient extends User implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $serviceDetails;
 
+    #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
+    private Collection $complaints;
+
+
+    public function __construct()
+    {
+    $this->complaints = new ArrayCollection();
+    }
+
+
     public function getServiceDetails(): string
     {
         return $this->serviceDetails;

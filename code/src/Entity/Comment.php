@@ -15,6 +15,9 @@ class Comment
     #[ORM\Column(type: 'text')]
     private string $content;
 
+    #[ORM\ManyToOne(targetEntity: Critique::class, inversedBy: "comments")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Critique $critique;
     // Getters and setters...
 
     public function getId(): int

@@ -15,24 +15,28 @@ class Critique
     #[ORM\Column(type: "integer")]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Client")]
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "critiques")]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Reservation")]
+    #[ORM\ManyToOne(targetEntity: Reservation::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Reservation $reservation;
 
-    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'Critique')]
+    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'critiques')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Garage $garage;
+
+    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Mechanic $mechanic;
+
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "critique")]
+    private Collection $comments;
+
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'critiques')]
     #[ORM\JoinColumn(nullable: false)]
     private Service $service;
-
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Mechanic")]
-    #[ORM\JoinColumn(nullable: false)]
-    private mechanic $mechanic;
-
-    #[ORM\OneToMany(targetEntity: "App\Entity\Comment", mappedBy: "critique")]
-    private Collection $comments;
 
     public function __construct(Client $client, Reservation $reservation, Service $service, Mechanic $mechanic)
 {

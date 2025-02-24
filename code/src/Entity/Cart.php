@@ -20,6 +20,9 @@ class Cart
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'cart')]
     private Collection $products;
 
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Client $client;
     public function __construct()
     {
         $this->products = new ArrayCollection();

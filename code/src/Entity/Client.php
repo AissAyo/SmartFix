@@ -50,8 +50,6 @@ class Client extends User implements UserInterface
     
     private ?string $name = null;
 
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: "client")]
-    private Collection $cars;
 
     public function __construct()
     {
