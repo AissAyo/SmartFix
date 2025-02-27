@@ -14,6 +14,7 @@ class ServiceClient extends User implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $serviceDetails;
 
+<<<<<<< HEAD
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
@@ -22,7 +23,7 @@ class ServiceClient extends User implements UserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $tokenExpiration = null;
-
+=======
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
     private Collection $complaints;
 
@@ -32,6 +33,7 @@ class ServiceClient extends User implements UserInterface
     $this->complaints = new ArrayCollection();
     }
 
+>>>>>>> dev
 
     public function getServiceDetails(): string
     {
