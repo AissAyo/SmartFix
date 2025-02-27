@@ -11,12 +11,18 @@ abstract class User
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     protected int $id;
+    // Récupérer l'ID
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-    #[ORM\Column(type: "string", length: 255)]
-    protected string $username;
+// Définir l'ID
+    public function setId(int $id): self
+    {
+        $this->id = $id;
 
-    #[ORM\Column(type: "string", length: 255)]
-    protected string $password;
+        return $this;
+    }
 
-    // Other common properties and methods for User
 }

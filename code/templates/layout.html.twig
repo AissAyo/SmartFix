@@ -47,20 +47,8 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="wptb-header--cart">
-                        <a href="#" class="wptb-cart-icon wptb-person-icon"><i class="bi bi-person"></i></a>
-                        <div class="wptb-cart-box wptb-person-box">
-                            <div class="wptb-grand-total">
-                                <ul>
-                                    <li><a href="shop-product.html">Login</a> <span class="value"></span></li>
-                                    <li><a href="shop-product.html">My commands</a> <span class="value"></span></li>
-                                    <li><a href="shop-product.html">My reservations</a> <span class="value"></span></li>
+                    {{ render(controller("App\\Controller\\MenuController::userMenu")) }}
 
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="wptb-header--cart">
                         <a href="#" class="wptb-cart-icon wptb-cartt-icon"><i class="bi bi-cart"></i></a>
