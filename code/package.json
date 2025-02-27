@@ -6,6 +6,7 @@
     "core-js": "^3.38.0",
     "css-loader": "^7.1.2",
     "file-loader": "^6.2.0",
+    "ignore-loader": "^0.1.2",
     "pretty-error": "^4.0.0",
     "regenerator-runtime": "^0.13.9",
     "sass": "^1.85.0",

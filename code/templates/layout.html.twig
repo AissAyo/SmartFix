@@ -19,7 +19,7 @@
                 <!-- Left Part -->
                 <div class="header_left_part d-flex align-items-center">
                     <div class="logo">
-                        <a href="index.html" class="light_logo"><img src="{{ asset('img/logo.svg') }}" alt="logo"></a>
+                        <a href="{{ url('app_home') }}" class="light_logo">  <img src="{{ asset('build/img/logo.png') }}" alt="logo"></a>
                     </div>
                 </div>
 
@@ -122,59 +122,62 @@
 
 {% block menu %}
     <!-- Mobile Responsive Menu -->
-    <div class="mr_menu">
-        <button type="button" class="mr_menu_close"><i class="bi bi-x-lg"></i></button>
-        <div class="logo"></div> <!-- Keep this div empty. Logo will come here by JavaScript -->
-        <div class="mr_navmenu"></div> <!-- Keep this div empty. Menu will come here by JavaScript -->
-    </div>
-    <div class="aside_info_wrapper">
-        <button class="aside_close"><i class="bi bi-x-lg"></i></button>
-        <div class="aside_logo">
-            <a href="index.html"><img src="{{ asset('img/logo.svg') }}"alt="logo"></a>
-        </div>
-        <div class="aside_info_inner">
+  <!-- Mobile Responsive Menu -->
+		<div class="mr_menu">
+			<button type="button" class="mr_menu_close"><i class="bi bi-x-lg"></i></button>
+            <div class="logo"></div> <!-- Keep this div empty. Logo will come here by JavaScript -->
+			<div class="mr_navmenu"></div> <!-- Keep this div empty. Menu will come here by JavaScript -->
+		</div>
 
-            <p>When you bring your vehicle to Ducatibox Car Mechanic Center, you can rest easy knowing that your vehicle is in professional hands.</p>
+        <div class="aside_info_wrapper">
+			<button class="aside_close"><i class="bi bi-x-lg"></i></button>
+            <div class="aside_logo">
+<a href="{{ path('app_home') }}"><img src={{ asset('build/img/logo.png') }} alt="logo"></a>
+            </div>
+			<div class="aside_info_inner">
 
-            <div class="aside_info_inner_box">
-                <div class="wptb-office">
-                    <div class="wptb-item--inner">
-                        <div class="wptb-item--subtitle">
-                            Call Us Anytime
+                <p>When you bring your vehicle to SamrtFix Car Mechanic Center, you can rest easy knowing that your vehicle is in professional hands.</p>
+
+                <div class="aside_info_inner_box">
+                    <div class="wptb-office">
+                        <div class="wptb-item--inner">
+                            <div class="wptb-item--subtitle">
+                                Call Us Anytime
+                            </div>
+                            <h5 class="wptb-item--title"><a href="tel:+12345677345">+123 45677345</a></h5>
                         </div>
-                        <h5 class="wptb-item--title"><a href="tel:+12345677345">+123 45677345</a></h5>
                     </div>
-                </div>
 
-                <div class="wptb-office">
-                    <div class="wptb-item--inner">
-                        <div class="wptb-item--subtitle">
-                            SEND US MAIL
+                    <div class="wptb-office">
+                        <div class="wptb-item--inner">
+                            <div class="wptb-item--subtitle">
+                                SEND US MAIL
+                            </div>
+                            <h5 class="wptb-item--title"><a href="mailto:SamrtFixcar@email.com">SamrtFixcar@email.com</a></h5>
                         </div>
-                        <h5 class="wptb-item--title"><a href="mailto:ducatiboxcar@email.com">smartfix@email.com</a></h5>
                     </div>
-                </div>
 
-                <div class="wptb-office">
-                    <div class="wptb-item--inner">
-                        <div class="wptb-item--subtitle">
-                            VISIT OUR WORKSHOP
-                        </div>
-                        <h5 class="wptb-item--title"><a href="#">17110 116th Ave SE Unit A
+                    <div class="wptb-office">
+                        <div class="wptb-item--inner">
+                            <div class="wptb-item--subtitle">
+                                VISIT OUR WORKSHOP
+                            </div>
+                            <h5 class="wptb-item--title"><a href="#">17110 116th Ave SE Unit A
                                 Renton, WA 98058-5055</a></h5>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="social_sites">
-                <ul class="d-flex align-items-center">
-                    <li><a href="#"><i class="bi bi-facebook"></i></a></li>
-                    <li><a href="#"><i class="bi bi-twitter-x"></i></a></li>
-                    <li><a href="#"><i class="bi bi-instagram"></i></a></li>
-                    <li><a href="#"><i class="bi bi-linkedin"></i></a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
+                <div class="social_sites">
+                    <ul class="d-flex align-items-center">
+                        <li><a href="#"><i class="bi bi-facebook"></i></a></li>
+                        <li><a href="#"><i class="bi bi-twitter-x"></i></a></li>
+                        <li><a href="#"><i class="bi bi-instagram"></i></a></li>
+                        <li><a href="#"><i class="bi bi-linkedin"></i></a></li>
+                    </ul>
+                </div>
+			</div>
+		</div>
+        
 {% endblock %}
 
 
@@ -217,7 +220,7 @@
                             <div class="wptb-image-single wow fadeInUp d-none d-lg-block">
                                 <div class="wptb-item--inner">
                                     <div class="wptb-item--image">
-                                        <img src="{{ asset('img/more/1.png') }}"   alt="img">
+                                        <img src="{{ asset('build/img/more/1.png') }}"   alt="img">
                                     </div>
                                 </div>
                             </div>
@@ -247,7 +250,7 @@
                 <div class="row">
                     <div class="col-xl-3 mb-5 mb-xl-0">
                         <div class="logo mr-bottom-30">
-                            <a href="index.html" class=""><img src="{{ asset('img/logo.svg') }}"  alt="logo"></a>
+                            <a href="index.html" class=""><img src="{{ asset('build/img/logo.svg') }}"  alt="logo"></a>
                         </div>
 
                         <div class="wptb-icon-box1 footer-contact-style mr-bottom-30">

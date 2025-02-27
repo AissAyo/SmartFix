@@ -1,0 +1,25 @@
+{
+  "name": "smartfix",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ayoubaissaoui19.03/SmartFix.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/ayoubaissaoui19.03/SmartFix/issues"
+  },
+  "homepage": "https://gitlab.com/ayoubaissaoui19.03/SmartFix#readme",
+  "dependencies": {
+    "@symfony/webpack-encore": "^5.1.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
