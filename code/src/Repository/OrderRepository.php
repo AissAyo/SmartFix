@@ -2,9 +2,9 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Category;
+use App\Entity\Order;
 
-class CategoryRepository implements CategoryRepositoryInterface
+class OrderRepository implements OrderRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
 
@@ -13,14 +13,14 @@ class CategoryRepository implements CategoryRepositoryInterface
         $this->entityManager = $entityManager;
     }
 
-    public function getEntityById(int $id): ?Category
+    public function getEntityById(int $id): ?Order
     {
-        return $this->entityManager->getRepository(Category::class)->find($id);
+        return $this->entityManager->getRepository(Order::class)->find($id);
     }
 
     public function getAllEntities(): array
     {
-        return $this->entityManager->getRepository(Category::class)->findAll();
+        return $this->entityManager->getRepository(Order::class)->findAll();
     }
 
     public function addEntity($entity): void

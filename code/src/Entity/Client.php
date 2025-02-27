@@ -7,11 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+
+
 #[ORM\Entity]
 #[ORM\Table(name: "clients")]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
-#[ORM\DiscriminatorMap(["client" => "Client", "verifiedClient" => "VerifiedClient"])]
+#[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User implements UserInterface
 {
     #[ORM\Column(type: "boolean")]
@@ -107,30 +109,7 @@ class Client extends User implements UserInterface
     /**
      * @return Collection|Review[]
      */
-    public function getReviews(): Collection
-    {
-        return $this->reviews;
-    }
-
-    public function addReview(Review $review): self
-    {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews[] = $review;
-            $review->setClient($this);
-        }
-        return $this;
-    }
-
-    public function removeReview(Review $review): self
-    {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getClient() === $this) {
-                $review->setClient(null);
-            }
-        }
-        return $this;
-    }
+    
 
     /**
      * @return Collection|Vehicule[]
@@ -297,6 +276,12 @@ class Client extends User implements UserInterface
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     public function eraseCredentials(): void
