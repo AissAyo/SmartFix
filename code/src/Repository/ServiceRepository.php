@@ -1,31 +1,43 @@
 <?php
 namespace App\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Service;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
-class ServiceRepository extends ServiceEntityRepository
+class ServiceRepository implements ServiceRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, Service::class);
+        $this->entityManager = $entityManager;
     }
 
-    // You can add custom query methods here if needed
-
-    // Example: Find all services
-    public function findAllServices()
+    public function getEntityById(int $id): ?Service
     {
-        return $this->createQueryBuilder('s')
-            ->orderBy('s.name', 'ASC')  // Ordering services by name as an example
-            ->getQuery()
-            ->getResult();
+        return $this->entityManager->getRepository(Service::class)->find($id);
     }
 
-    // Example: Find a service by its ID
-    public function findServiceById(int $id)
+    public function getAllEntities(): array
     {
-        return $this->find($id);  // Returns the service with the given ID
+        return $this->entityManager->getRepository(Service::class)->findAll();
+    }
+
+    public function addEntity($entity): void
+    {
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+    }
+
+    public function updateEntity($entity): void
+    {
+        $this->entityManager->merge($entity);
+        $this->entityManager->flush();
+    }
+
+    public function deleteEntity($entity): void
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
     }
 }
