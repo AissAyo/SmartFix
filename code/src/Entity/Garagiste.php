@@ -4,15 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: "garagistes")]
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "type", type: "string")]
-#[ORM\DiscriminatorMap([
-    "mechanic" => Mechanic::class,
-    "seller" => Seller::class,
-    "car_rental_service" => CarRentalService::class,
-])]
+ 
+#[ORM\MappedSuperclass]
 abstract class Garagiste extends User
 {
    

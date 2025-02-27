@@ -30,9 +30,10 @@ class Complaint
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\ManyToOne(targetEntity: ServiceClient::class, inversedBy: 'complaints')]
+    #[ORM\ManyToOne(targetEntity: ServiceClient::class, inversedBy: "complaints")]
     #[ORM\JoinColumn(nullable: false)]
     private ServiceClient $serviceClient;
+    
 
     public function __construct()
     {
