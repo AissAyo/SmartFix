@@ -15,8 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
 #[ORM\DiscriminatorMap(["client" => "Client", "verifiedClient" => "VerifiedClient"])]
-#[ORM\Table(name: "clients")]
-class Client extends User implements UserInterface, PasswordAuthenticatedUserInterface
+class Client extends User implements UserInterface
 
 {
 
@@ -60,14 +59,8 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resetToken = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $tokenExpiration = null;
 
     public function __construct()
     {
@@ -118,10 +111,7 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
         $this->username = $username;
         return $this;
     }
-    public function setPassword($password){
-        $this->password = $password;
-        return $this;
-    }
+
     /**
      * @return Collection|Review[]
      */
@@ -335,42 +325,6 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getResetToken(): ?string
-    {
-        return $this->resetToken;
-    }
-
-    public function setResetToken(?string $resetToken): static
-    {
-        $this->resetToken = $resetToken;
-
-        return $this;
-    }
-
-    public function getTokenExpiration(): ?\DateTimeInterface
-    {
-        return $this->tokenExpiration;
-    }
-
-    public function setTokenExpiration(?\DateTimeInterface $tokenExpiration): static
-    {
-        $this->tokenExpiration = $tokenExpiration;
 
         return $this;
     }

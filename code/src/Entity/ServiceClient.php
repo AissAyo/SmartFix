@@ -17,11 +17,7 @@ class ServiceClient extends User implements UserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resetToken = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $tokenExpiration = null;
 
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
     private Collection $complaints;
@@ -72,27 +68,4 @@ class ServiceClient extends User implements UserInterface
         return $this;
     }
 
-    public function getResetToken(): ?string
-    {
-        return $this->resetToken;
-    }
-
-    public function setResetToken(?string $resetToken): static
-    {
-        $this->resetToken = $resetToken;
-
-        return $this;
-    }
-
-    public function getTokenExpiration(): ?\DateTimeInterface
-    {
-        return $this->tokenExpiration;
-    }
-
-    public function setTokenExpiration(?\DateTimeInterface $tokenExpiration): static
-    {
-        $this->tokenExpiration = $tokenExpiration;
-
-        return $this;
-    }
 }

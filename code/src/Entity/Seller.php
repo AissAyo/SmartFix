@@ -7,6 +7,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: "sellers")]
+/**
+ * @ORM\Entity
+ */
 class Seller extends Garagiste implements UserInterface
 {
     #[ORM\Column(type: "string", length: 255)]
@@ -85,10 +88,7 @@ class Seller extends Garagiste implements UserInterface
         return ['ROLE_USER'];
     }
 
-    public function getPassword(): ?string
-    {
-        return null; // Assuming Seller does not have a password
-    }
+
 
     public function getSalt(): ?string
     {

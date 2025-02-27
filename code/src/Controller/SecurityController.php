@@ -17,11 +17,13 @@ use App\Form\ForgotPasswordType;
 use App\DTO\ResetPasswordDTO;
 use App\Form\ResetPasswordType;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use App\Service\AuthService;
+
 
 class SecurityController extends AbstractController
 {
     #[Route('/mot-de-passe-oublie', name: 'app_forgot_password')]
-    public function forgotPassword(Request $request, EntityManagerInterface $em, MailerInterface $mailer): Response
+    public function forgotPassword(Request $request, EntityManagerInterface $em, MailerInterface $mailer,  UserRepository   $userRepository): Response
     {
         // Instancier le DTO
         $forgotPasswordDTO = new ForgotPasswordDTO();
@@ -35,8 +37,7 @@ class SecurityController extends AbstractController
             $email = $data->getEmail();
 
             // Vérifiez si l'e-mail existe pour un client ou un service client
-            $user = $em->getRepository(Client::class)->findOneBy(['email' => $email])
-                ?? $em->getRepository(ServiceClient::class)->findOneBy(['email' => $email]);
+            $user = $userRepository->findUserByEmail($email);
 
             if ($user) {
                 // Générer un token unique
@@ -64,9 +65,13 @@ class SecurityController extends AbstractController
                     $this->addFlash('error', 'Error sending the email: ' . $e->getMessage());
                 }
             } else {
-                // Si l'utilisateur n'existe pas
-                $this->addFlash('error', 'No user found with this email.');
+                //bach myb9ach flush li 9bel tal3
+                $this->container->get('session')->getFlashBag()->clear();
+
             }
+        }
+        else{
+
         }
 
         return $this->render('security/forgot_password.html.twig', [
@@ -127,9 +132,10 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/logout', name: 'app_logout')]
-    public function logout(): Response
+    public function logout( AuthService     $authService): Response
     {
-        // Symfony gère la déconnexion automatiquement, pas besoin d'un service personnalisé ici.
+        $authService->logoutUser();
+
         return $this->redirectToRoute('app_home');
     }
 }

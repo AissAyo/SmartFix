@@ -42,11 +42,23 @@ class LoginController extends AbstractController
             $userType = $authService->getUserType();
             $securityLogger->info("Utilisateur déjà connecté en tant que : {$userType}");
 
-            if ($userType === 'ServiceClient') {
+            if ($userType === 'serviceClient') {
                 return $this->redirectToRoute('app_home');
             } elseif ($userType === 'client') {
                 return $this->redirectToRoute('app_home');
+            } elseif ($userType === 'seller') {
+                return $this->redirectToRoute('app_home');
+            } elseif ($userType === 'mechanic') {
+                return $this->redirectToRoute('app_home');
+            } elseif ($userType === 'carRentalService') {
+                return $this->redirectToRoute('app_home');
+            } elseif ($userType === 'admin') {
+            return $this->redirectToRoute('app_home');
+        } else {
+                // Si l'utilisateur n'a pas de type reconnu, on peut rediriger vers une page par défaut ou l'accueil
+                return $this->redirectToRoute('app_home');
             }
+
         }
         // Dernière erreur de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -79,11 +91,20 @@ class LoginController extends AbstractController
                 if ($authService->isLoggedIn()) {
                     $userType = $authService->getUserType();
 
-                    if ($userType === 'client') {
+                    if ($userType === 'serviceClient') {
                         return $this->redirectToRoute('app_home');
-                    } elseif ($userType === 'ServiceClient') {
+                    } elseif ($userType === 'client') {
                         return $this->redirectToRoute('app_home');
-                    } else {
+                    } elseif ($userType === 'seller') {
+                        return $this->redirectToRoute('app_home');
+                    } elseif ($userType === 'mechanic') {
+                        return $this->redirectToRoute('app_home');
+                    } elseif ($userType === 'carRentalService') {
+                        return $this->redirectToRoute('app_home');
+                    } elseif ($userType === 'admin') {
+                        return $this->redirectToRoute('app_home');
+                    }else {
+                        // Si l'utilisateur n'a pas de type reconnu, on peut rediriger vers une page par défaut ou l'accueil
                         return $this->redirectToRoute('app_login');
                     }
                 }

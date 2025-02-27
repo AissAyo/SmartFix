@@ -7,9 +7,11 @@ use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\Client;
-use App\Entity\Garagiste;
-use App\Entity\mechanic;
 use App\Entity\ServiceClient;
+use App\Entity\Seller;
+use App\Entity\Mechanic;
+use App\Entity\CarRentalService;
+use App\Entity\Admin;  // Ajout de l'Admin
 
 class AuthService
 {
@@ -42,10 +44,28 @@ class AuthService
     {
         $session = $this->requestStack->getSession();
 
+        // Détermine le type d'utilisateur en fonction de l'instance de l'entité
+        $userType = 'other';  // Valeur par défaut
+
+        if ($user instanceof Client) {
+            $userType = 'client';
+        } elseif ($user instanceof ServiceClient) {
+            $userType = 'serviceClient';
+        } elseif ($user instanceof Seller) {
+            $userType = 'seller';
+        } elseif ($user instanceof Mechanic) {
+            $userType = 'mechanic';
+        } elseif ($user instanceof CarRentalService) {
+            $userType = 'carRentalService';
+        } elseif ($user instanceof Admin) {  // Ajout de l'Admin
+            $userType = 'admin';
+        }
+
+        // Enregistre les informations de l'utilisateur dans la session
         $session->set('user', [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'type' => $user instanceof Client ? 'client' : ($user instanceof ServiceClient ? 'ServiceClient' : 'other')
+            'type' => $userType,
         ]);
     }
 
@@ -53,6 +73,7 @@ class AuthService
     {
         $this->requestStack->getSession()->remove('user');
     }
+
     public function isLoggedIn(): bool
     {
         $session = $this->requestStack->getSession();
@@ -81,9 +102,19 @@ class AuthService
         return $this->getUserType() === 'clientService';
     }
 
-    public function isGaragiste(): bool
+    public function isSeller(): bool
     {
-        return $this->getUserType() === 'garagiste';
+        return $this->getUserType() === 'seller';
+    }
+
+    public function isMechanic(): bool
+    {
+        return $this->getUserType() === 'mechanic';
+    }
+
+    public function isCarRentalService(): bool
+    {
+        return $this->getUserType() === 'carRentalService';
     }
 
     public function isClient(): bool

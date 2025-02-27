@@ -51,10 +51,7 @@ class Mechanic extends Garagiste implements UserInterface
         return ['ROLE_USER'];
     }
 
-    public function getPassword(): ?string
-    {
-        return null; // Assuming Mechanic does not have a password
-    }
+
 
     public function getSalt(): ?string
     {

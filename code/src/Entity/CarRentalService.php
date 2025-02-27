@@ -128,10 +128,7 @@ class CarRentalService extends Garagiste implements UserInterface
         return ['ROLE_USER'];
     }
 
-    public function getPassword(): ?string
-    {
-        return null; // Assuming CarRentalService does not have a password
-    }
+
 
     public function getSalt(): ?string
     {
