@@ -25,8 +25,9 @@ class Reservation
     #[ORM\Column(type: "string", length: 20)]
     private string $status;
 
-    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
-    private float $prixEstime;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private string $prixEstime;
+
 
     #[ORM\Column(type: "string", length: 50)]
     private string $serviceType;
@@ -37,6 +38,14 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: "App\Entity\Car")]
     #[ORM\JoinColumn(nullable: false)]
     private Car $car;
+
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "reservations")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Client $client;	
+
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Vehicule $vehicule;
 
     // Getters and setters
     public function getId(): int

@@ -17,28 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class DefaultController extends AbstractController
 {
     #[Route('/default', name: 'app_default', /*stateless: true*/)]
-    public function index(Request $request, EntityManagerInterface $manager): Response
-    {
-        $session = $request->getSession();
-
-        $username = 'anonymous';
-        if ($session->has('username')) {
-            $username = $session->get('username');
-        } else {
-            $session->set('username', 'Issam');
-        }
-
-        // get *all* blog instances
-        /** @var BlogRepository $blogs */
-        $repository = $manager->getRepository(Blog::class);
-        $blogs = $repository->getPublishedBlogs('Doctrine');
-
-        dump($blogs);
-
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
-    }
+    
 
     #[Route(path: '/about-the-company', name: 'about_the_company')]
     public function aboutUs(): Response
@@ -61,6 +40,11 @@ class DefaultController extends AbstractController
     public function contactUs(): Response
     {
         return $this->render('default/contact_us.html.twig');
+    }
+    #[Route(name: 'services', path: '/services')]
+    public function services(): Response
+    {
+        return $this->render('page/services.html.twig');
     }
 
     #[Route(path: '/terms-and-conditions', name: 'app_terms_and_conditions')]

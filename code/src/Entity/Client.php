@@ -8,17 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
+#[ORM\Table(name: "clients")]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
 #[ORM\DiscriminatorMap(["client" => "Client", "verifiedClient" => "VerifiedClient"])]
-#[ORM\Table(name: "clients")]
-class Client implements UserInterface
+class Client extends User implements UserInterface
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -46,20 +41,15 @@ class Client implements UserInterface
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $address;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $name;
+    private ?string $address = null;
 
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: "client")]
-    private Collection $cars;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Vehicule", inversedBy="reservations")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $vehicule;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    
+    private ?string $name = null;
+
 
     public function __construct()
     {
@@ -105,7 +95,15 @@ class Client implements UserInterface
         $this->loyaltyPoints = $loyaltyPoints;
         return $this;
     }
-
+  
+    public function setUsername($username){
+        $this->username = $username;
+        return $this;
+    }
+    public function setPassword($password){
+        $this->password = $password;
+        return $this;
+    }
     /**
      * @return Collection|Review[]
      */
