@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'mechanics')]
+
 class Mechanic extends Garagiste implements UserInterface
 {
     #[ORM\Column(type: 'string', length: 20)]
@@ -18,11 +18,8 @@ class Mechanic extends Garagiste implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $garageEmail;
 
-   
-
-    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'mechanics')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Garage $garage;
+    #[ORM\OneToMany(targetEntity: garage::class, mappedBy: 'mechanic')]
+    private Collection $garages;
 
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]

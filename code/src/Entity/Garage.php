@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'garages')]
 class Garage
 {
     #[ORM\Id]
@@ -26,14 +27,15 @@ class Garage
     #[ORM\Column(type: 'string', length: 255)]
     private string $location;
 
-    #[ORM\OneToMany(targetEntity: Mechanic::class, mappedBy: 'garage')]
-    private Collection $mechanics;
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Mechanic $mechanic;
 
     #[ORM\ManyToMany(targetEntity: CategoryService::class, inversedBy: 'garages')]
     #[ORM\JoinTable(name: 'garage_category_service')]
     private Collection $categoryServices;
 
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: 'garage')]
+    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: 'garages')]
     private Collection $critiques;
 
 
