@@ -13,6 +13,19 @@ class Admin extends User implements UserInterface
 
     #[ORM\Column(type: "json")]
     private array $roles = [];
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
 
     public function getUsername(): string
     {

@@ -22,6 +22,7 @@ use App\Service\AuthService;
 
 class SecurityController extends AbstractController
 {
+
     #[Route('/mot-de-passe-oublie', name: 'app_forgot_password')]
     public function forgotPassword(Request $request, EntityManagerInterface $em, MailerInterface $mailer,  UserRepository   $userRepository): Response
     {
@@ -31,6 +32,10 @@ class SecurityController extends AbstractController
         // Créer le formulaire
         $form = $this->createForm(ForgotPasswordType::class, $forgotPasswordDTO);
         $form->handleRequest($request);
+        if (!$form->isSubmitted()) {
+            $request->getSession()->getFlashBag()->clear();
+        }
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -64,15 +69,12 @@ class SecurityController extends AbstractController
                     // Si une erreur survient lors de l'envoi, afficher un message d'erreur
                     $this->addFlash('error', 'Error sending the email: ' . $e->getMessage());
                 }
-            } else {
-                //bach myb9ach flush li 9bel tal3
-                $this->container->get('session')->getFlashBag()->clear();
+            }else{
+                $this->addFlash('error', 'This email address does not exist.');
 
             }
         }
-        else{
 
-        }
 
         return $this->render('security/forgot_password.html.twig', [
             'form' => $form->createView(),
