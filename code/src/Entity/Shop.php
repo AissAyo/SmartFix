@@ -20,8 +20,10 @@ class Shop
     #[ORM\Column(type: 'string', length: 255)]
     private string $location;
 
-    #[ORM\OneToMany(targetEntity: Seller::class, mappedBy: 'shop')]
-    private Collection $sellers;
+    #[ORM\ManyToOne(targetEntity: Seller::class, inversedBy: 'shops')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Seller $seller;
+
 
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'shop')]
     private Collection $categories;

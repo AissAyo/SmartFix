@@ -18,6 +18,15 @@ class Delivery
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $deliveryDate;
 
+    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'delivery')]      
+    private Order $order;
+
+
+    public function __construct()
+    {
+        $this->deliveryDate = new \DateTime();
+    }
+
     public function getId(): int
     {
         return $this->id;

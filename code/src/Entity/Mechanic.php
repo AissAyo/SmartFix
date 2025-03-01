@@ -21,6 +21,9 @@ class Mechanic extends Garagiste implements UserInterface
     #[ORM\OneToMany(targetEntity: garage::class, mappedBy: 'mechanic')]
     private Collection $garages;
 
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'mechanic')]
+    private Collection $reservations;
+    
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Location $location;

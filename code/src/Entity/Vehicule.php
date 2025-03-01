@@ -27,9 +27,7 @@ class Vehicule
     #[ORM\OneToMany(targetEntity: "App\Entity\Reservation", mappedBy: "vehicule")]
     private Collection $reservations;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Service", inversedBy: "vehicules")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Service $service;
+    
 
     public function __construct()
     {

@@ -26,13 +26,13 @@ class Order
     #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'Order')]
     private ?Cart $cart = null;
 
-    #[ORM\ManyToOne(targetEntity: Payment::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Payment::class , mappedBy: 'Order')]
+   
     private Payment $payment;
 
     #[ORM\ManyToOne(targetEntity: Delivery::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Delivery $delivery;
+    private Delivery $delivery; 
 
     
 

@@ -23,9 +23,6 @@ class CarRentalService extends Garagiste implements UserInterface
     private string $serviceName;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $serviceLocation;
-
-    #[ORM\Column(type: 'string', length: 255)]
     private string $serviceHours;
 
     #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'carRentalService')]
@@ -34,14 +31,12 @@ class CarRentalService extends Garagiste implements UserInterface
     #[ORM\OneToMany(targetEntity: VerifiedClient::class, mappedBy: 'carRentalService')]
     private Collection $verifiedClients;
 
-    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'service')]
-    private Collection $vehicules;
 
     public function __construct()
     {
         $this->cars = new ArrayCollection();
         $this->verifiedClients = new ArrayCollection();
-        $this->vehicules = new ArrayCollection();
+       
     }
 
     
@@ -111,10 +106,7 @@ class CarRentalService extends Garagiste implements UserInterface
         return $this->verifiedClients;
     }
 
-    public function getVehicules(): Collection
-    {
-        return $this->vehicules;
-    }
+    
 
     // Implementing the required method from UserInterface
     public function getUserIdentifier(): string

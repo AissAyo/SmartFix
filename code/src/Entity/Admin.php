@@ -6,22 +6,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class Admin implements UserInterface
+class Admin extends User 
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: "integer")]
-    private int $id;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $username;
-
-    #[ORM\Column(type: "string", length: 255)]
-    private string $password;
-
-    #[ORM\Column(type: "json")]
-    private array $roles = [];
-
+    
     public function getId(): int
     {
         return $this->id;
@@ -60,14 +47,19 @@ class Admin implements UserInterface
         return $this;
     }
 
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
+    
 
     public function getUserIdentifier(): string
     {
         return $this->username;
+    }
+    public function getEmail(): string
+    {
+        return $this->Email;
+    }
+    public function setEmail(string $Email): self
+    {
+        $this->Email = $Email;
+        return $this;
     }
 }

@@ -103,4 +103,5 @@ class Rental
         $this->totalAmount = $totalAmount;
         return $this;
     }
+    
 }
