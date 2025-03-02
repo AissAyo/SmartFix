@@ -2,6 +2,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.0",
     "@babel/preset-env": "^7.16.0",
+    "@babel/preset-react": "^7.26.3",
     "@symfony/webpack-encore": "^5.0.1",
     "core-js": "^3.38.0",
     "css-loader": "^7.1.2",
@@ -38,6 +39,8 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
-    "bootstrap-icons": "^1.11.3"
+    "bootstrap-icons": "^1.11.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   }
 }
