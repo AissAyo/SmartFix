@@ -12,8 +12,6 @@ class Seller extends Garagiste implements UserInterface
     #[ORM\Column(type: "string", length: 255)]
     protected string $contactInfo;
 
-  
-
     #[ORM\Column(type: "string", length: 255)]
     private string $shopName;
 
@@ -23,9 +21,8 @@ class Seller extends Garagiste implements UserInterface
     #[ORM\Column(type: "string", length: 15)]
     private string $shopPhone;
 
-    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'sellers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Shop $shop;
+    #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'sellers')]
+    private Collection $shops;
 
     // Getter and setter methods
 

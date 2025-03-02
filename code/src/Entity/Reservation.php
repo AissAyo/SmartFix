@@ -19,8 +19,6 @@ class Reservation
     #[ORM\Column(type: "integer")]
     private int $clientId;
 
-    #[ORM\Column(type: "integer")]
-    private int $mecaniqueId;
 
     #[ORM\Column(type: "string", length: 20)]
     private string $status;
@@ -28,12 +26,19 @@ class Reservation
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $prixEstime;
 
-
-    #[ORM\Column(type: "string", length: 50)]
-    private string $serviceType;
-
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
+
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Mechanic")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Mechanic $mechanic; 
+
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Service")]
+    #[ORM\JoinColumn(nullable: false)]
+    private service $service;
+
+    #[ORM\OnetTMany (targetentity: "App\Entity\RepairPart")] 
+    private Collection $repairParts;
 
     #[ORM\ManyToOne(targetEntity: "App\Entity\Car")]
     #[ORM\JoinColumn(nullable: false)]
@@ -105,17 +110,6 @@ class Reservation
     public function setPrixEstime(float $prixEstime): self
     {
         $this->prixEstime = $prixEstime;
-        return $this;
-    }
-
-    public function getServiceType(): string
-    {
-        return $this->serviceType;
-    }
-
-    public function setServiceType(string $serviceType): self
-    {
-        $this->serviceType = $serviceType;
         return $this;
     }
 

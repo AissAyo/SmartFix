@@ -9,20 +9,8 @@ class Rental
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $rentalId;
-
-    #[ORM\Column(type: 'integer')]
-    private int $customerId;
-
-    #[ORM\Column(type: 'date')]
-    private \DateTimeInterface $startDate;
-
-    #[ORM\Column(type: 'date')]
-    private \DateTimeInterface $endDate;
-
-    #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    #[ORM\Column(type: "integer")]
+    private int $id;
 
     #[ORM\ManyToOne(targetEntity: Car::class, inversedBy: 'rentals')]
     #[ORM\JoinColumn(nullable: false)]
@@ -36,53 +24,18 @@ class Rental
     #[ORM\JoinColumn(nullable: false)]
     private VerifiedClient $verifiedClient;
 
-    public function getRentalId(): int
-    {
-        return $this->rentalId;
-    }
+    #[ORM\Column(type: "datetime")]
+    private \DateTimeInterface $startDate;
 
-    public function getCustomerId(): int
-    {
-        return $this->customerId;
-    }
+    #[ORM\Column(type: "datetime")]
+    private \DateTimeInterface $endDate;
 
-    public function setCustomerId(int $customerId): self
-    {
-        $this->customerId = $customerId;
-        return $this;
-    }
+    #[ORM\Column(type: "decimal", scale: 2)]
+    private float $totalAmount;
 
-    public function getStartDate(): \DateTimeInterface
+    public function getId(): int
     {
-        return $this->startDate;
-    }
-
-    public function setStartDate(\DateTimeInterface $startDate): self
-    {
-        $this->startDate = $startDate;
-        return $this;
-    }
-
-    public function getEndDate(): \DateTimeInterface
-    {
-        return $this->endDate;
-    }
-
-    public function setEndDate(\DateTimeInterface $endDate): self
-    {
-        $this->endDate = $endDate;
-        return $this;
-    }
-
-    public function getTotalAmount(): float
-    {
-        return $this->totalAmount;
-    }
-
-    public function setTotalAmount(float $totalAmount): self
-    {
-        $this->totalAmount = $totalAmount;
-        return $this;
+        return $this->id;
     }
 
     public function getCar(): Car
@@ -118,10 +71,37 @@ class Rental
         return $this;
     }
 
-    public function calculateTotalAmount(): void
+    public function getStartDate(): \DateTimeInterface
     {
-        $interval = $this->startDate->diff($this->endDate);
-        $days = $interval->days;
-        $this->totalAmount = $days * $this->car->getDailyRate();
+        return $this->startDate;
     }
+
+    public function setStartDate(\DateTimeInterface $startDate): self
+    {
+        $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function getEndDate(): \DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(\DateTimeInterface $endDate): self
+    {
+        $this->endDate = $endDate;
+        return $this;
+    }
+
+    public function getTotalAmount(): float
+    {
+        return $this->totalAmount;
+    }
+
+    public function setTotalAmount(float $totalAmount): self
+    {
+        $this->totalAmount = $totalAmount;
+        return $this;
+    }
+    
 }

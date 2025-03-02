@@ -23,6 +23,10 @@ class Cart
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
+
+    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'cart')]
+    private ?order $Order = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -49,33 +53,25 @@ class Cart
         return $this->products;
     }
 
-    public function addProduct(Product $product): self
+    public function getClient(): Client
     {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setCart($this);
-        }
+        return $this->client;
+    }
 
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function getCommande(): ?Commande
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCart() === $this) {
-                $product->setCart(null);
-            }
-        }
-
-        return $this;
+        return $this->commande;
     }
 
-    public function calculateTotalAmount(): void
+    public function setCommande(?Commande $commande): self
     {
-        $this->totalAmount = 0;
-        foreach ($this->products as $product) {
-            $this->totalAmount += $product->getPrice();
-        }
+        $this->commande = $commande;
+        return $this;
     }
 }

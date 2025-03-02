@@ -17,6 +17,7 @@ class Product
 
     #[ORM\Column(type: 'float')]
     private float $price;
+    
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
@@ -32,9 +33,7 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private Cart $cart;
 
-    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "products")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Order $order;
+    
 
 
     public function getProductId(): int

@@ -19,6 +19,13 @@ class Car
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
+    #[ORM\Column(type: "boolean", length: 255)]
+    private bool $Status;
+
+    #[ORM\Column(type: "float", length: 255)]
+    private float $DailyRate;
+
+
     #[ORM\ManyToOne(targetEntity: CarRentalService::class, inversedBy: "cars")]
     #[ORM\JoinColumn(nullable: false)]
     private CarRentalService $carRentalService;
@@ -62,6 +69,24 @@ class Car
     public function setClient(Client $client): self
     {
         $this->client = $client;
+        return $this;
+    }
+    public function getDailyRate(): float
+    {
+        return $this->DailyRate;
+    }
+    public function setDailyrate(float $DailyRate): self
+    {
+        $this->DailyRate = $DailyRate;
+        return $this;
+    }
+    public function getStatus(): bool
+    {
+        return $this->Status;
+    }
+    public function setStatus(bool $Status): self
+    {
+        $this->Status = $Status;
         return $this;
     }
 }

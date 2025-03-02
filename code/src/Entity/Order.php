@@ -23,20 +23,18 @@ class Order
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $deliveryDate;
 
-    #[ORM\ManyToOne(targetEntity: Cart::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Cart $cart;
+    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'Order')]
+    private ?Cart $cart = null;
 
-    #[ORM\ManyToOne(targetEntity: Payment::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\OneToOne(targetEntity: Payment::class , mappedBy: 'Order')]
+   
     private Payment $payment;
 
     #[ORM\ManyToOne(targetEntity: Delivery::class)]
     #[ORM\JoinColumn(nullable: false)]
-    private Delivery $delivery;
+    private Delivery $delivery; 
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'order')]
-    private Collection $products;
+    
 
     public function __construct()
     {
