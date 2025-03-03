@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 class Product
@@ -17,7 +19,6 @@ class Product
 
     #[ORM\Column(type: 'float')]
     private float $price;
-    
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
@@ -25,16 +26,21 @@ class Product
     #[ORM\Column(type: 'integer')]
     private int $stockQuantity;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private Category $category;
+    private Shop $shop;
 
-    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: CategoryProduct::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private Cart $cart;
+    private CategoryProduct $categoryProduct;
 
-    
+    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'products')]
+    private Collection $carts;
 
+    public function __construct()
+    {
+        $this->carts = new ArrayCollection();
+    }
 
     public function getProductId(): int
     {
@@ -85,25 +91,49 @@ class Product
         return $this;
     }
 
-    public function getCategory(): Category
+    public function getShop(): Shop
     {
-        return $this->category;
+        return $this->shop;
     }
 
-    public function setCategory(Category $category): self
+    public function setShop(Shop $shop): self
     {
-        $this->category = $category;
+        $this->shop = $shop;
         return $this;
     }
 
-    public function getCart(): Cart
+    public function getCategoryProduct(): CategoryProduct
     {
-        return $this->cart;
+        return $this->categoryProduct;
     }
 
-    public function setCart(Cart $cart): self
+    public function setCategoryProduct(CategoryProduct $categoryProduct): self
     {
-        $this->cart = $cart;
+        $this->categoryProduct = $categoryProduct;
+        return $this;
+    }
+
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): self
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts[] = $cart;
+            $cart->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): self
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeProduct($this);
+        }
+
         return $this;
     }
 }

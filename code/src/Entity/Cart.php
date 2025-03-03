@@ -17,15 +17,16 @@ class Cart
     #[ORM\Column(type: 'float')]
     private float $totalAmount;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'cart')]
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'carts')]
+    #[ORM\JoinTable(name: 'cart_products')]
     private Collection $products;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
+    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: 'cart')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
     #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'cart')]
-    private ?order $Order = null;
+    private ?Order $order = null;
 
     public function __construct()
     {
@@ -53,6 +54,25 @@ class Cart
         return $this->products;
     }
 
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeCart($this);
+        }
+
+        return $this;
+    }
+
     public function getClient(): Client
     {
         return $this->client;
@@ -64,14 +84,14 @@ class Cart
         return $this;
     }
 
-    public function getCommande(): ?Commande
+    public function getOrder(): ?Order
     {
-        return $this->commande;
+        return $this->order;
     }
 
-    public function setCommande(?Commande $commande): self
+    public function setOrder(?Order $order): self
     {
-        $this->commande = $commande;
+        $this->order = $order;
         return $this;
     }
 }

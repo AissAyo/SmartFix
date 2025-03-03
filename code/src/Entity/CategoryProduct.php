@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
-class Category
+class CategoryProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,11 +29,11 @@ class Category
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'categories')]
+    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'categoryProducts')]
     #[ORM\JoinColumn(nullable: false)]
     private Shop $shop;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'categoryProducts')]
     private Collection $products;
 
     public function __construct()

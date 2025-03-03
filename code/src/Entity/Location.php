@@ -21,6 +21,15 @@ class Location
     #[ORM\Column(type: 'float')]
     private float $latitude;
 
+    #[ORM\OneToOne(targetEntity: Garage::class, mappedBy: 'location')]
+    private Garage $garage;
+
+    #[ORM\OneToOne(targetEntity: CarRental::class, mappedBy: 'location')]
+    private CarRental $carRental;
+
+    #[ORM\OneToOne(targetEntity: Shop::class, mappedBy: 'location')]
+    private Shop $shop;
+    
     public function getLocationId(): int
     {
         return $this->locationId;

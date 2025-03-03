@@ -22,37 +22,31 @@ class Reservation
 
     #[ORM\Column(type: "string", length: 20)]
     private string $status;
-
+ 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private string $prixEstime;
+    private string $prixEstime;  
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Mechanic")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic; 
+    
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Service")]
+    #[ORM\ManyToMany(targetEntity: "App\Entity\GarageService")]
     #[ORM\JoinColumn(nullable: false)]
-    private service $service;
+    private garageservice $garageService;
 
     #[ORM\OnetTMany (targetentity: "App\Entity\RepairPart")] 
     private Collection $repairParts;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Car")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Car $car;
-
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "reservations")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Client $client;	
 
     #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations")]
     #[ORM\JoinColumn(nullable: false)]
     private Vehicule $vehicule;
 
-    // Getters and setters
+    #[ORM\OneToOne(targetEntity: critique::class, inversedBy: "reservations")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Critique $critique;
+    
     public function getId(): int
     {
         return $this->id;

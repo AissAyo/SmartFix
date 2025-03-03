@@ -25,8 +25,8 @@ class Shop
     private Seller $seller;
 
 
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'shop')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'shop')]
+    private Collection $Product;
 
     public function __construct()
     {

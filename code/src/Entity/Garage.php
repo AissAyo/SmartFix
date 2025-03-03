@@ -15,6 +15,11 @@ class Garage
     #[ORM\Column(type: 'integer')]
     private int $Id;
 
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $EmailGarage;
+
+
     #[ORM\Column(type: 'float')]
     private float $rating;
 
@@ -24,19 +29,17 @@ class Garage
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $location;
-
     #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
-    #[ORM\ManyToMany(targetEntity: CategoryService::class, inversedBy: 'garages')]
-    #[ORM\JoinTable(name: 'garage_category_service')]
-    private Collection $categoryServices;
+    #[ORM\ManyToMany(targetEntity: GarageService::class, inversedBy: 'garages')]
+    #[ORM\JoinTable(name: 'garage_services')]
+    private Collection $GarageServices;
 
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: 'garages')]
-    private Collection $critiques;
+    #[ORM\OnetoOne (targetEntity: Location::class, mappedBy: 'garage')]
+    private Location $location;
+    
 
 
 
@@ -94,15 +97,13 @@ class Garage
         return $this;
     }
 
-    // Getter and Setter for $location
-    public function getLocation(): string
+    public function getEmailGarage(): string
     {
-        return $this->location;
+        return $this->EmailGarage;
     }
-
-    public function setLocation(string $location): self
+    public function setEmailGarage (): self
     {
-        $this->location = $location;
+        $this->EmailGarage = $EmailGarage;
         return $this;
     }
 }
