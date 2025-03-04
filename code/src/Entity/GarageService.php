@@ -12,48 +12,49 @@ class GarageService
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $Id;
+    private int $id;
 
-    #[ORM\Column(type: 'float', length: 255)]
-    private float $Prix;
- 
+    #[ORM\Column(type: 'float')]
+    private float $price;
 
-
-    #[ORM\ManyToOne(targetEntity: garage::class)]
+    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'garageServices')]
     #[ORM\JoinColumn(nullable: false)]
-    private Garage $garage;	
+    private Garage $garage;
 
-    #[ORM\ManyToOne(targetEntity: service::class)]
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'garageServices')]
     #[ORM\JoinColumn(nullable: false)]
     private Service $service;
-    
-    #[ORM\ManyToOne(targetEntity: CarAPI::class)]
+
+    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'garageServices')]
     #[ORM\JoinColumn(nullable: false)]
-    private CarAPI $carAPI;
+    private ?CarAPI $carAPI = null;
 
-    #[ORM\OneToMany(targetEntity: Reservatino::class, mappedBy: 'garageService')]
-    private Collection $reservations;  
+ 
 
-    public function __construct() {
-        $this->garages = new ArrayCollection();
+    
+    #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'garageServices')]
+    #[ORM\JoinTable(name: 'garage_service_reservation')]
+    private Collection $reservations;
+ 
+    public function __construct()
+    {
+        $this->carAPIs = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): int
     {
-        return $this->Id;
+        return $this->id;
     }
 
     public function getPrix(): float
     {
-        return $this->Prix;
+        return $this->price;
     }
 
-
-    public function setPrix(float $Prix): self
+    public function setPrix(float $price): self
     {
-        $this->Prix = $Prix;
+        $this->price = $price;
         return $this;
     }
-}    
-
-
+}

@@ -33,14 +33,15 @@ class Garage
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
-    #[ORM\ManyToMany(targetEntity: GarageService::class, inversedBy: 'garages')]
-    #[ORM\JoinTable(name: 'garage_services')]
-    private Collection $GarageServices;
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'garage')]
+    private Collection $garageServices;
 
-    #[ORM\OnetoOne (targetEntity: Location::class, mappedBy: 'garage')]
-    private Location $location;
     
-
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
+    
+    
 
 
     public function __construct()

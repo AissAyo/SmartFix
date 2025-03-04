@@ -31,7 +31,7 @@ class Rental
     private \DateTimeInterface $endDate;
 
     #[ORM\Column(type: "decimal", scale: 2)]
-    private float $totalAmount;
+    private String $totalAmount;
 
     public function getId(): int
     {

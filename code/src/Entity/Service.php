@@ -31,16 +31,15 @@ class Service
 
    
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)] 
+    #[ORM\JoinColumn(nullable: false)]
     private CategoryService $categoryService;
     
 
-    #[ORM\ManyToOne(targetEntity: GarageService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
-    private GarageService $garageService;
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'service')]
+    private Collection $garageServices;
 
 
-    public function getId(): int
+    public function getId(): int 
     {
         return $this->serviceId;
     }

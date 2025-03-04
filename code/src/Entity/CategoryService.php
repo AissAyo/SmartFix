@@ -27,11 +27,10 @@ class CategoryService
     #[ORM\JoinColumn(nullable: false)]
     private Garagiste $mechanic;
 
-    #[ORM\ManyToMany(targetEntity: Garage::class, mappedBy: 'categoryServices')]
-    private Collection $garages;
+  
 
 
-    public function __construct()
+    public function __construct() 
     {
         $this->services = new ArrayCollection();
     }

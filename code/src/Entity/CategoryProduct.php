@@ -33,7 +33,7 @@ class CategoryProduct
     #[ORM\JoinColumn(nullable: false)]
     private Shop $shop;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'categoryProducts')]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'categoryProduct')]
     private Collection $products;
 
     public function __construct()

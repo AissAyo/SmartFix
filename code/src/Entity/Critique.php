@@ -11,48 +11,29 @@ use Doctrine\Common\Collections\Collection;
 class Critique
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "critiques")]
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'critiques')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\ManyToOne(targetEntity: Reservation::class)]
+    #[ORM\OneToOne(targetEntity: Reservation::class, inversedBy: 'critique')]
     #[ORM\JoinColumn(nullable: false)]
     private Reservation $reservation;
 
-    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'critiques')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Garage $garage;
-
-    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic;
-
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "critique")]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'critique')]
     private Collection $comments;
 
-    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'critiques')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Service $service;
-
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: 'integer')]
     private int $rating;
-
-    #[ORM\Column(type: "text")]
-    private string $content;
-
-    #[ORM\Column(type: "datetime")]
-    private \DateTime $date;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
 
-    // Getters and setters
     public function getId(): int
     {
         return $this->id;
@@ -148,28 +129,6 @@ class Critique
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
-        return $this;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    public function setContent(string $content): self
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    public function getDate(): \DateTime
-    {
-        return $this->date;
-    }
-
-    public function setDate(\DateTime $date): self
-    {
-        $this->date = $date;
         return $this;
     }
 }

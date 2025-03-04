@@ -26,9 +26,9 @@ class CarRental
     #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'carRental')]
     private Collection $cars;
 
-    #[ORM\OneToOne(targetEntity: Location::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'carRental')]
     #[ORM\JoinColumn(nullable: false)]
-    private Location $location;
+    private ?Location $location = null;
 
     #[ORM\ManyToOne(targetEntity: CarRentalService::class, inversedBy: 'carRentals')]
     #[ORM\JoinColumn(nullable: false)]

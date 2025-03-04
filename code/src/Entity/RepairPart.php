@@ -19,7 +19,7 @@ class RepairPart {
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $price;
 
-   #[ORM\ManyToOne(targetEntity: "App\Entity\Reservation")]
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: 'repairParts')]
     #[ORM\JoinColumn(nullable: false)]
     private Reservation $reservation;
 

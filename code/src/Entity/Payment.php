@@ -19,7 +19,7 @@ class Payment
     private \DateTimeInterface $paymentDate;
 
     #[ORM\Column(type: 'decimal', scale: 2)]
-    private float $amount;
+    private String $amount;
 
     #[ORM\Column(type: 'string', length: 3)]
     private string $currency;
@@ -33,8 +33,9 @@ class Payment
     #[ORM\Column(type: 'string', length: 255)]
     private string $paymentGateway;
 
-    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'payment')]
-    private Order $order;
+    #[ORM\OneToOne(targetEntity: Order::class, inversedBy: 'payment')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $order = null;
 
     public function __construct()
     {
