@@ -25,6 +25,8 @@ abstract class User implements UserInterface
     #[ORM\Column(type: "string", length: 255)]
     protected string $Email;
 
+    #[ORM\Column(type: "json")]
+    private array $roles = [];
     
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resetToken = null;
@@ -42,6 +44,20 @@ abstract class User implements UserInterface
     {
         $this->resetToken = $resetToken;
 
+        return $this;
+    }
+    public function getRoles(): array
+    {
+        // Ensure every user has at least ROLE_USER
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
         return $this;
     }
 

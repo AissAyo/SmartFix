@@ -44,7 +44,7 @@ class Product
 
     public function getProductId(): int
     {
-        return $this->productId;
+        return $this->id;
     }
 
     public function getName(): string

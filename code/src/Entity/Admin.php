@@ -36,16 +36,7 @@ class Admin extends User
         return $this;
     }
 
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-        return $this;
-    }
+  
 
     
 
