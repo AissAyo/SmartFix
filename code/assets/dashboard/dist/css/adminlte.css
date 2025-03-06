@@ -46,6 +46,76 @@
 *::after {
   box-sizing: border-box;
 }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #343a40;
+  color: #fff;
+  height: 100vh;
+  padding-top: 20px;
+  position: fixed;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  border-bottom: 1px solid #495057;
+}
+
+.menu-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.menu-link:hover {
+  background-color: #495057;
+}
+
+.submenu {
+  list-style: none;
+  padding-left: 20px;
+  background-color: #495057;
+  display: none;
+}
+
+.submenu-link {
+  display: block;
+  padding: 10px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.submenu-link:hover {
+  background-color: #6c757d;
+}
+
+.has-submenu .arrow {
+  font-size: 0.8em;
+  transition: transform 0.3s;
+}
+
+.has-submenu.open .submenu {
+  display: block;
+}
+
+.has-submenu.open .arrow {
+  transform: rotate(180deg);
+}
+
 
 html {
   font-family: sans-serif;

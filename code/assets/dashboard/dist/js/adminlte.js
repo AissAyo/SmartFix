@@ -52,6 +52,7 @@
     },
     onLoadFail: function onLoadFail(_jqXHR, _textStatus, _errorThrown) {}
   };
+  
 
   var CardRefresh = /*#__PURE__*/function () {
     function CardRefresh(element, settings) {
