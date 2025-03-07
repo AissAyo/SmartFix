@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Mechanic;
-use App\Repository\MechanicRepository;
+use App\Repository\Service\MechanicRepository;
 
 class MechanicService
 {
