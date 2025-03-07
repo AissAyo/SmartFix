@@ -1,6 +1,8 @@
-@import 'scss/adminlte.raw';
-@import 'scss/alerts';
-@import 'scss/animation-effects';
-@import 'scss/bootstrap-variables';
+@import 'scss/_adminlte.raw.scss';
+@import 'scss/_alerts.scss';
+@import 'scss/_animation-effects.scss';
+@import 'scss/_bootstrap-variables.scss';
 @import 'scss/_main-header.scss';
-@import 'scss/_main-sidebar.scss'
+@import 'scss/_main-sidebar.scss';
+@import 'scss/_brand.scss';
+@import 'scss/_colors.scss'
