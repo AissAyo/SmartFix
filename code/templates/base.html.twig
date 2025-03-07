@@ -7,8 +7,9 @@
         
         {# Block for stylesheets #}
         {% block stylesheets %}
-            {# Include default stylesheets or parent stylesheets #}
-           
+            {{ encore_entry_link_tags('app') }}
+            {% block extra_stylesheets %}{% endblock %}
+            
             <link href="{{ asset('assets/img/favicon.png') }}" rel="shortcut icon" type="image/png">
             <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
             <link href="{{ asset('assets/img/apple-touch-icon-72x72.png') }}" rel="apple-touch-icon" sizes="72x72">
@@ -29,7 +30,8 @@
         {% endblock %}
 
         {% block javascripts %}
-           
+            {{ encore_entry_script_tags('app') }}
+            {% block extra_javascripts %}{% endblock %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </body>
