@@ -1,12 +1,4 @@
 
-    
-
-
-
-
-
-
-{# {% extends 'base.html.twig'%} #}
 {% block title %} admin layout {% endblock %}
 {% block stylesheets %}
    
@@ -89,7 +81,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                    <img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -105,7 +97,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/avatar.png" alt="User Avatar" class="img-size-50 img-circle mr-3">
+<img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   John Pierce
@@ -121,7 +113,7 @@
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+<img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nora Silvester
@@ -183,7 +175,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="../../index3.html" class="brand-link">
-      <img src="../dashboard/dist/img/avatar.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+<img src="{{ asset('build/images/avatar.1784647c.png') }}" alt="Avatar">
       <span class="brand-text font-weight-light">SmartFix</span>
     </a>
 
@@ -192,7 +184,7 @@
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="/dashboard/dist/img/avatar.png" class="img-circle elevation-2" alt="User Image">
+<img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
         </div>
         <div class="info">
           <a href="#" class="d-block"> nom admin </a>
@@ -221,31 +213,12 @@
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
-                <i class="right fas fa-angle-left"></i>
+                
               </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../../index.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../../index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../../index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item has-treeview">
+            </li>
+        
+<li class="nav-item has-treeview">
   <a href="#" class="nav-link clickable">
     <i class="nav-icon fas fa-users"></i>
     <p>
@@ -258,24 +231,237 @@
       <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>Clients</p>
+        <i class="right fas fa-angle-left"></i> <!-- Ajouter une flèche pour indiquer des sous-boutons -->
       </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create Client</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Read Clients</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Update Client</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Delete Client</p>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>Mechanics</p>
+        <i class="right fas fa-angle-left"></i> <!-- Flèche pour indiquer des sous-boutons -->
       </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create Mechanic</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Read Mechanics</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Update Mechanic</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Delete Mechanic</p>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
         <p>Shops</p>
+        <i class="right fas fa-angle-left"></i> <!-- Flèche pour indiquer des sous-boutons -->
+      </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create Shop</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Read Shops</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Update Shop</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Delete Shop</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Car Rental</p>
+        <i class="right fas fa-angle-left"></i> <!-- Flèche pour indiquer des sous-boutons -->
+      </a>
+      <ul class="nav nav-treeview" style="display: none;">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Create Rental</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Read Rentals</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Update Rental</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Delete Rental</p>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</li>
+
+<!-- Styles CSS -->
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+
+  .nav-item .nav-treeview {
+    padding-left: 20px;
+  }
+
+  /* Ajout de styles pour les sous-boutons */
+  .nav-item .nav-link .fas, .nav-item .nav-link .far {
+    margin-right: 5px;
+  }
+
+  .nav-item .nav-link .right {
+    margin-left: auto;
+  }
+
+  /* Styles pour mieux visualiser les sous-menus */
+  .nav-item .nav-treeview {
+    display: none;
+    padding-left: 20px;
+  }
+
+  .nav-item:hover > .nav-treeview {
+    display: block;
+  }
+
+  /* Change de couleur lors du survol d'un sous-menu */
+  .nav-item:hover > .nav-link {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  // Script pour basculer l'affichage des sous-menus
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+
+  // Script pour basculer les sous-sous-menus
+  document.querySelectorAll('.nav-item > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      const nestedSubmenu = this.nextElementSibling;
+      if (nestedSubmenu) {
+        nestedSubmenu.style.display = nestedSubmenu.style.display === 'none' ? 'block' : 'none';
+      }
+    });
+  });
+</script>
+
+
+
+
+
+          
+        <li class="nav-item has-treeview">
+             <a href="#" class="nav-link">
+               <i class="fas fa-car-alt"></i>
+              <p>
+                Vehicle
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+  <ul class="nav nav-treeview" style="display: none;">
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p>List</p>
       </a>
     </li>
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="far fa-circle nav-icon"></i>
-        <p>Car Renters</p>
+        <p> Add</p>
+      </a>
+    </li>
+   
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> Update </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> Delete </p>
       </a>
     </li>
   </ul>
@@ -304,6 +490,81 @@
   });
 </script>
 
+
+        
+
+<!-- Styles CSS -->
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+
+
+
+
+
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+
+
+
           {# <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-copy"></i>
@@ -313,7 +574,108 @@
                 <span class="badge badge-info right">6</span>
               </p>
             </a> #}
-            <li class="nav-item has-treeview">
+
+            
+        <li class="nav-item has-treeview">
+             <a href="#" class="nav-link">
+            <i class="fas fa-shopping-cart"></i>            
+              <p>
+                    Shops      
+                    <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+  <ul class="nav nav-treeview" style="display: none;">
+    
+     
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> List</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> Add </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> Update </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="#" class="nav-link">
+        <i class="far fa-circle nav-icon"></i>
+        <p> Delete </p>
+      </a>
+    </li>
+  </ul>
+</li>
+
+<!-- Styles CSS -->
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+
+
+
+
+
+<style>
+  .nav-item .nav-link.clickable {
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .nav-item .nav-link.clickable:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.preventDefault();
+      const submenu = this.nextElementSibling;
+      submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+</script>
+
+
+
+          {# <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-copy"></i>
+              <p>
+                Car Reservations 
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">6</span>
+              </p>
+            </a> #}
+        <li class="nav-item has-treeview">
              <a href="#" class="nav-link">
               <i class="nav-icon fas fa-chart-pie"></i>
               <p>
@@ -371,6 +733,10 @@
     });
   });
 </script>
+
+
+
+
             
           <li class="nav-item">
             
@@ -442,41 +808,7 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Forms
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../forms/general.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>General Elements</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../forms/advanced.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Advanced Elements</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../forms/editors.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Editors</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../forms/validation.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Validation</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          
           
             <ul class="nav nav-treeview">
               <li class="nav-item">
@@ -499,206 +831,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-book"></i>
-              <p>
-                Pages
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../examples/invoice.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Invoice</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/profile.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Profile</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/e-commerce.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>E-commerce</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/projects.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Projects</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/project-add.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Project Add</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/project-edit.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Project Edit</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/project-detail.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Project Detail</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/contacts.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Contacts</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/faq.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>FAQ</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/contact-us.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Contact us</p>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon far fa-plus-square"></i>
-              <p>
-                Extras
-                <i class="fas fa-angle-left right"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Login & Register v1
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../examples/login.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Login v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/register.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Register v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/forgot-password.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Forgot Password v1</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/recover-password.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Recover Password v1</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>
-                    Login & Register v2
-                    <i class="fas fa-angle-left right"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="../examples/login-v2.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Login v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/register-v2.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Register v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/forgot-password-v2.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Forgot Password v2</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="../examples/recover-password-v2.html" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Recover Password v2</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/lockscreen.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Lockscreen</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/legacy-user-menu.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Legacy User Menu</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/language-menu.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Language Menu</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/404.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Error 404</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/500.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Error 500</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/pace.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Pace</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../examples/blank.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Blank Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="../../starter.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Starter Page</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          
+          
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-search"></i>
@@ -746,7 +880,7 @@
   <!-- /.control-sidebar -->
   <script src="code/assets/dashboard/dashboard.js"></script>
 
-</div>
+
 <!-- ./wrapper -->
 <script src="code/assets/dashboard/js/SidebarSearch.js"></script>
 <!-- jQuery -->
