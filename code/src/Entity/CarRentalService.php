@@ -14,9 +14,6 @@ class CarRentalService extends Garagiste implements UserInterface
    
 
     #[ORM\Column(type: 'string', length: 255)]
-    protected string $contactInfo;
-
-    #[ORM\Column(type: 'string', length: 255)]
     private string $serviceMail;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -25,31 +22,19 @@ class CarRentalService extends Garagiste implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $serviceHours;
 
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'carRentalService')]
-    private Collection $cars;
+   
 
     #[ORM\OneToMany(targetEntity: VerifiedClient::class, mappedBy: 'carRentalService')]
     private Collection $verifiedClients;
 
+    #[ORM\OneToMany(targetEntity: CarRental::class, mappedBy: 'carRentalService')]
+    private Collection $carRentals;
 
     public function __construct()
     {
         $this->cars = new ArrayCollection();
         $this->verifiedClients = new ArrayCollection();
-       
-    }
-
-    
-
-    public function getContactInfo(): string
-    {
-        return $this->contactInfo;
-    }
-
-    public function setContactInfo(string $contactInfo): self
-    {
-        $this->contactInfo = $contactInfo;
-        return $this;
+        $this->carRentals = new ArrayCollection();
     }
 
     public function getServiceMail(): string
@@ -74,17 +59,6 @@ class CarRentalService extends Garagiste implements UserInterface
         return $this;
     }
 
-    public function getServiceLocation(): string
-    {
-        return $this->serviceLocation;
-    }
-
-    public function setServiceLocation(string $serviceLocation): self
-    {
-        $this->serviceLocation = $serviceLocation;
-        return $this;
-    }
-
     public function getServiceHours(): string
     {
         return $this->serviceHours;
@@ -106,7 +80,10 @@ class CarRentalService extends Garagiste implements UserInterface
         return $this->verifiedClients;
     }
 
-    
+    public function getCarRentals(): Collection
+    {
+        return $this->carRentals;
+    }
 
     // Implementing the required method from UserInterface
     public function getUserIdentifier(): string

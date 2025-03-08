@@ -25,8 +25,7 @@ class Client extends User implements UserInterface
     #[ORM\Column(type: "integer")]
     private int $loyaltyPoints = 0;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
-    private Collection $reservations;
+   
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
     private Collection $reviews;
@@ -37,8 +36,8 @@ class Client extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "client")]
     private Collection $critiques;
 
-    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: "client")]
-    private Collection $carts;
+    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'client')]
+    private ?Cart $cart = null;
 
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;

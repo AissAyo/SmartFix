@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Assure-toi d'importer Encore correctement
 const Encore = require('@symfony/webpack-encore');
 
@@ -97,15 +98,53 @@ Encore
     // Enable image handling
     .addRule({
         test: /\.(png|jpg|jpeg|gif|ico|svg|webp)$/,
+=======
+const Encore = require('@symfony/webpack-encore');
+
+Encore
+    .addEntry('dashboard', './assets/dashboard/dashboard.js')
+    .setOutputPath('public/build/')
+    .setPublicPath('/build')
+    .enableSassLoader()
+    .splitEntryChunks()
+    .enableSingleRuntimeChunk()
+    .cleanupOutputBeforeBuild()
+    .enableBuildNotifications()
+    .enableSourceMaps(!Encore.isProduction())
+    .enableVersioning(Encore.isProduction())
+
+    // Ajouter une règle pour les images
+    .addRule({
+        test: /\.(png|jpg|jpeg|gif|svg)$/i,
+>>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
         use: [
             {
                 loader: 'file-loader',
                 options: {
+<<<<<<< HEAD
                     name: 'img/[name].[hash:8].[ext]',
+=======
+                    name: 'images/[name].[ext]', // Place les images dans public/build/images/
+                    outputPath: '',  // Ne pas ajouter de sous-dossier sous public/build
+                    publicPath: '/build/', // Le chemin public pour accéder aux images
+>>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
                 },
             },
         ],
     })
+<<<<<<< HEAD
 ;
+=======
+
+    .configureBabelPresetEnv((config) => {
+        config.useBuiltIns = 'usage';
+        config.corejs = '3.38';
+    })
+    .copyFiles({
+        from: './assets/images',
+        to: 'images/[path][name].[ext]'
+    });
+    
+>>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
 
 module.exports = Encore.getWebpackConfig();

@@ -10,7 +10,7 @@ class Location
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $Id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $address;
@@ -21,9 +21,18 @@ class Location
     #[ORM\Column(type: 'float')]
     private float $latitude;
 
-    public function getLocationId(): int
+    #[ORM\OneToOne(targetEntity: Garage::class, mappedBy: 'location')]
+    private ?Garage $garage = null;
+
+    #[ORM\OneToOne(targetEntity: CarRental::class, mappedBy: 'location')]
+    private ?CarRental $carRental = null;
+
+    #[ORM\OneToOne(targetEntity: Shop::class, mappedBy: 'location')]
+    private ?Shop $shop = null;
+
+    public function getId(): int
     {
-        return $this->locationId;
+        return $this->id;
     }
 
     public function getAddress(): string
@@ -56,6 +65,39 @@ class Location
     public function setLatitude(float $latitude): self
     {
         $this->latitude = $latitude;
+        return $this;
+    }
+
+    public function getGarage(): ?Garage
+    {
+        return $this->garage;
+    }
+
+    public function setGarage(?Garage $garage): self
+    {
+        $this->garage = $garage;
+        return $this;
+    }
+
+    public function getCarRental(): ?CarRental
+    {
+        return $this->carRental;
+    }
+
+    public function setCarRental(?CarRental $carRental): self
+    {
+        $this->carRental = $carRental;
+        return $this;
+    }
+
+    public function getShop(): ?Shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(?Shop $shop): self
+    {
+        $this->shop = $shop;
         return $this;
     }
 }

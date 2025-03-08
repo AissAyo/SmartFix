@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "reservations")]
@@ -14,58 +16,54 @@ class Reservation
     private int $id;
 
     #[ORM\Column(type: "datetime")]
-    private \DateTimeInterface $dateReservation;
+    private \DateTimeInterface $reservationDate;
 
     #[ORM\Column(type: "integer")]
     private int $clientId;
-
 
     #[ORM\Column(type: "string", length: 20)]
     private string $status;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private string $prixEstime;
+    private string $estimatedPrice;
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Mechanic")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic; 
+    #[ORM\ManyToMany(targetEntity: GarageService::class, mappedBy: 'reservations')]
+    private Collection $garageServices;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Service")]
-    #[ORM\JoinColumn(nullable: false)]
-    private service $service;
-
-    #[ORM\OnetTMany (targetentity: "App\Entity\RepairPart")] 
+    #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')] 
     private Collection $repairParts;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Car")]
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
-    private Car $car;
+    private Vehicule $vehicle;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "reservations")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Client $client;	
+    #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
+    private ?Critique $critique = null;
 
-    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Vehicule $vehicule;
+    
 
-    // Getters and setters
+    public function __construct() 
+    {
+        $this->garageServices = new ArrayCollection();
+        $this->repairParts = new ArrayCollection();
+    }
+
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function getDateReservation(): \DateTimeInterface
+    public function getReservationDate(): \DateTimeInterface
     {
-        return $this->dateReservation;
+        return $this->reservationDate;
     }
 
-    public function setDateReservation(\DateTimeInterface $dateReservation): self
+    public function setReservationDate(\DateTimeInterface $reservationDate): self
     {
-        $this->dateReservation = $dateReservation;
+        $this->reservationDate = $reservationDate;
         return $this;
     }
 
@@ -80,17 +78,6 @@ class Reservation
         return $this;
     }
 
-    public function getMecaniqueId(): int
-    {
-        return $this->mecaniqueId;
-    }
-
-    public function setMecaniqueId(int $mecaniqueId): self
-    {
-        $this->mecaniqueId = $mecaniqueId;
-        return $this;
-    }
-
     public function getStatus(): string
     {
         return $this->status;
@@ -102,14 +89,14 @@ class Reservation
         return $this;
     }
 
-    public function getPrixEstime(): float
+    public function getEstimatedPrice(): string
     {
-        return $this->prixEstime;
+        return $this->estimatedPrice;
     }
 
-    public function setPrixEstime(float $prixEstime): self
+    public function setEstimatedPrice(string $estimatedPrice): self
     {
-        $this->prixEstime = $prixEstime;
+        $this->estimatedPrice = $estimatedPrice;
         return $this;
     }
 
@@ -124,14 +111,83 @@ class Reservation
         return $this;
     }
 
-    public function getCar(): Car
+    public function getGarageServices(): Collection
     {
-        return $this->car;
+        return $this->garageServices;
     }
 
-    public function setCar(Car $car): self
+    public function addGarageService(GarageService $garageService): self
     {
-        $this->car = $car;
+        if (!$this->garageServices->contains($garageService)) {
+            $this->garageServices[] = $garageService;
+        }
+
+        return $this;
+    }
+
+    public function removeGarageService(GarageService $garageService): self
+    {
+        $this->garageServices->removeElement($garageService);
+        return $this;
+    }
+
+    public function getRepairParts(): Collection
+    {
+        return $this->repairParts;
+    }
+
+    public function addRepairPart(RepairPart $repairPart): self
+    {
+        if (!$this->repairParts->contains($repairPart)) {
+            $this->repairParts[] = $repairPart;
+            $repairPart->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepairPart(RepairPart $repairPart): self
+    {
+        if ($this->repairParts->removeElement($repairPart)) {
+            // set the owning side to null (unless already changed)
+            if ($repairPart->getReservation() === $this) {
+                $repairPart->setReservation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVehicle(): Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(Vehicle $vehicle): self
+    {
+        $this->vehicle = $vehicle;
+        return $this;
+    }
+
+    public function getCritique(): ?Critique
+    {
+        return $this->critique;
+    }
+
+    public function setCritique(?Critique $critique): self
+    {
+        $this->critique = $critique;
+        return $this;
+    }
+
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
         return $this;
     }
 }

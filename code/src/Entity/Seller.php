@@ -21,7 +21,7 @@ class Seller extends Garagiste implements UserInterface
     #[ORM\Column(type: "string", length: 15)]
     private string $shopPhone;
 
-    #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'sellers')]
+    #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'seller')]
     private Collection $shops;
 
     #[ORM\Column(type: "string", length: 255)]

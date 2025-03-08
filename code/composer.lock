@@ -5,10 +5,14 @@
         "This file is @generated automatically"
     ],
 <<<<<<< HEAD
+<<<<<<< HEAD
     "content-hash": "99091a7ade5880dbf14887cfbed9c629",
 =======
     "content-hash": "2631c8077b863b82ea810d3baf470c23",
 >>>>>>> 2fdb94a548e7b3ce15a68168c1a3ed0ed9f7bc1d
+=======
+    "content-hash": "f60af7fe3a8acb3e5e3bfa0e2dc12e3e",
+>>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
     "packages": [
         {
             "name": "beberlei/doctrineextensions",

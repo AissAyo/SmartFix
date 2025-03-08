@@ -17,6 +17,9 @@ class Service
     #[ORM\Column(type: 'string', length: 100)]
     private string $serviceName;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $serviceCode;
+
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $prix;
 
@@ -27,18 +30,16 @@ class Service
     private string $status;
 
    
-
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "service")]
-    private Collection $critiques;
-
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "service")]
-    private Collection $Reservations;
-
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
     #[ORM\JoinColumn(nullable: false)]
     private CategoryService $categoryService;
+    
 
-    public function getId(): int
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'service')]
+    private Collection $garageServices;
+
+
+    public function getId(): int 
     {
         return $this->serviceId;
     }
@@ -73,6 +74,18 @@ class Service
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+    public function getServiceCode(): string
+    {
+        return $this->serviceCode;
+    }
+
+    
+    public function setServiceCode(string $serviceCode): self
+    {
+        $this->serviceCode = $serviceCode;
 
         return $this;
     }

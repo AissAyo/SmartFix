@@ -23,16 +23,17 @@ class Order
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $deliveryDate;
 
-    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'Order')]
-    private ?Cart $cart = null;
-
-    #[ORM\OneToOne(targetEntity: Payment::class , mappedBy: 'Order')]
-   
-    private Payment $payment;
-
-    #[ORM\ManyToOne(targetEntity: Delivery::class)]
+    #[ORM\OneToOne(targetEntity: Cart::class, inversedBy: 'order')]
     #[ORM\JoinColumn(nullable: false)]
-    private Delivery $delivery; 
+    private ?Cart $cart = null; 
+
+    #[ORM\OneToOne(targetEntity: Payment::class, mappedBy: 'order')]
+    private ?Payment $payment = null;
+
+
+    #[ORM\ManyToOne(targetEntity: Delivery::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Delivery $delivery;
 
     
 

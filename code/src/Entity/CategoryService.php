@@ -20,7 +20,18 @@ class CategoryService
     #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
     private Collection $services;
 
+<<<<<<< HEAD
     public function __construct()
+=======
+    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Garagiste $mechanic;
+
+  
+
+
+    public function __construct() 
+>>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
     {
         $this->services = new ArrayCollection();
     }

@@ -17,16 +17,19 @@ class Shop
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $location;
-
     #[ORM\ManyToOne(targetEntity: Seller::class, inversedBy: 'shops')]
     #[ORM\JoinColumn(nullable: false)]
-    private Seller $seller;
+    private ?Seller $seller = null;
 
+    #[ORM\OneToMany(targetEntity: CategoryProduct::class, mappedBy: 'shop')]
+    private Collection $categoryProducts;
 
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'shop')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'shop')]
+    private Collection $products;
+
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'shop')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
 
     public function __construct()
     {

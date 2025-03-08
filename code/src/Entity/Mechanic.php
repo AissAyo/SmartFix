@@ -16,13 +16,12 @@ class Mechanic extends Garagiste implements UserInterface
     private string $telephoneGarage;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $garageEmail;
+    private string $garageEmail; 
 
     #[ORM\OneToMany(targetEntity: garage::class, mappedBy: 'mechanic')]
     private Collection $garages;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'mechanic')]
-    private Collection $reservations;
+   
     
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]
