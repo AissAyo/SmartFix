@@ -9,19 +9,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
-
-
-
 #[ORM\Entity]
 #[ORM\Table(name: "clients")]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
 #[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User implements UserInterface
-
 {
-
-
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -49,20 +43,11 @@ class Client extends User implements UserInterface
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-
-    private ?string $address = null;
-
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    
-    private ?string $name = null;
+    private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-
-
+   
 
     public function __construct()
     {
@@ -108,7 +93,7 @@ class Client extends User implements UserInterface
         $this->loyaltyPoints = $loyaltyPoints;
         return $this;
     }
-  
+
     public function setUsername($username){
         $this->username = $username;
         return $this;
@@ -117,7 +102,30 @@ class Client extends User implements UserInterface
     /**
      * @return Collection|Review[]
      */
-    
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getClient() === $this) {
+                $review->setClient(null);
+            }
+        }
+        return $this;
+    }
 
     /**
      * @return Collection|Vehicule[]
@@ -302,15 +310,6 @@ class Client extends User implements UserInterface
         return $this->username;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
+    
 }
+

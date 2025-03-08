@@ -1,8 +1,8 @@
 {
-  "build/app.css": "/build/app.8ba37b3a.css",
-  "build/app.js": "/build/app.739b23dc.js",
-  "build/runtime.js": "/build/runtime.0afa1bd0.js",
-  "build/796.a872419e.js": "/build/796.a872419e.js",
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_popperjs_core_lib_index_js-node_modules_core-js_modules_es_array_concat_-526af3.js": "/build/vendors-node_modules_popperjs_core_lib_index_js-node_modules_core-js_modules_es_array_concat_-526af3.js",
   "build/fonts/bootstrap-icons.woff": "/build/fonts/bootstrap-icons.66b7720f.woff",
   "build/fonts/bootstrap-icons.woff2": "/build/fonts/bootstrap-icons.64ed46b2.woff2",
   "build/img/bg-6.jpg": "/build/img/bg-6.ed7f7bd2.jpg",

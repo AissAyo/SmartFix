@@ -24,6 +24,9 @@ class Seller extends Garagiste implements UserInterface
     #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'sellers')]
     private Collection $shops;
 
+    #[ORM\Column(type: "string", length: 255)]
+    private string $role;
+
     // Getter and setter methods
 
     public function getWorkingHours(): string
@@ -31,12 +34,7 @@ class Seller extends Garagiste implements UserInterface
         return $this->workingHours;
     }
 
-    public function setWorkingHours(string $workingHours): self
-    {
-        $this->workingHours = $workingHours;
-        return $this;
-    }
-
+ 
     public function getContactInfo(): string
     {
         return $this->contactInfo;
@@ -59,14 +57,25 @@ class Seller extends Garagiste implements UserInterface
         return $this;
     }
 
-    public function getShop(): Shop
+    public function getshopName(): Shop
     {
         return $this->shop;
     }
 
-    public function setShop(Shop $shop): self
+    public function setshopName(Shop $shop): self
     {
         $this->shop = $shop;
+        return $this;
+    }
+
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
         return $this;
     }
 
@@ -79,7 +88,7 @@ class Seller extends Garagiste implements UserInterface
     // Other methods required by UserInterface
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        return [$this->role];
     }
 
     public function getPassword(): ?string
@@ -95,5 +104,12 @@ class Seller extends Garagiste implements UserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    // Ensure method signatures match the parent class
+    public function setWorkingHours(?string $workingHours): self
+    {
+        $this->workingHours = $workingHours;
+        return $this;
     }
 }

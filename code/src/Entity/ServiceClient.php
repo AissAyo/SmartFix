@@ -14,14 +14,11 @@ class ServiceClient extends User implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $serviceDetails;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resetToken = null;
+    
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $tokenExpiration = null;
+    
 
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
     private Collection $complaints;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\AdminController;
 
 use App\Entity\Mechanic;
 use App\Service\MechanicService;
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class AdminCRUDMechanicController extends AbstractController
+class AdminCrudMechanicController extends AbstractController
 {
     private MechanicService $mechanicService;
 
