@@ -1,13 +1,4 @@
 <?php
-<<<<<<< HEAD
-namespace App\Controller\AdminController;
-
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-class AdminCrudClientController extends AbstractController
-{
-    // Your code here
-=======
 
 declare(strict_types=1);
 
@@ -31,5 +22,4 @@ class AdminCrudClientController extends AbstractController
     {
         return $this->render('Admin/Client.html.twig');
     }
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
 }

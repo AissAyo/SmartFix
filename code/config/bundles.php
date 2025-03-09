@@ -17,8 +17,4 @@ return [
     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
-<<<<<<< HEAD
-    Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
-=======
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
 ];
