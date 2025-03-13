@@ -17,12 +17,13 @@ class AdminCrudMechanicController extends AbstractController
     {
         $this->mechanicService = $mechanicService;
     }
+    #
 
-    #[Route('/admin/mechanics', name: 'admin_mechanics_list', methods: ['GET'])]
+    #[Route('/listmechanics', name: 'admin_mechanics_list', methods: ['GET'])]
     public function list(): Response
     {
         $mechanics = $this->mechanicService->getAllMechanics();
-        return $this->render('admin/mechanics/list.html.twig', ['mechanics' => $mechanics]);
+        return $this->render('admin/adminCrudMechanic.html.twig', ['mechanics' => $mechanics]);
     }
 
     #[Route('/admin/mechanics/{id}', name: 'admin_mechanics_show', methods: ['GET'])]

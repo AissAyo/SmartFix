@@ -1,10 +1,11 @@
 <?php
 namespace App\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Seller;
 
-class SellerRepository implements SellerRepositoryInterface
+class SellerRepository extends ServiceEntityRepository implements SellerRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
 
@@ -31,13 +32,24 @@ class SellerRepository implements SellerRepositoryInterface
 
     public function updateEntity($entity): void
     {
-        $this->entityManager->merge($entity);
         $this->entityManager->flush();
     }
+    
 
     public function deleteEntity($entity): void
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+    public function save(Seller $seller): void
+    {
+        $this->_em->persist($seller);
+        $this->_em->flush();
+    }
+
+    public function delete(Seller $seller): void
+    {
+        $this->_em->remove($seller);
+        $this->_em->flush();
     }
 }

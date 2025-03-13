@@ -16,20 +16,19 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginAuthenticator
+            custom_authenticators:
+                - App\Security\LoginAuthenticator
             logout:
                 path: app_logout
 
-    role_hierarchy:
-        ROLE_ADMIN: [ROLE_CLIENT, ROLE_CLIENT_SERVICE, ROLE_SELLER, ROLE_MECHANIC, ROLE_CAR_RENTAL_SERVICE]
-
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/client, roles: ROLE_CLIENT }
-        - { path: ^/service, roles: ROLE_CLIENT_SERVICE }
-        - { path: ^/seller, roles: ROLE_SELLER }
-        - { path: ^/mechanic, roles: ROLE_MECHANIC }
-        - { path: ^/rental, roles: ROLE_CAR_RENTAL_SERVICE }
+        # Uncomment these when you're ready to define access rules
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/client, roles: ROLE_CLIENT }
+        # - { path: ^/service, roles: ROLE_CLIENT_SERVICE }
+        # - { path: ^/seller, roles: ROLE_SELLER }
+        # - { path: ^/mechanic, roles: ROLE_MECHANIC }
+        # - { path: ^/rental, roles: ROLE_CAR_RENTAL_SERVICE }
 
 when@test:
     security:

@@ -40,9 +40,8 @@
                         {% for mechanic in mechanics %}
                         <tr>
                             <th scope="row">{{ mechanic.name }}</th>
-                            <td>{{ mechanic.email }}</td>
-                            <td>{{ mechanic.email }}</td>
-                            <td>{{ mechanic.password }} years</td>
+                            <td>{{ mechanic.specialty }}</td>
+                            <td>{{ mechanic.experience }} years</td>
                             <td class="text-end">
                                 <div class="dropdown">
                                     <button class="btn btn-link p-0" type="button" id="mechanic-{{ mechanic.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">

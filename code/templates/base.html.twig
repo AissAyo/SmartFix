@@ -36,7 +36,6 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
-<<<<<<< HEAD
            
            {% block importmap %}{{ importmap('app') }}{% endblock %}
             <!-- Core JS -->
@@ -67,10 +66,6 @@
             <!-- Theme Custom JS -->
             <script src="{{ asset('js/theme.js') }}"></script>
 
-=======
-            {% block extra_javascripts %}{% endblock %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
         {% endblock %}
     </body>
 </html>

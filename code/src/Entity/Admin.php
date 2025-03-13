@@ -24,7 +24,6 @@ class Admin extends User
         return $this;
     }
 
-<<<<<<< HEAD
     public function getRoles(): array
     {
         return $this->roles;
@@ -35,7 +34,6 @@ class Admin extends User
         $this->roles = $roles;
         return $this;
     }
-=======
     public function getPassword(): string
     {
         return $this->password;
@@ -48,7 +46,6 @@ class Admin extends User
     }
 
   
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
 
     
 

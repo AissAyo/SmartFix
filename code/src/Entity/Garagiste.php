@@ -22,8 +22,12 @@ abstract class Garagiste extends User
     private ?string $garageAddress = null;
 
     #[ORM\Column(type: "string", length: 20, nullable: true)]
-    private ?string $phoneNumber = null;
+    private ?string $garagePhone = null;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $garageEmail = null;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $garageCity = null;
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $workingHours = null;
 

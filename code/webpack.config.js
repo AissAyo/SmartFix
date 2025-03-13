@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-// Assure-toi d'importer Encore correctement
 const Encore = require('@symfony/webpack-encore');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
@@ -23,7 +21,6 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
-    .addStyleEntry('admin', './assets/scss/app.scss')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -31,12 +28,6 @@ Encore
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-
-    // Exclude .css.map files from being processed
-    .addRule({
-        test: /\.css\.map$/,
-        use: 'ignore-loader'
-    })
 
     /*
      * FEATURE CONFIG
@@ -62,25 +53,8 @@ Encore
         config.corejs = '3.38';
     })
 
-    // Ignorer les erreurs causées par les fichiers CSS manquants (comme les images)
-    .configureCssLoader((config) => {
-        config.url = {
-            filter: (url) => {
-                // Ignore les erreurs pour les fichiers spécifiques
-                return !url.includes('ui-icons') && !url.includes('16.png');
-            },
-        };
-    })
-
-    // Exclure les fichiers source maps pour éviter l'erreur liée à bootstrap-icons.css.map
-    .configureDevServerOptions((options) => {
-        options.watchOptions = {
-            ignored: /bootstrap-icons\.css\.map/, // Ignore ce fichier spécifique
-        };
-    })
-
     // enables Sass/SCSS support
-    .enableSassLoader()
+    //.enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -94,57 +68,6 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
-
-    // Enable image handling
-    .addRule({
-        test: /\.(png|jpg|jpeg|gif|ico|svg|webp)$/,
-=======
-const Encore = require('@symfony/webpack-encore');
-
-Encore
-    .addEntry('dashboard', './assets/dashboard/dashboard.js')
-    .setOutputPath('public/build/')
-    .setPublicPath('/build')
-    .enableSassLoader()
-    .splitEntryChunks()
-    .enableSingleRuntimeChunk()
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
-    .enableSourceMaps(!Encore.isProduction())
-    .enableVersioning(Encore.isProduction())
-
-    // Ajouter une règle pour les images
-    .addRule({
-        test: /\.(png|jpg|jpeg|gif|svg)$/i,
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
-        use: [
-            {
-                loader: 'file-loader',
-                options: {
-<<<<<<< HEAD
-                    name: 'img/[name].[hash:8].[ext]',
-=======
-                    name: 'images/[name].[ext]', // Place les images dans public/build/images/
-                    outputPath: '',  // Ne pas ajouter de sous-dossier sous public/build
-                    publicPath: '/build/', // Le chemin public pour accéder aux images
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
-                },
-            },
-        ],
-    })
-<<<<<<< HEAD
 ;
-=======
-
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = '3.38';
-    })
-    .copyFiles({
-        from: './assets/images',
-        to: 'images/[path][name].[ext]'
-    });
-    
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
 
 module.exports = Encore.getWebpackConfig();

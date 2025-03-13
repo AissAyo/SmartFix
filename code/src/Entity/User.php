@@ -23,12 +23,16 @@ abstract class User implements UserInterface
     #[ORM\Column(type: "string", length: 255)]
     private string $email;
 
-<<<<<<< HEAD
-=======
+    #[ORM\Column(type: "string", length: 255)]
+    private string $address;
+    #[ORM\Column(type: "string", length: 255)]
+    private string $phone;
+    #[ORM\Column(type: "string", length: 255)]
+    private string $city;
+
     #[ORM\Column(type: "json")]
     private array $roles = [];
     
->>>>>>> b5f74be67730947e6fc0467d1ad111ea928ffcf3
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resetToken = null;
 
@@ -115,11 +119,7 @@ abstract class User implements UserInterface
     }
 
     // Implement UserInterface methods
-    public function getRoles(): array
-    {
-        // Return the roles of the user
-        return ['ROLE_USER'];
-    }
+   
 
     public function getUserIdentifier(): string
     {
