@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AdminCrudMechanicController extends AbstractController
 {
-    private MechanicService $mechanicService;
+   /* private MechanicService $mechanicService;
 
     public function __construct(MechanicService $mechanicService)
     {
@@ -72,5 +72,5 @@ class AdminCrudMechanicController extends AbstractController
         }
         $this->mechanicService->deleteMechanic($mechanic);
         return $this->redirectToRoute('admin_mechanics_list');
-    }
+    }*/
 }

@@ -2,39 +2,39 @@
 
 namespace App\Repository;
 
-use App\Entity\Seller;
+use App\Entity\Garagiste;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Seller>
+ * @extends ServiceEntityRepository<Garagiste>
  */
-class SellerRepository extends ServiceEntityRepository
+class GaragisteRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Seller::class);
+        parent::__construct($registry, Garagiste::class);
     }
 
     //    /**
-    //     * @return Seller[] Returns an array of Seller objects
+    //     * @return Garagiste[] Returns an array of Garagiste objects
     //     */
     //    public function findByExampleField($value): array
     //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
+    //        return $this->createQueryBuilder('g')
+    //            ->andWhere('g.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
+    //            ->orderBy('g.id', 'ASC')
     //            ->setMaxResults(10)
     //            ->getQuery()
     //            ->getResult()
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Seller
+    //    public function findOneBySomeField($value): ?Garagiste
     //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
+    //        return $this->createQueryBuilder('g')
+    //            ->andWhere('g.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->getQuery()
     //            ->getOneOrNullResult()

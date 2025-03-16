@@ -16,10 +16,5 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AdminCrudClientController extends AbstractController
 {
-    #[Route('/client', name: 'CrudClient', /*stateless: true*/)]
-    
-    public function client(): Response
-    {
-        return $this->render('Admin/Client.html.twig');
-    }
+   
 }

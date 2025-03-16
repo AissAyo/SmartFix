@@ -7,7 +7,7 @@ use App\Repository\SellerRepository;
 
 class SellerService
 {
-    private SellerRepository $sellerRepository;
+  /*  private SellerRepository $sellerRepository;
 
     public function __construct(SellerRepository $sellerRepository)
     {
@@ -37,5 +37,5 @@ class SellerService
     public function deleteSeller(Seller $seller): void
     {
         $this->sellerRepository->delete($seller);
-    }
+    }*/
 }
