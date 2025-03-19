@@ -2,62 +2,54 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'mechanics')]
-class Mechanic extends Garagiste implements UserInterface
+class Mechanic extends Garagiste
 {
     #[ORM\Column(type: 'string', length: 20)]
     private string $status;
 
-    #[ORM\Column(type: 'string', length: 15)]
-    private string $telephoneGarage;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $garageEmail;
-
-   
-
-    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'mechanics')]
+    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
     #[ORM\JoinColumn(nullable: false)]
-    private Garage $garage;
+    private Collection $garage;
+
 
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Location $location;
 
-    #[ORM\ManyToOne(targetEntity: Role::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Role $role;
-
-    // Implementing the required method from UserInterface
-    public function getUserIdentifier(): string
+    public function getStatus(): string
     {
-        return $this->garageEmail;
+        return $this->status;
     }
 
-    // Other methods required by UserInterface
-    public function getRoles(): array
+    public function setStatus(string $status): void
     {
-        return ['ROLE_USER'];
+        $this->status = $status;
     }
 
-    public function getPassword(): ?string
+    public function getGarage(): Collection
     {
-        return null; // Assuming Mechanic does not have a password
+        return $this->garage;
     }
 
-    public function getSalt(): ?string
+    public function setGarage(Collection $garage): void
     {
-        return null; // Not needed when using modern algorithms
+        $this->garage = $garage;
     }
 
-    public function eraseCredentials() : void
+    public function getLocation(): Location
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        return $this->location;
     }
 
-    // Additional properties and methods specific to Mechanic can be added here
+    public function setLocation(Location $location): void
+    {
+        $this->location = $location;
+    }
+
 }

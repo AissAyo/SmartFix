@@ -21,13 +21,17 @@ class Garage
     private string $status;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
+    private string $garageName;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $location;
 
-    #[ORM\OneToMany(targetEntity: Mechanic::class, mappedBy: 'garage')]
-    private Collection $mechanics;
+    #[ORM\Column(type: 'string', length: 15)]
+    private string $telephoneGarage;
+
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garage')]
+    private Mechanic $mechanic;
+
 
     #[ORM\ManyToMany(targetEntity: CategoryService::class, inversedBy: 'garages')]
     #[ORM\JoinTable(name: 'garage_category_service')]
@@ -81,16 +85,7 @@ class Garage
     }
 
     // Getter and Setter for $name
-    public function getName(): string
-    {
-        return $this->name;
-    }
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-        return $this;
-    }
 
     // Getter and Setter for $location
     public function getLocation(): string
@@ -102,5 +97,25 @@ class Garage
     {
         $this->location = $location;
         return $this;
+    }
+
+    public function getGarageName(): string
+    {
+        return $this->garageName;
+    }
+
+    public function setGarageName(string $garageName): void
+    {
+        $this->garageName = $garageName;
+    }
+
+    public function getTelephoneGarage(): string
+    {
+        return $this->telephoneGarage;
+    }
+
+    public function setTelephoneGarage(string $telephoneGarage): void
+    {
+        $this->telephoneGarage = $telephoneGarage;
     }
 }

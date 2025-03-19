@@ -6,29 +6,34 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+
 #[ORM\Entity]
 class Shop
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id; // Ensure this column is named 'id'
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $name;
+    private string $shopName;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $location;
 
-    #[ORM\OneToMany(targetEntity: Seller::class, mappedBy: 'shop')]
-    private Collection $sellers;
+
+
+    #[ORM\ManyToOne(targetEntity: Seller::class, inversedBy: 'shops')]
+    #[ORM\JoinColumn(nullable: false)]
+    private Seller $seller;
+
 
     #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'shop')]
     private Collection $categories;
 
     public function __construct()
     {
-        $this->sellers = new ArrayCollection();
+        $this->seller = new Seller();
         $this->categories = new ArrayCollection();
     }
 
@@ -37,14 +42,14 @@ class Shop
         return $this->id;
     }
 
-    public function getName(): string
+    public function getShopName(): string
     {
-        return $this->name;
+        return $this->shopName;
     }
 
-    public function setName(string $name): self
+    public function setShopName(string $shopName): self
     {
-        $this->name = $name;
+        $this->shopName = $shopName;
         return $this;
     }
 
@@ -59,57 +64,20 @@ class Shop
         return $this;
     }
 
-    public function getSellers(): Collection
-    {
-        return $this->sellers;
-    }
-
-    public function addSeller(Seller $seller): self
-    {
-        if (!$this->sellers->contains($seller)) {
-            $this->sellers[] = $seller;
-            $seller->setShop($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSeller(Seller $seller): self
-    {
-        if ($this->sellers->removeElement($seller)) {
-            // set the owning side to null (unless already changed)
-            if ($seller->getShop() === $this) {
-                $seller->setShop(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function addCategory(Category $category): self
+    public function getSeller(): Seller
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories[] = $category;
-            $category->setShop($this);
-        }
-
-        return $this;
+        return $this->seller;
     }
 
-    public function removeCategory(Category $category): self
+    public function setSeller(Seller $seller): void
     {
-        if ($this->categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getShop() === $this) {
-                $category->setShop(null);
-            }
-        }
-
-        return $this;
+        $this->seller = $seller;
     }
+
+
 }

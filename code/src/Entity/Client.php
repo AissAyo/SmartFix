@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
 #[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
-class Client extends User implements UserInterface
+class Client extends User
 {
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
@@ -48,9 +48,6 @@ class Client extends User implements UserInterface
     private ?string $address = null;
 
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    
-    private ?string $name = null;
 
 
     public function __construct()
@@ -65,15 +62,14 @@ class Client extends User implements UserInterface
         $this->cars = new ArrayCollection();
     }
 
-    public function getVerificationStatus(): bool
+    public function isVerificationStatus(): bool
     {
         return $this->verificationStatus;
     }
 
-    public function setVerificationStatus(bool $verificationStatus): self
+    public function setVerificationStatus(bool $verificationStatus): void
     {
         $this->verificationStatus = $verificationStatus;
-        return $this;
     }
 
     public function getDateInscription(): \DateTimeImmutable
@@ -81,10 +77,9 @@ class Client extends User implements UserInterface
         return $this->dateInscription;
     }
 
-    public function setDateInscription(\DateTimeImmutable $dateInscription): self
+    public function setDateInscription(\DateTimeImmutable $dateInscription): void
     {
         $this->dateInscription = $dateInscription;
-        return $this;
     }
 
     public function getLoyaltyPoints(): int
@@ -92,215 +87,70 @@ class Client extends User implements UserInterface
         return $this->loyaltyPoints;
     }
 
-    public function setLoyaltyPoints(int $loyaltyPoints): self
+    public function setLoyaltyPoints(int $loyaltyPoints): void
     {
         $this->loyaltyPoints = $loyaltyPoints;
-        return $this;
     }
-  
-    public function setUsername($username){
-        $this->username = $username;
-        return $this;
-    }
-    public function setPassword($password){
-        $this->password = $password;
-        return $this;
-    }
-    /**
-     * @return Collection|Review[]
-     */
-    
 
-    /**
-     * @return Collection|Vehicule[]
-     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function setReservations(Collection $reservations): void
+    {
+        $this->reservations = $reservations;
+    }
+
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function setReviews(Collection $reviews): void
+    {
+        $this->reviews = $reviews;
+    }
+
     public function getVehicules(): Collection
     {
         return $this->vehicules;
     }
 
-    public function addVehicule(Vehicule $vehicule): self
+    public function setVehicules(Collection $vehicules): void
     {
-        if (!$this->vehicules->contains($vehicule)) {
-            $this->vehicules[] = $vehicule;
-            $vehicule->setClient($this);
-        }
-        return $this;
+        $this->vehicules = $vehicules;
     }
 
-    public function removeVehicule(Vehicule $vehicule): self
-    {
-        if ($this->vehicules->removeElement($vehicule)) {
-            // set the owning side to null (unless already changed)
-            if ($vehicule->getClient() === $this) {
-                $vehicule->setClient(null);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @return Collection|Critique[]
-     */
     public function getCritiques(): Collection
     {
         return $this->critiques;
     }
 
-    public function addCritique(Critique $critique): self
+    public function setCritiques(Collection $critiques): void
     {
-        if (!$this->critiques->contains($critique)) {
-            $this->critiques[] = $critique;
-            $critique->setClient($this);
-        }
-        return $this;
+        $this->critiques = $critiques;
     }
 
-    public function removeCritique(Critique $critique): self
-    {
-        if ($this->critiques->removeElement($critique)) {
-            // set the owning side to null (unless already changed)
-            if ($critique->getClient() === $this) {
-                $critique->setClient(null);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @return Collection|Cart[]
-     */
     public function getCarts(): Collection
     {
         return $this->carts;
     }
 
-    public function addCart(Cart $cart): self
+    public function setCarts(Collection $carts): void
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts[] = $cart;
-            $cart->setClient($this);
-        }
-        return $this;
+        $this->carts = $carts;
     }
 
-    public function removeCart(Cart $cart): self
-    {
-        if ($this->carts->removeElement($cart)) {
-            // set the owning side to null (unless already changed)
-            if ($cart->getClient() === $this) {
-                $cart->setClient(null);
-            }
-        }
-        return $this;
-    }
-
-    /**
-     * @return Collection|Complaint[]
-     */
     public function getComplaints(): Collection
     {
         return $this->complaints;
     }
 
-    public function addComplaint(Complaint $complaint): self
+    public function setComplaints(Collection $complaints): void
     {
-        if (!$this->complaints->contains($complaint)) {
-            $this->complaints[] = $complaint;
-            $complaint->setClient($this);
-        }
-        return $this;
+        $this->complaints = $complaints;
     }
 
-    public function removeComplaint(Complaint $complaint): self
-    {
-        if ($this->complaints->removeElement($complaint)) {
-            // set the owning side to null (unless already changed)
-            if ($complaint->getClient() === $this) {
-                $complaint->setClient(null);
-            }
-        }
-        return $this;
-    }
 
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return Collection|Car[]
-     */
-    public function getCars(): Collection
-    {
-        return $this->cars;
-    }
-
-    public function addCar(Car $car): self
-    {
-        if (!$this->cars->contains($car)) {
-            $this->cars[] = $car;
-            $car->setClient($this);
-        }
-        return $this;
-    }
-
-    public function removeCar(Car $car): self
-    {
-        if ($this->cars->removeElement($car)) {
-            // set the owning side to null (unless already changed)
-            if ($car->getClient() === $this) {
-                $car->setClient(null);
-            }
-        }
-        return $this;
-    }
-
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-        return $this;
-    }
-
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-    }
-
-    public function getUserIdentifier(): string
-    {
-        return $this->username;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
 }
