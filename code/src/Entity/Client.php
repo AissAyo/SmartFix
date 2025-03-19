@@ -2,25 +2,20 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 
 #[ORM\Entity]
 #[ORM\Table(name: "clients")]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name: "discr", type: "string")]
-#[ORM\DiscriminatorMap(["client" => "Client", "verifiedClient" => "VerifiedClient"])]
-#[ORM\Table(name: "clients")]
-class Client extends User implements UserInterface, PasswordAuthenticatedUserInterface
-
+#[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
+class Client extends User implements UserInterface
 {
-
-
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -57,17 +52,6 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
     
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $password = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $resetToken = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $tokenExpiration = null;
 
     public function __construct()
     {
@@ -125,30 +109,7 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
     /**
      * @return Collection|Review[]
      */
-    public function getReviews(): Collection
-    {
-        return $this->reviews;
-    }
-
-    public function addReview(Review $review): self
-    {
-        if (!$this->reviews->contains($review)) {
-            $this->reviews[] = $review;
-            $review->setClient($this);
-        }
-        return $this;
-    }
-
-    public function removeReview(Review $review): self
-    {
-        if ($this->reviews->removeElement($review)) {
-            // set the owning side to null (unless already changed)
-            if ($review->getClient() === $this) {
-                $review->setClient(null);
-            }
-        }
-        return $this;
-    }
+    
 
     /**
      * @return Collection|Vehicule[]
@@ -317,6 +278,12 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
         return $this->roles;
     }
 
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -327,51 +294,13 @@ class Client extends User implements UserInterface, PasswordAuthenticatedUserInt
         return $this->username;
     }
 
-    public function getEmail(): ?string
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getEmail()
     {
         return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): static
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getResetToken(): ?string
-    {
-        return $this->resetToken;
-    }
-
-    public function setResetToken(?string $resetToken): static
-    {
-        $this->resetToken = $resetToken;
-
-        return $this;
-    }
-
-    public function getTokenExpiration(): ?\DateTimeInterface
-    {
-        return $this->tokenExpiration;
-    }
-
-    public function setTokenExpiration(?\DateTimeInterface $tokenExpiration): static
-    {
-        $this->tokenExpiration = $tokenExpiration;
-
-        return $this;
     }
 }

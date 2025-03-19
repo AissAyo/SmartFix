@@ -31,13 +31,6 @@ class Mechanic extends Garagiste implements UserInterface
     #[ORM\ManyToOne(targetEntity: Role::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Role $role;
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @Assert\Email(message="Please enter a valid email address.")
-     * @Assert\NotBlank(message="Email cannot be blank.")
-     */
-
-
 
     // Implementing the required method from UserInterface
     public function getUserIdentifier(): string

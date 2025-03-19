@@ -95,7 +95,7 @@
 }
 
 .contact-form {
-    background-image: url('../img/background/bg-6.jpg');
+    background-image: url('../../public/build/img/background/bg-6.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

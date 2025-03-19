@@ -11,29 +11,16 @@ abstract class Garagiste extends User
    
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $garageName;
+    protected string $garageName;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $garageAddress;
+    protected string $garageAddress;
 
     #[ORM\Column(type: "string", length: 255)]
-    private string $phoneNumber;
+    protected string $phone_number;
 
     #[ORM\Column(type: "string", length: 255)]
     protected string $workingHours;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): static
-    {
-        $this->email = $email;
-
-        return $this;
-    }
 }

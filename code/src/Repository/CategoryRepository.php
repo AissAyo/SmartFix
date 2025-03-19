@@ -1,43 +1,43 @@
 <?php
-
 namespace App\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Category;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Category>
- */
-class CategoryRepository extends ServiceEntityRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, Category::class);
+        $this->entityManager = $entityManager;
     }
 
-    //    /**
-    //     * @return Category[] Returns an array of Category objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function getEntityById(int $id): ?Category
+    {
+        return $this->entityManager->getRepository(Category::class)->find($id);
+    }
 
-    //    public function findOneBySomeField($value): ?Category
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function getAllEntities(): array
+    {
+        return $this->entityManager->getRepository(Category::class)->findAll();
+    }
+
+    public function addEntity($entity): void
+    {
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+    }
+
+    public function updateEntity($entity): void
+    {
+        $this->entityManager->merge($entity);
+        $this->entityManager->flush();
+    }
+
+    public function deleteEntity($entity): void
+    {
+        $this->entityManager->remove($entity);
+        $this->entityManager->flush();
+    }
 }

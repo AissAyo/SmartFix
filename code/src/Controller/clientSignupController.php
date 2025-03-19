@@ -3,14 +3,14 @@
 
 namespace App\Controller;
 
+use App\DTO\clientSignupDTO;
+use App\Entity\Client;
+use App\Type\clientType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Client;
-use App\DTO\clientSignupDTO;
-use App\Form\Type\clientType;
 
 class clientSignupController extends AbstractController
 {

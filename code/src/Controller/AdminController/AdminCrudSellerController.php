@@ -1,0 +1,91 @@
+<?php
+namespace App\Controller\AdminController;
+
+use App\Entity\Seller;
+use App\Service\SellerService;
+use App\Type\SellerType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+
+class AdminCrudSellerController extends AbstractController
+{
+    private SellerService $sellerService;
+
+    public function __construct(SellerService $sellerService)
+    {
+        $this->sellerService = $sellerService;
+    }
+
+    #[Route('listseller', name: 'admin_list_seller')]
+    public function listSeller(): Response
+    {
+        $sellers = $this->sellerService->getAllSellers();
+        return $this->render('Admin/adminCrudSeller.html.twig', ['sellers' => $sellers]);
+    }
+    #[Route('addseller', name: 'admin_sellers_add', methods: ['GET', 'POST'])]
+    public function addSeller(Request $request): Response
+    {
+        if ($request->isMethod('POST')) {
+            $seller = new Seller();
+            $seller->setUsername($request->request->get('username'));
+            $seller->setContactInfo($request->request->get('contactInfo'));
+            $seller->setPhoneNumber($request->request->get('phoneNumber'));
+            $seller->setGarageAddress($request->request->get('garageAddress'));
+
+            $this->sellerService->createSeller($seller);
+
+            return $this->redirectToRoute('admin_list_seller');
+        }
+
+        return $this->render('Admin/adminCrudSellerAdd.html.twig');
+    }
+
+    #[Route('editseller/{id}', name: 'admin_sellers_edit', methods: ['GET', 'POST'])]
+    public function editSeller(Request $request, int $id): Response
+    {
+        $seller = $this->sellerService->getSeller($id);
+        if (!$seller) {
+            throw $this->createNotFoundException('No seller found for id ' . $id);
+        }
+
+        $form = $this->createForm(SellerType::class, $seller);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->sellerService->updateSeller($seller);
+            return $this->redirectToRoute('admin_list_seller');
+        }
+
+        return $this->render('Admin/adminCrudSellerEdit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('showseller/{id}', name: 'admin_sellers_show', methods: ['GET'])]
+    public function showSeller(int $id): Response
+    {
+        $seller = $this->sellerService->getSeller($id);
+        if (!$seller) {
+            throw $this->createNotFoundException('No seller found for id ' . $id);
+        }
+
+        return $this->render('Admin/adminCrudSellerShow.html.twig', ['seller' => $seller]);
+    }
+
+    #[Route('deleteseller/{id}', name: 'admin_sellers_delete', methods: ['POST'])]
+    public function deleteSeller(Request $request, int $id): Response
+    {
+        $seller = $this->sellerService->getSeller($id);
+        if (!$seller) {
+            throw $this->createNotFoundException('No seller found for id ' . $id);
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $seller->getId(), $request->request->get('_token'))) {
+            $this->sellerService->deleteSeller($seller);
+        }
+
+        return $this->redirectToRoute('admin_list_seller');
+    }
+}

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Seller{% endblock %}
+
+{% block body %}
+    <h1>Edit Seller</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">Save</button>
+    {{ form_end(form) }}
+    <a href="{{ path('admin_list_seller') }}">Back to list</a>
+{% endblock %}

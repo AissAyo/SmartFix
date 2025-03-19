@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Repository\ClientRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\Client;
@@ -13,23 +13,24 @@ use App\Entity\ServiceClient;
 
 class AuthService
 {
-    private UserRepository $userRepository;
+    private ClientRepository $ClientRepository;
     private UserPasswordHasherInterface $passwordHasher;
     private RequestStack $requestStack;
 
     public function __construct(
-        UserRepository $userRepository,
+        ClientRepository $ClientRepository,
         UserPasswordHasherInterface $passwordHasher,
         RequestStack $requestStack
     ) {
-        $this->userRepository = $userRepository;
+
+        $this->ClientRepository = $ClientRepository;
         $this->passwordHasher = $passwordHasher;
         $this->requestStack = $requestStack;
     }
 
     public function authenticate(string $email, string $password): ?User
     {
-        $user = $this->userRepository->findUserByEmail($email);
+        $user = $this->ClientRepository->findUserByEmail($email);
 
         if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
             return null; // Retourne null si l'authentification échoue
@@ -38,7 +39,7 @@ class AuthService
         return $user;
     }
 
-    public function loginUser(User $user): void
+    public function loginUser(Client $user): void
     {
         $session = $this->requestStack->getSession();
 

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show Seller{% endblock %}
+
+{% block body %}
+    <h1>Seller Details</h1>
+    <p><strong>Username:</strong> {{ seller.username }}</p>
+    <p><strong>Contact Info:</strong> {{ seller.contactInfo }}</p>
+    <p><strong>Phone Number:</strong> {{ seller.phoneNumber }}</p>
+    <p><strong>Garage Address:</strong> {{ seller.garageAddress }}</p>
+    <a href="{{ path('admin_list_seller') }}">Back to list</a>
+{% endblock %}

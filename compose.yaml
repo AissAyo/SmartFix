@@ -31,6 +31,9 @@ services:
         - mysql
       networks:
         - symfony
+      ports:
+        - "8000:8000"
+
 
     mysql:
       image: mysql
