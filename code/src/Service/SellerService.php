@@ -32,6 +32,7 @@ class SellerService
 
     public function createSeller(Seller $seller): void
     {
+
         $this->sellerRepository->addEntity($seller);
     }
 

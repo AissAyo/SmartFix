@@ -30,7 +30,6 @@
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
                             <th scope="col">password</th>
-                            <th scope="col">Address</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                         </thead>
@@ -39,9 +38,8 @@
                             <tr>
                                 <th scope="row">{{ seller.username }}</th>
                                 <td>{{ seller.contactInfo }}</td>
-                                <td>{{ seller.phoneNumber }}</td>
+                                <td>{{ seller.phone_number }}</td>
                                 <td>{{ seller.password }}</td>
-                                <td>{{ seller.garageAddress  }}</td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0" type="button" id="seller-{{ seller.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">
