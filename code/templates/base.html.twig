@@ -10,14 +10,6 @@
 
         {# Block for stylesheets #}
         {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-            {% block extra_stylesheets %}{% endblock %}
-            
-            <link href="{{ asset('assets/img/favicon.png') }}" rel="shortcut icon" type="image/png">
-            <link href="{{ asset('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
-            <link href="{{ asset('assets/img/apple-touch-icon-72x72.png') }}" rel="apple-touch-icon" sizes="72x72">
-            <link href="{{ asset('assets/img/apple-touch-icon-114x114.png') }}" rel="apple-touch-icon" sizes="114x114">
-            <link href="{{ asset('assets/img/apple-touch-icon-144x144.png') }}" rel="apple-touch-icon" sizes="144x144">
         {% endblock %}
     </head>
     <body>
@@ -35,36 +27,6 @@
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-           
-           {% block importmap %}{{ importmap('app') }}{% endblock %}
-            <!-- Core JS -->
-            <script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
-
-            <!-- Framework -->
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-
-            <!-- WOW Scroll Effect -->
-            <script src="{{ asset('plugins/wow/wow.min.js') }}"></script>
-
-            <!-- Swiper Slider -->
-            <script src="{{ asset('plugins/swiper/swiper-bundle.min.js') }}"></script>
-
-            <!-- Odometer Counter -->
-            <script src="{{ asset('plugins/odometer/appear.js') }}"></script>
-            <script src="{{ asset('plugins/odometer/odometer.js') }}"></script>
-
-            <!-- Fancybox -->
-            <script src="{{ asset('plugins/fancybox/jquery.fancybox.min.js') }}"></script>
-
-            <!-- Flatpickr -->
-            <script src="{{ asset('plugins/flatpickr/flatpickr.min.js') }}"></script>
-
-            <!-- Nice Select -->
-            <script src="{{ asset('plugins/nice-select/jquery.nice-select.min.js') }}"></script>
-
-            <!-- Theme Custom JS -->
-            <script src="{{ asset('js/theme.js') }}"></script>
 
         {% endblock %}
     </body>
