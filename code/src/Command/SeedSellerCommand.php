@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    name: 'app:seed-sellers',  // Command name
+    name: 'app:seed-sellers',
     description: 'Seed the database with fake seller data'
 )]
 class SeedSellerCommand extends Command
@@ -33,23 +33,21 @@ class SeedSellerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $faker = Factory::create();  // Initialize Faker
+        $faker = Factory::create();
 
         $output->writeln('Seeding sellers...');
 
-        // Generate 10 fake sellers and persist them to the database
         for ($i = 0; $i < 20; $i++) {
-            // Generate random values for the required fields
-            $phone_number = $faker->phoneNumber;
+            // Generate Fake Data
+            $username = $faker->userName;
+            $email = $faker->unique()->safeEmail;
+            $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
+            $phoneNumber = $faker->phoneNumber;
             $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
             $contactInfo = $faker->address;
 
-            // Create Seller object and pass the arguments to the constructor
-            $seller = new Seller($phone_number, $workingHours, $contactInfo);
-            $seller->setUsername($faker->userName)
-                ->setEmail($faker->unique()->safeEmail)
-                ->setPassword(password_hash('password123', PASSWORD_BCRYPT)) // Default password
-                ->setRole('Seller');
+            // Create Seller object with updated constructor arguments
+            $seller = new Seller($username, $phoneNumber, $workingHours, $contactInfo, $email, $password);
 
             // Persist the seller entity
             $this->em->persist($seller);

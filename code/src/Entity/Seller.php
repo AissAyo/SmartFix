@@ -15,11 +15,12 @@ class Seller extends Garagiste
     #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'seller')]
     private Collection $shops;
 
-    public function __construct(string $phone_number, string $workingHours, string $contactInfo)
+    public function __construct(string $username, string $phoneNumber, string $workingHours, string $contactInfo, ?string $email = null, ?string $password = null)
     {
-        parent::__construct($phone_number, $workingHours); // Pass arguments to the parent constructor
+        parent::__construct($username, $phoneNumber, $workingHours, $email, $password);
         $this->contactInfo = $contactInfo;
-        $this->shops = new ArrayCollection(); // Initialize the collection
+        $this->shops = new ArrayCollection();
+        $this->setRole("Seller"); // Assign role here
     }
 
     public function getContactInfo(): string

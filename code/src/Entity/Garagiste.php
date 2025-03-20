@@ -10,14 +10,15 @@ abstract class Garagiste extends User
 {
 
     #[ORM\Column(type: "string", length: 255)]
-    protected string $phone_number;
+    protected string $phoneNumber;
 
     #[ORM\Column(type: "string", length: 255)]
     protected string $workingHours;
 
-    public function __construct(string $phone_number, string $workingHours)
+    public function __construct(string $username, string $phoneNumber, string $workingHours, ?string $email = null, ?string $password = null)
     {
-        $this->phone_number = $phone_number;
+        parent::__construct($username, $email, $password);
+        $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
     }
     public function getWorkingHours(): string

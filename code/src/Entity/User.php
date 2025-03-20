@@ -24,9 +24,11 @@ abstract class User
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     protected ?string $role = null; // Change this to match camelCase
 
-    public function __construct()
+    public function __construct(string $username, ?string $email = null, ?string $password = null)
     {
-        // You can initialize default values here if needed
+        $this->username = $username;
+        $this->email = $email;
+        $this->password = $password;
     }
 
     public function getRole(): ?string
