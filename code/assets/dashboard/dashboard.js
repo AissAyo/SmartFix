@@ -6,8 +6,10 @@ import './dashboard.css';
 import './js/SidebarSearch.js';
 import './js/DirectChat.js';
 import './dist/img/avatar.png';
+import './js/CrudClient.js';
+import './js/AddNormalClient.js';
 
-// import './js/pages/dashboard.js';
+
 
 
 
