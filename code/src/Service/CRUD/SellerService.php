@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\CRUD;
 
 use App\Entity\Seller;
-use App\Listener\Indexer\ElasticsearchIndexer;
 use App\Repository\SellerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Events;
 
 class SellerService
 {

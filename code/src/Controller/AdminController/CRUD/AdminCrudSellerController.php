@@ -2,7 +2,7 @@
 namespace App\Controller\AdminController\CRUD;
 
 use App\Entity\Seller;
-use App\Service\SellerService;
+use App\Service\CRUD\SellerService;
 use App\Type\SellerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +22,7 @@ class AdminCrudSellerController extends AbstractController
     public function listSeller(): Response
     {
         $sellers = $this->sellerService->getAllSellers();
-        return $this->render('Admin/adminCrudSeller.html.twig', ['sellers' => $sellers]);
+        return $this->render('Admin/CRUD/Seller/adminCrudSeller.html.twig', ['sellers' => $sellers]);
     }
     #[Route('addseller', name: 'admin_sellers_add', methods: ['GET', 'POST'])]
     public function addSeller(Request $request): Response
@@ -36,7 +36,7 @@ class AdminCrudSellerController extends AbstractController
             return $this->redirectToRoute('admin_list_seller');
         }
 
-        return $this->render('Admin/adminCrudSellerAdd.html.twig', [
+        return $this->render('Admin/CRUD/Seller/adminCrudSellerAdd.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -57,7 +57,7 @@ class AdminCrudSellerController extends AbstractController
             return $this->redirectToRoute('admin_list_seller');
         }
 
-        return $this->render('Admin/adminCrudSellerEdit.html.twig', [
+        return $this->render('Admin/CRUD/Seller/adminCrudSellerEdit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -70,7 +70,7 @@ class AdminCrudSellerController extends AbstractController
             throw $this->createNotFoundException('No seller found for id ' . $id);
         }
 
-        return $this->render('Admin/adminCrudSellerShow.html.twig', ['seller' => $seller]);
+        return $this->render('Admin/CRUD/Seller/adminCrudSellerShow.html.twig', ['seller' => $seller]);
     }
 
     #[Route('deleteseller/{id}', name: 'admin_sellers_delete', methods: ['POST'])]

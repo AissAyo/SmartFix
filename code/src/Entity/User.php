@@ -23,6 +23,8 @@ abstract class User
     #[ORM\Column(type: "string", length: 255)]
     private string $email;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $logo = null;
 
     #[ORM\Column(type: "json")]
     private string $roles;
@@ -40,7 +42,8 @@ abstract class User
         string $roles,
         ?string $password = null,
         ?string $resetToken = null,
-        ?DateTimeInterface $tokenExpiration = null
+        ?DateTimeInterface $tokenExpiration = null,
+        ?string $logo = null
     ) {
         $this->name = $name;
         $this->email = $email;
@@ -48,6 +51,7 @@ abstract class User
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
+        $this->logo=$logo;
     }
 
     public function getId(): ?int

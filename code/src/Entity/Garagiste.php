@@ -14,8 +14,7 @@ abstract class Garagiste extends User
 
     #[ORM\Column( type: 'string', length: 255, nullable: true)]
     private ?string $working_hours = null;
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $logo = null;
+
 
 
     public function __construct(
@@ -29,10 +28,8 @@ abstract class Garagiste extends User
         ?string            $logo = null,
         ?string            $workingHours = null
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration);
-
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration,$logo);
         $this->phoneNumber = $phoneNumber;
-        $this->logo = $logo;
         $this->working_hours = $workingHours;
     }
 
