@@ -1,5 +1,5 @@
 <?php
-namespace  App\Controller\AdminController;
+namespace  App\Controller\AdminController\CRUD;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
