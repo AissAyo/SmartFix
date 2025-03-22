@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Controller\AdminController;
+namespace App\Controller\AdminController\CRUD;
 
 use App\Entity\Mechanic;
-use App\Service\MechanicService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 class AdminCrudMechanicController extends AbstractController
 {
