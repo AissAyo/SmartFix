@@ -27,22 +27,21 @@ class AdminCrudSellerController extends AbstractController
     #[Route('addseller', name: 'admin_sellers_add', methods: ['GET', 'POST'])]
     public function addSeller(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $seller = new Seller();
-            $seller->setUsername($request->request->get('username'));
-            $seller->setContactInfo($request->request->get('contactInfo'));
-            $seller->setPhoneNumber($request->request->get('phoneNumber'));
-            $seller->setGarageAddress($request->request->get('garageAddress'));
+        $seller = new Seller();
+        $form = $this->createForm(SellerType::class, $seller);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->sellerService->createSeller($seller);
-
             return $this->redirectToRoute('admin_list_seller');
         }
 
-        return $this->render('Admin/adminCrudSellerAdd.html.twig');
+        return $this->render('Admin/adminCrudSellerAdd.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('editseller/{id}', name: 'admin_sellers_edit', methods: ['GET', 'POST'])]
+    #[Route('/editseller/{id}', name: 'admin_sellers_edit', methods: ['GET', 'POST'])]
     public function editSeller(Request $request, int $id): Response
     {
         $seller = $this->sellerService->getSeller($id);

@@ -29,17 +29,21 @@
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">password</th>
+                            <th scope="col">Logo</th>
+                            <th scope="col">Working Hours</th>
+                            <th scope="col">Contact Information</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for seller in sellers %}
                             <tr>
-                                <th scope="row">{{ seller.username }}</th>
-                                <td>{{ seller.contactInfo }}</td>
+                                <th scope="row">{{ seller.name}}</th>
+                                <td>{{ seller.email}}</td>
                                 <td>{{ seller.phone_number }}</td>
-                                <td>{{ seller.password }}</td>
+                                <td>{{ seller.logo }}</td>
+                                <td>{{ seller.working_hours}}</td>
+                                <td>{{ seller.contactInfo}}</td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0" type="button" id="seller-{{ seller.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">

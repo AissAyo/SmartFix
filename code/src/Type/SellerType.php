@@ -12,20 +12,29 @@ class SellerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
-                'label' => 'Username',
+            ->add('name', TextType::class, [
+                'label' => 'name',
                 'required' => true,
             ])
-            ->add('contactInfo', TextType::class, [
-                'label' => 'Contact Info',
+
+            ->add('email', TextType::class, [
+                'label' => 'E-mail',
                 'required' => true,
             ])
             ->add('phoneNumber', TextType::class, [
-                'label' => 'Phone Number',
+                'label' => 'Garage Address',
                 'required' => true,
             ])
-            ->add('garageAddress', TextType::class, [
-                'label' => 'Garage Address',
+             ->add('Logo', TextType::class, [
+                 'label' => 'Logo',
+                 'required' => true,
+            ])
+            ->add('workingHours', TextType::class, [
+            'label' => 'workingHours',
+            'required' => true,
+            ])
+            ->add('contactInfo', TextType::class, [
+                'label' => 'Contact Info',
                 'required' => true,
             ]);
     }
