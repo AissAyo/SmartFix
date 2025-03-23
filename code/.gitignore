@@ -30,3 +30,10 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+AdminLTE/
+template/
+/AdminLTE
+/AdminLTE/
+/template/
+/template

@@ -22,8 +22,8 @@ abstract class User
     #[ORM\Column(type: "string", length: 255)]
     protected string $Email;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 255)];
 
-    protected string $;
+    // protected string $;
     // Other common properties and methods for User
 }
