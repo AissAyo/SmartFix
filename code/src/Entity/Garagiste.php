@@ -2,44 +2,55 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
- 
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
 {
 
-    #[ORM\Column(type: "string", length: 255)]
-    protected string $phoneNumber;
+    #[ORM\Column(type: "string", length: 20, nullable: true)]
+    private ?string $phoneNumber = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    protected string $workingHours;
+    #[ORM\Column( type: 'string', length: 255, nullable: true)]
+    private ?string $workingHours = null;
 
-    public function __construct(string $username, string $phoneNumber, string $workingHours, ?string $email = null, ?string $password = null)
-    {
-        parent::__construct($username, $email, $password);
+
+
+    public function __construct(
+        string             $name,
+        string             $email,
+        string             $roles,
+        ?string            $password = null,
+        ?string            $resetToken = null,
+        ?DateTimeInterface $tokenExpiration = null,
+        ?string            $phoneNumber = null,
+        ?string            $logo = null,
+        ?string            $workingHours = null
+    ) {
+
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $logo);
+
+
         $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
     }
-    public function getWorkingHours(): string
+
+    public function getphoneNumber(): ?string
     {
-        return $this->workingHours;
+        return $this->phoneNumber;
     }
 
-    public function setWorkingHours(string $workingHours): void
+    public function setphoneNumber(?string $phoneNumber): void
     {
-        $this->workingHours = $workingHours;
+        $this->phoneNumber = $phoneNumber;
     }
-
-    public function getPhoneNumber(): string
+    public function getworkingHours(): ?string
     {
-        return $this->phone_number;
-    }
-
-    public function setPhoneNumber(string $phone_number): void
+    return $this->workingHours;
+    }public function setworkingHours(?string $workingHours): void
     {
-        $this->phone_number = $phone_number;
+    $this->workingHours = $workingHours;
     }
-
 
 }

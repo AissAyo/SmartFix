@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "sellers")]
@@ -15,23 +15,48 @@ class Seller extends Garagiste
     #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'seller')]
     private Collection $shops;
 
-    public function __construct(string $username, string $phoneNumber, string $workingHours, string $contactInfo, ?string $email = null, ?string $password = null)
-    {
-        parent::__construct($username, $phoneNumber, $workingHours, $email, $password);
+
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $contactInfo
+     * @param string $roles
+     * @param string|null $password
+     * @param string|null $resetToken
+     * @param \DateTimeInterface|null $tokenExpiration
+     * @param string|null $phoneNumber
+     * @param string|null $logo
+     * @param string|null $workingHours
+     */
+    public function __construct(
+        string $name='',
+        string $email='',
+        string $contactInfo='',
+        string $roles = "Seller",
+        ?string $password = null,
+        ?string $resetToken = null,
+        ?\DateTimeInterface $tokenExpiration = null,
+
+        ?string $phoneNumber = null,
+        ?string $logo = null,
+        ?string $workingHours = null
+    ) {
+
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo, $workingHours);
+
+
         $this->contactInfo = $contactInfo;
-        $this->shops = new ArrayCollection();
-        $this->setRole("Seller"); // Assign role here
     }
+
 
     public function getContactInfo(): string
     {
         return $this->contactInfo;
     }
 
-    public function setContactInfo(string $contactInfo): self
+    public function setContactInfo(string $contactInfo): void
     {
         $this->contactInfo = $contactInfo;
-        return $this;
     }
 
     public function getShops(): Collection
@@ -39,11 +64,13 @@ class Seller extends Garagiste
         return $this->shops;
     }
 
-    public function setShops(Collection $shops): self
+    public function setShops(Collection $shops): void
     {
         $this->shops = $shops;
-        return $this;
     }
+
+
+
 
 
 }

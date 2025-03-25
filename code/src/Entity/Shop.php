@@ -6,34 +6,34 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-
 #[ORM\Entity]
 class Shop
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $id;
+    private int $id; // Ensure this column is named 'id'
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $shopName;
-
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $location;
-
-
+    private string $name;
 
     #[ORM\ManyToOne(targetEntity: Seller::class, inversedBy: 'shops')]
     #[ORM\JoinColumn(nullable: false)]
-    private Seller $seller;
+    private ?Seller $seller = null;
 
+    #[ORM\OneToMany(targetEntity: CategoryProduct::class, mappedBy: 'shop')]
+    private Collection $categoryProducts;
 
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'shop')]
-    private Collection $categories;
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'shop')]
+    private Collection $products;
+
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'shop')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
 
     public function __construct()
     {
-        $this->seller = new Seller();
+        $this->sellers = new ArrayCollection();
         $this->categories = new ArrayCollection();
     }
 
@@ -42,14 +42,14 @@ class Shop
         return $this->id;
     }
 
-    public function getShopName(): string
+    public function getName(): string
     {
-        return $this->shopName;
+        return $this->name;
     }
 
-    public function setShopName(string $shopName): self
+    public function setName(string $name): self
     {
-        $this->shopName = $shopName;
+        $this->name = $name;
         return $this;
     }
 
@@ -64,20 +64,57 @@ class Shop
         return $this;
     }
 
+    public function getSellers(): Collection
+    {
+        return $this->sellers;
+    }
+
+    public function addSeller(Seller $seller): self
+    {
+        if (!$this->sellers->contains($seller)) {
+            $this->sellers[] = $seller;
+            $seller->setShop($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSeller(Seller $seller): self
+    {
+        if ($this->sellers->removeElement($seller)) {
+            // set the owning side to null (unless already changed)
+            if ($seller->getShop() === $this) {
+                $seller->setShop(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getCategories(): Collection
     {
         return $this->categories;
     }
 
-    public function getSeller(): Seller
+    public function addCategory(Category $category): self
     {
-        return $this->seller;
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->setShop($this);
+        }
+
+        return $this;
     }
 
-    public function setSeller(Seller $seller): void
+    public function removeCategory(Category $category): self
     {
-        $this->seller = $seller;
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getShop() === $this) {
+                $category->setShop(null);
+            }
+        }
+
+        return $this;
     }
-
-
 }

@@ -7,12 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'garages')]
 class Garage
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $Id;
+
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $EmailGarage;
+
 
     #[ORM\Column(type: 'float')]
     private float $rating;
@@ -21,25 +27,24 @@ class Garage
     private string $status;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $garageName;
+    private string $name;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $location;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $workingHours = null;
 
-    #[ORM\Column(type: 'string', length: 15)]
-    private string $telephoneGarage;
-
-    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garage')]
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
+    #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'garage')]
+    private Collection $garageServices;
 
-    #[ORM\ManyToMany(targetEntity: CategoryService::class, inversedBy: 'garages')]
-    #[ORM\JoinTable(name: 'garage_category_service')]
-    private Collection $categoryServices;
-
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: 'garage')]
-    private Collection $critiques;
-
+    
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Location $location = null;
+    
+    
 
 
     public function __construct()
@@ -85,37 +90,24 @@ class Garage
     }
 
     // Getter and Setter for $name
-
-
-    // Getter and Setter for $location
-    public function getLocation(): string
+    public function getName(): string
     {
-        return $this->location;
+        return $this->name;
     }
 
-    public function setLocation(string $location): self
+    public function setName(string $name): self
     {
-        $this->location = $location;
+        $this->name = $name;
         return $this;
     }
 
-    public function getGarageName(): string
+    public function getEmailGarage(): string
     {
-        return $this->garageName;
+        return $this->EmailGarage;
     }
-
-    public function setGarageName(string $garageName): void
+    public function setEmailGarage (): self
     {
-        $this->garageName = $garageName;
-    }
-
-    public function getTelephoneGarage(): string
-    {
-        return $this->telephoneGarage;
-    }
-
-    public function setTelephoneGarage(string $telephoneGarage): void
-    {
-        $this->telephoneGarage = $telephoneGarage;
+        $this->EmailGarage = $EmailGarage;
+        return $this;
     }
 }

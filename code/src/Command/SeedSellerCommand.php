@@ -37,17 +37,32 @@ class SeedSellerCommand extends Command
 
         $output->writeln('Seeding sellers...');
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             // Generate Fake Data
-            $username = $faker->userName;
+            $name = $faker->name;
             $email = $faker->unique()->safeEmail;
-            $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
-            $phoneNumber = $faker->phoneNumber;
-            $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
             $contactInfo = $faker->address;
+            $roles = "Seller"; // Default role
+            $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
+            $resetToken = null;
+            $tokenExpiration = null;
+            $phoneNumber = $faker->phoneNumber;
+            $logo = $faker->imageUrl(200, 200, 'business'); // Generates a fake logo URL
+            $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
 
             // Create Seller object with updated constructor arguments
-            $seller = new Seller($username, $phoneNumber, $workingHours, $contactInfo, $email, $password);
+            $seller = new Seller(
+                $name,
+                $email,
+                $contactInfo,
+                $roles,
+                $password,
+                $resetToken,
+                $tokenExpiration,
+                $phoneNumber,
+                $logo,
+                $workingHours
+            );
 
             // Persist the seller entity
             $this->em->persist($seller);

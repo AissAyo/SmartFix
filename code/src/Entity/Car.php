@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "cars")]
@@ -19,13 +21,27 @@ class Car
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
-    #[ORM\ManyToOne(targetEntity: CarRentalService::class, inversedBy: "cars")]
+    #[ORM\Column(type: "boolean", length: 255)]
+    private bool $Status;
+
+    #[ORM\Column(type: "float", length: 255)]
+    private float $DailyRate;
+
+    #[ORM\ManyToOne(targetEntity: CarRental::class, inversedBy: 'cars')]
     #[ORM\JoinColumn(nullable: false)]
-    private CarRentalService $carRentalService;
+    private CarRental $carRental;
     
     #[ORM\OneToMany(targetEntity: Rental::class, mappedBy: "car")]
     private Collection $rentals;
 
+    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'cars')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CarAPI $carAPI = null;
+
+    public function __construct()
+    {
+        $this->carAPIs = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -54,14 +70,36 @@ class Car
         return $this;
     }
 
-    public function getClient(): Client
+    public function getDailyRate(): float
     {
-        return $this->client;
+        return $this->DailyRate;
     }
 
-    public function setClient(Client $client): self
+    public function setDailyrate(float $DailyRate): self
     {
-        $this->client = $client;
+        $this->DailyRate = $DailyRate;
+        return $this;
+    }
+
+    public function getStatus(): bool
+    {
+        return $this->Status;
+    }
+
+    public function setStatus(bool $Status): self
+    {
+        $this->Status = $Status;
+        return $this;
+    }
+
+    public function getCarRentalService(): CarRentalService
+    {
+        return $this->carRentalService;
+    }
+
+    public function setCarRentalService(CarRentalService $carRentalService): self
+    {
+        $this->carRentalService = $carRentalService;
         return $this;
     }
 }

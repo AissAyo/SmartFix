@@ -14,15 +14,20 @@ class Cart
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private string $totalAmount;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'cart')]
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'carts')]
+    #[ORM\JoinTable(name: 'cart_products')]
     private Collection $products;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
+    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: 'cart')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
+
+    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'cart')]
+    private ?Order $order = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -33,12 +38,12 @@ class Cart
         return $this->id;
     }
 
-    public function getTotalAmount(): float
+    public function getTotalAmount(): string
     {
         return $this->totalAmount;
     }
 
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalAmount(string $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
         return $this;
@@ -53,7 +58,7 @@ class Cart
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setCart($this);
+            $product->addCart($this);
         }
 
         return $this;
@@ -62,20 +67,31 @@ class Cart
     public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCart() === $this) {
-                $product->setCart(null);
-            }
+            $product->removeCart($this);
         }
 
         return $this;
     }
 
-    public function calculateTotalAmount(): void
+    public function getClient(): Client
     {
-        $this->totalAmount = 0;
-        foreach ($this->products as $product) {
-            $this->totalAmount += $product->getPrice();
-        }
+        return $this->client;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    public function getOrder(): ?Order
+    {
+        return $this->order;
+    }
+
+    public function setOrder(?Order $order): self
+    {
+        $this->order = $order;
+        return $this;
     }
 }

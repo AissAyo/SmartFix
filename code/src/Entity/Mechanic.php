@@ -2,44 +2,46 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'mechanics')]
+
 class Mechanic extends Garagiste
 {
-    #[ORM\Column(type: 'string', length: 20)]
-    private string $status;
 
 
-    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Collection $garage;
+    #[ORM\OneToMany(targetEntity: garage::class, mappedBy: 'mechanic')]
+    private Collection $garages;
 
-
+   
+    
     #[ORM\ManyToOne(targetEntity: Location::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Location $location;
 
-    public function getStatus(): string
-    {
-        return $this->status;
+    public function __construct(
+        string $name,
+        string $email,
+        string $roles,
+        ?string $password = null,
+        ?string $resetToken = null,
+        ?\DateTimeInterface $tokenExpiration = null,
+        ?string $phoneNumber = null,
+        ?string $logo = null
+    ) {
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo);
+
+        $this->garages = new ArrayCollection();
     }
 
-    public function setStatus(string $status): void
+    public function getGarages(): Collection
     {
-        $this->status = $status;
+        return $this->garages;
     }
 
-    public function getGarage(): Collection
+    public function setGarages(Collection $garages): void
     {
-        return $this->garage;
-    }
-
-    public function setGarage(Collection $garage): void
-    {
-        $this->garage = $garage;
+        $this->garages = $garages;
     }
 
     public function getLocation(): Location
@@ -51,5 +53,6 @@ class Mechanic extends Garagiste
     {
         $this->location = $location;
     }
+
 
 }

@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeInterface;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 
 #[ORM\Entity]
@@ -16,6 +15,8 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User
 {
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $username = null;
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -25,8 +26,7 @@ class Client extends User
     #[ORM\Column(type: "integer")]
     private int $loyaltyPoints = 0;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
-    private Collection $reservations;
+   
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
     private Collection $reviews;
@@ -37,29 +37,28 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "client")]
     private Collection $critiques;
 
-    #[ORM\OneToMany(targetEntity: Cart::class, mappedBy: "client")]
-    private Collection $carts;
+    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: 'client')]
+    private ?Cart $cart = null;
 
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
 
-    private ?string $address = null;
+    public function __construct(
+        string             $name,
+        string             $email,
+        string             $roles,
+        ?string            $password = null,
+        ?string            $resetToken = null,
+        ?DateTimeInterface $tokenExpiration = null,
+        ?string            $username = null
+    ) {
+        // Call the parent constructor (User) to initialize common properties
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration);
 
-
-
-
-    public function __construct()
-    {
-        $this->dateInscription = new \DateTimeImmutable();
-        $this->reservations = new ArrayCollection();
-        $this->reviews = new ArrayCollection();
-        $this->vehicules = new ArrayCollection();
-        $this->critiques = new ArrayCollection();
-        $this->carts = new ArrayCollection();
-        $this->complaints = new ArrayCollection();
-        $this->cars = new ArrayCollection();
+        // Initialize the Client-specific properties
+        $this->username = $username;
+        $this->dateInscription = new \DateTimeImmutable(); // Assuming the current date for inscription
     }
 
     public function isVerificationStatus(): bool
@@ -92,16 +91,6 @@ class Client extends User
         $this->loyaltyPoints = $loyaltyPoints;
     }
 
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function setReservations(Collection $reservations): void
-    {
-        $this->reservations = $reservations;
-    }
-
     public function getReviews(): Collection
     {
         return $this->reviews;
@@ -132,16 +121,6 @@ class Client extends User
         $this->critiques = $critiques;
     }
 
-    public function getCarts(): Collection
-    {
-        return $this->carts;
-    }
-
-    public function setCarts(Collection $carts): void
-    {
-        $this->carts = $carts;
-    }
-
     public function getComplaints(): Collection
     {
         return $this->complaints;
@@ -152,5 +131,16 @@ class Client extends User
         $this->complaints = $complaints;
     }
 
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): void
+    {
+        $this->username = $username;
+    }
+
 
 }
+
