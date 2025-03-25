@@ -11,7 +11,6 @@ class SellerService
     private SellerRepository $sellerRepository;
     private EntityManagerInterface $entityManager;
 
-
     public function __construct(SellerRepository $sellerRepository, EntityManagerInterface $entityManager)
     {
         $this->sellerRepository = $sellerRepository;
@@ -30,8 +29,13 @@ class SellerService
 
     public function createSeller(Seller $seller): void
     {
-
-        $this->sellerRepository->addEntity($seller);
+        try {
+            $this->sellerRepository->addEntity($seller);
+            // Add logging here if needed
+        } catch (\Exception $e) {
+            // Log the error
+            throw $e;
+        }
     }
 
     public function updateSeller(Seller $seller): void
@@ -41,6 +45,6 @@ class SellerService
 
     public function deleteSeller(Seller $seller): void
     {
-        $this->sellerRepository->deleteEntity($seller , true);
+        $this->sellerRepository->deleteEntity($seller, true);
     }
 }

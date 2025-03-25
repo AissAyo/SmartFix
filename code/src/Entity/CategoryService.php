@@ -17,7 +17,7 @@ class CategoryService
     #[ORM\Column(type: 'string', length: 255)]
     private string $Categoryname;
 
-    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'category', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'categoryService')]
     private Collection $services;
 
 

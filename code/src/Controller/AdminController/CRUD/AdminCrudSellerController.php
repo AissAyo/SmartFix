@@ -24,6 +24,7 @@ class AdminCrudSellerController extends AbstractController
         $sellers = $this->sellerService->getAllSellers();
         return $this->render('Admin/CRUD/Seller/adminCrudSeller.html.twig', ['sellers' => $sellers]);
     }
+
     #[Route('addseller', name: 'admin_sellers_add', methods: ['GET', 'POST'])]
     public function addSeller(Request $request): Response
     {
@@ -31,9 +32,18 @@ class AdminCrudSellerController extends AbstractController
         $form = $this->createForm(SellerType::class, $seller);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->sellerService->createSeller($seller);
-            return $this->redirectToRoute('admin_list_seller');
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->sellerService->createSeller($seller);
+                $this->addFlash('success', 'Seller created successfully!');
+                return $this->redirectToRoute('admin_list_seller');
+            } else {
+                // Debug form errors
+                $errors = $form->getErrors(true);
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
         }
 
         return $this->render('Admin/CRUD/Seller/adminCrudSellerAdd.html.twig', [

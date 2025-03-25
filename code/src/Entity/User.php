@@ -5,8 +5,12 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\MappedSuperclass]
+#[Vich\Uploadable]
 abstract class User
 {
     #[ORM\Id]
@@ -14,19 +18,22 @@ abstract class User
     #[ORM\Column(type: "integer")]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $name;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $name;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $password = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $email;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $logo = null;
 
-    #[ORM\Column(type: "json")]
+    #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
+    private ?File $logoFile = null;
+
+    #[ORM\Column(type: "json", nullable: true)]
     private string $roles;
     
 
@@ -37,9 +44,9 @@ abstract class User
     private ?DateTimeInterface $tokenExpiration = null;
 
     public function __construct(
-        string $name,
-        string $email,
-        string $roles,
+        string $name = '',
+        string $email = '',
+        string $roles = 'ROLE_USER',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
@@ -51,7 +58,7 @@ abstract class User
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->logo=$logo;
+        $this->logo = $logo;
     }
 
     public function getId(): ?int
@@ -122,5 +129,25 @@ abstract class User
     {
         $this->tokenExpiration = $tokenExpiration;
         return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    public function setLogoFile(?File $logoFile): void
+    {
+        $this->logoFile = $logoFile;
     }
 }

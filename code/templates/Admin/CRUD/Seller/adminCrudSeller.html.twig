@@ -38,12 +38,20 @@
                         <tbody>
                         {% for seller in sellers %}
                             <tr>
-                                <th scope="row">{{ seller.name}}</th>
-                                <td>{{ seller.email}}</td>
-                                <td>{{ seller.phone_number }}</td>
-                                <td>{{ seller.logo }}</td>
-                                <td>{{ seller.working_hours}}</td>
-                                <td>{{ seller.contactInfo}}</td>
+                                <th scope="row">{{ seller.name }}</th>
+                                <td>{{ seller.email }}</td>
+                                <td>{{ seller.phoneNumber ?? 'N/A' }}</td>
+                                <td>
+                                    {% if seller.logo %}
+                                        <img src="{{ asset('uploads/seller_logos/' ~ seller.logo) }}"
+                                             class="img-fluid rounded"
+                                             style="max-width: 50px; height: auto;" alt="">
+                                    {% else %}
+                                        <span class="text-muted">No logo available</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ seller.workingHours ?? 'Not specified' }}</td>
+                                <td>{{ seller.contactInfo ?? 'N/A' }}</td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0" type="button" id="seller-{{ seller.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">

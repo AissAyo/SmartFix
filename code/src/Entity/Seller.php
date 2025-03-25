@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,22 +17,23 @@ class Seller extends Garagiste
     private Collection $shops;
 
 
-    public function __construct(
-        string $name,
-        string $email,
-        string $contactInfo,
-        string $roles = "Seller",
-        ?string $password = null,
-        ?string $resetToken = null,
-        ?\DateTimeInterface $tokenExpiration = null,
-        ?string $phoneNumber = null,
-        ?string $logo = null,
-        ?string $workingHours = null
-    ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber ,$logo,$workingHours);
-
-        $this->contactInfo = $contactInfo;
+    public function __construct()
+    {
+        parent::__construct(
+            '',        // name
+            '',        // email
+            'ROLE_SELLER', // roles
+            null,      // password
+            null,      // resetToken
+            null,      // tokenExpiration
+            null,      // phoneNumber
+            null,      // logo
+            null       // workingHours
+        );
+        $this->contactInfo = '';
+        $this->shops = new ArrayCollection();
     }
+
 
     public function getContactInfo(): string
     {
