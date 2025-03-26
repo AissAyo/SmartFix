@@ -34,7 +34,7 @@ services:
     command: ["php-fpm"]
     depends_on:
       - mysql
-      - python_service
+
     networks:
       - symfony
 
@@ -65,26 +65,6 @@ services:
     volumes:
       - db_admin_data:/var/www/html
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    networks:
-      - symfony
-
-  python_service:
-    image: python-fastapi:latest
-    build:
-      context: ./python_service/
-      dockerfile: Dockerfile
-    volumes:
-      - ./python_service:/app
-    ports:
-      - "5000:5000"
-    networks:
-      - symfony
 
 volumes:
   db_admin_data:

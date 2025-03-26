@@ -1,72 +1,112 @@
 <?php
-
 namespace App\Controller\AdminController\CRUD;
 
 use App\Entity\Mechanic;
+use App\Service\CRUD\MechanicService;
+use App\Type\MechanicType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class AdminCrudMechanicController extends AbstractController
 {
-   /* private MechanicService $mechanicService;
+    private MechanicService $mechanicService;
 
     public function __construct(MechanicService $mechanicService)
     {
         $this->mechanicService = $mechanicService;
     }
-    #
 
-    #[Route('/listmechanics', name: 'admin_mechanics_list', methods: ['GET'])]
-    public function list(): Response
+    #[Route('listmechanic/{page}', name: 'admin_list_mechanic', defaults: ['page' => 1])]
+    public function listMechanic(int $page, PaginatorInterface $paginator): Response
     {
-        $mechanics = $this->mechanicService->getAllMechanics();
-        return $this->render('admin/adminCrudMechanic.html.twig', ['mechanics' => $mechanics]);
+        $query = $this->mechanicService->getAllMechanicsQuery();
+
+        $pagination = $paginator->paginate(
+            $query,
+            $page,
+            10 // Items per page
+        );
+
+        return $this->render('Admin/CRUD/Mechanic/adminCrudMechanic.html.twig', [
+            'pagination' => $pagination,
+            'mechanics' => $pagination->getItems(),
+        ]);
     }
 
-    #[Route('/admin/mechanics/{id}', name: 'admin_mechanics_show', methods: ['GET'])]
-    public function show(int $id): Response
+    #[Route('addmechanic', name: 'admin_mechanics_add', methods: ['GET', 'POST'])]
+    public function addMechanic(Request $request): Response
+    {
+        $mechanic = new Mechanic();
+        $form = $this->createForm(MechanicType::class, $mechanic);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->mechanicService->createMechanic($mechanic);
+                $this->addFlash('success', 'Mechanic created successfully!');
+                return $this->redirectToRoute('admin_list_mechanic');
+            } else {
+                // Handle form errors
+                $errors = $form->getErrors(true);
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            }
+        }
+
+        return $this->render('Admin/CRUD/Mechanic/adminCrudMechanicAdd.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/editmechanic/{id}', name: 'admin_mechanics_edit', methods: ['GET', 'POST'])]
+    public function editMechanic(Request $request, int $id): Response
     {
         $mechanic = $this->mechanicService->getMechanic($id);
         if (!$mechanic) {
-            throw $this->createNotFoundException('Mechanic not found');
+            throw $this->createNotFoundException('No mechanic found for id ' . $id);
         }
-        return $this->render('admin/mechanics/show.html.twig', ['mechanic' => $mechanic]);
-    }
 
-    #[Route('/admin/mechanics/new', name: 'admin_mechanics_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
-    {
-        if ($request->isMethod('POST')) {
-            $mechanic = new Mechanic();
-            // Set properties from request
-            $this->mechanicService->createMechanic($mechanic);
-            return $this->redirectToRoute('admin_mechanics_list');
-        }
-        return $this->render('admin/mechanics/new.html.twig');
-    }
+        $form = $this->createForm(MechanicType::class, $mechanic);
+        $form->handleRequest($request);
 
-    #[Route('/admin/mechanics/{id}/edit', name: 'admin_mechanics_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, int $id): Response
-    {
-        $mechanic = $this->mechanicService->getMechanic($id);
-        if (!$mechanic) {
-            throw $this->createNotFoundException('Mechanic not found');
-        }
-        if ($request->isMethod('POST')) {
-            // Update properties from request
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->mechanicService->updateMechanic($mechanic);
-            return $this->redirectToRoute('admin_mechanics_list');
+            return $this->redirectToRoute('admin_list_mechanic');
         }
-        return $this->render('admin/mechanics/edit.html.twig', ['mechanic' => $mechanic]);
+
+        return $this->render('Admin/CRUD/Mechanic/adminCrudMechanicEdit.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    #[Route('/admin/mechanics/{id}/delete', name: 'admin_mechanics_delete', methods: ['POST'])]
-    public function delete(int $id): Response
+    #[Route('showmechanic/{id}', name: 'admin_mechanics_show', methods: ['GET'])]
+    public function showMechanic(int $id): Response
     {
         $mechanic = $this->mechanicService->getMechanic($id);
         if (!$mechanic) {
-            throw $this->createNotFoundException('Mechanic not found');
+            throw $this->createNotFoundException('No mechanic found for id ' . $id);
         }
-        $this->mechanicService->deleteMechanic($mechanic);
-        return $this->redirectToRoute('admin_mechanics_list');
-    }*/
+
+        return $this->render('Admin/CRUD/Mechanic/adminCrudMechanicShow.html.twig', ['mechanic' => $mechanic]);
+    }
+
+    #[Route('deletemechanic/{id}', name: 'admin_mechanics_delete', methods: ['POST'])]
+    public function deleteMechanic(Request $request, int $id): Response
+    {
+        $mechanic = $this->mechanicService->getMechanic($id);
+        if (!$mechanic) {
+            throw $this->createNotFoundException('No mechanic found for id ' . $id);
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $mechanic->getId(), $request->request->get('_token'))) {
+            $this->mechanicService->deleteMechanic($mechanic);
+            $this->addFlash('success', 'Mechanic deleted successfully!');
+        }
+
+        return $this->redirectToRoute('admin_list_mechanic');
+    }
 }

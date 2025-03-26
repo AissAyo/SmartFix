@@ -84,14 +84,14 @@ class SellerType extends AbstractType
                 ],
             ])
             ->add('logoFile', VichFileType::class, [
-                'label' => 'Logo',
+                'label' => 'Profile Image',
                 'required' => false,
-                'allow_delete' => true, // Allow file deletion
-                'download_uri' => true, // Add a download link
+                'allow_delete' => true,
+                'download_uri' => true,
                 'constraints' => [
                     new Image([
-                        'maxSize' => '2M', // Maximum file size (2MB)
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types
+                        'maxSize' => '2M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'],
                         'mimeTypesMessage' => 'Please upload a valid image (JPEG, PNG, or GIF).',
                     ]),
                 ],

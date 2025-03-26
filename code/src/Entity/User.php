@@ -30,10 +30,10 @@ abstract class User
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $logo = null;
 
-    #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
+    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'logo')]
     private ?File $logoFile = null;
 
-    #[ORM\Column(type: "json", nullable: true)]
+    #[ORM\Column(type: "string", nullable: true)]
     private string $roles;
     
 
@@ -48,16 +48,12 @@ abstract class User
         string $email = '',
         string $roles = 'ROLE_USER',
         ?string $password = null,
-        ?string $resetToken = null,
-        ?DateTimeInterface $tokenExpiration = null,
         ?string $logo = null
     ) {
         $this->name = $name;
         $this->email = $email;
         $this->roles = $roles;
         $this->password = $password;
-        $this->resetToken = $resetToken;
-        $this->tokenExpiration = $tokenExpiration;
         $this->logo = $logo;
     }
 
@@ -110,15 +106,6 @@ abstract class User
         return $this;
     }
 
-    public function getRoles(): string
-    {
-        return $this->roles;
-    }
-    public function setRoles(string $roles): self
-    {
-        $this->roles = $roles;
-        return $this;
-    }
 
     public function getTokenExpiration(): ?DateTimeInterface
     {

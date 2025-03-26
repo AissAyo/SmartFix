@@ -43,7 +43,7 @@
                                 <td>{{ seller.phoneNumber ?? 'N/A' }}</td>
                                 <td>
                                     {% if seller.logo %}
-                                        <img src="{{ asset('uploads/seller_logos/' ~ seller.logo) }}"
+                                        <img src="{{ asset('uploads/user_uploads/' ~ seller.logo) }}"
                                              class="img-fluid rounded"
                                              style="max-width: 50px; height: auto;" alt="">
                                     {% else %}
