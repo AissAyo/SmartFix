@@ -18,8 +18,8 @@ class Delivery
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $deliveryDate;
 
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'delivery')]
-    private Collection $orders;
+    #[ORM\OneToMany(targetEntity: Or_der::class, mappedBy: 'delivery')]
+    private Collection $Or_ders;
 
     public function __construct()
     {
@@ -53,14 +53,14 @@ class Delivery
         return $this;
     }
 
-    public function getOrder(): Order
+    public function getOr_der(): Or_der
     {
-        return $this->order;
+        return $this->Or_der;
     }
 
-    public function setOrder(Order $order): self
+    public function setOr_der(Or_der $Or_der): self
     {
-        $this->order = $order;
+        $this->Or_der = $Or_der;
         return $this;
     }
 }

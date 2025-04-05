@@ -56,8 +56,8 @@ class ClientType extends AbstractType
                     ])
                 ],
             ])
-            ->add('logo', TextType::class, [
-                'label' => 'Logo',
+            ->add('photoProfil', TextType::class, [
+                'label' => 'photoProfil',
                 'required' => false,
             ])
          ->add('username', TextType::class, [

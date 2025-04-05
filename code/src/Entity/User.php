@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -28,14 +29,15 @@ abstract class User
     private string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $logo = null;
+    private ?string $photoProfil = null;
 
     #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
-    private ?File $logoFile = null;
+    private ?File $photoProfilFile = null;
 
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $roles;
-    
+    #[ORM\Column(type: "string", length: 20, nullable: true)]
+    private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resetToken = null;
@@ -50,7 +52,8 @@ abstract class User
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string $logo = null
+        ?string $photoProfil = null,
+        ?String $phone=null
     ) {
         $this->name = $name;
         $this->email = $email;
@@ -58,7 +61,7 @@ abstract class User
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->logo=$logo;
+        $this->photoProfil=$photoProfil;
     }
 
     public function getId(): ?int
@@ -131,23 +134,33 @@ abstract class User
         return $this;
     }
 
-    public function getLogo(): ?string
+    public function getphotoProfil(): ?string
     {
-        return $this->logo;
+        return $this->photoProfil;
     }
 
-    public function setLogo(?string $logo): void
+    public function setphotoProfil(?string $photoProfil): void
     {
-        $this->logo = $logo;
+        $this->photoProfil = $photoProfil;
     }
 
-    public function getLogoFile(): ?File
+    public function getphotoProfilFile(): ?File
     {
-        return $this->logoFile;
+        return $this->photoProfilFile;
     }
 
-    public function setLogoFile(?File $logoFile): void
+    public function setphotoProfilFile(?File $photoProfilFile): void
     {
-        $this->logoFile = $logoFile;
+        $this->photoProfilFile = $photoProfilFile;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
     }
 }

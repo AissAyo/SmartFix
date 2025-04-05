@@ -25,8 +25,8 @@ class Cart
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'cart')]
-    private ?Order $order = null;
+    #[ORM\OneToOne(targetEntity: Or_der::class, mappedBy: 'cart')]
+    private ?Or_der $Or_der = null;
 
     public function __construct()
     {
@@ -84,14 +84,14 @@ class Cart
         return $this;
     }
 
-    public function getOrder(): ?Order
+    public function getOr_der(): ?Or_der
     {
-        return $this->order;
+        return $this->Or_der;
     }
 
-    public function setOrder(?Order $order): self
+    public function setOr_der(?Or_der $Or_der): self
     {
-        $this->order = $order;
+        $this->Or_der = $Or_der;
         return $this;
     }
 }

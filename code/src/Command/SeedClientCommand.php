@@ -38,12 +38,12 @@ class SeedClientCommand extends Command
     $output->writeln('Seeding clients...');
 
     // Generate 10 fake clients and persist them to the database
-    for ($i = 0; $i < 200; $i++) {
+    for ($i = 0; $i < 50; $i++) {
         $client = new Client();
         $client->setVerificationStatus($faker->boolean)  // Random boolean for verification status
             ->setDateInscription(\DateTimeImmutable::createFromMutable($faker->dateTimeBetween('-1 year', 'now')))  // Convert DateTime to DateTimeImmutable
             ->setLoyaltyPoints($faker->numberBetween(0, 1000))  // Random loyalty points between 0 and 1000
-            ->setUsername($faker->userName)  
+            ->setUsername($faker->userName)
             ->setAddress($faker->address)
             ->setName($faker->name)
             ->setPassword($faker->password);

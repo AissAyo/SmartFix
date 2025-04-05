@@ -33,9 +33,9 @@ class Payment
     #[ORM\Column(type: 'string', length: 255)]
     private string $paymentGateway;
 
-    #[ORM\OneToOne(targetEntity: Order::class, inversedBy: 'payment')]
+    #[ORM\OneToOne(targetEntity: Or_der::class, inversedBy: 'payment')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Order $order = null;
+    private ?Or_der $Or_der = null;
 
     public function __construct()
     {
@@ -125,14 +125,14 @@ class Payment
         return $this;
     }
 
-    public function getOrder(): Order
+    public function getOr_der(): Or_der
     {
-        return $this->order;
+        return $this->Or_der;
     }
 
-    public function setOrder(Order $order): self
+    public function setOr_der(Or_der $Or_der): self
     {
-        $this->order = $order;
+        $this->Or_der = $Or_der;
         return $this;
     }
 }

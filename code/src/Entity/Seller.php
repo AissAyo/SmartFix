@@ -35,10 +35,10 @@ class Seller extends Garagiste
         string $roles = "Seller",
         ?string $password = null,
         ?string $resetToken = null,
-        ?\DateTimeInterface $tokenExpiration = null,
+        ?string  $logo = null,
 
+        ?\DateTimeInterface $tokenExpiration = null,
         ?string $phoneNumber = null,
-        ?string $logo = null,
         ?string $workingHours = null
     ) {
 

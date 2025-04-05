@@ -6,6 +6,7 @@ use DateTimeInterface;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\Types\Boolean;
 
 
 #[ORM\Entity]
@@ -15,8 +16,7 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User
 {
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $username = null;
+
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -26,7 +26,7 @@ class Client extends User
     #[ORM\Column(type: "integer")]
     private int $loyaltyPoints = 0;
 
-   
+
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
     private Collection $reviews;
@@ -45,20 +45,30 @@ class Client extends User
 
 
     public function __construct(
-        string             $name,
-        string             $email,
-        string             $roles,
-        ?string            $password = null,
-        ?string            $resetToken = null,
+        string $name,
+        string $email,
+        ?string $roles  = "client",
+        ?string $password = null,
+        ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string            $username = null
+        bool $verificationStatus = false,
+        ?string $photoProfil = null,
+        ?string $phone=null
     ) {
         // Call the parent constructor (User) to initialize common properties
         parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration);
 
         // Initialize the Client-specific properties
-        $this->username = $username;
-        $this->dateInscription = new \DateTimeImmutable(); // Assuming the current date for inscription
+        $this->username = $name; // or adjust if you have a separate username logic.
+        $this->dateInscription = new DateTimeImmutable();
+        $this->verificationStatus = $verificationStatus;
+        $this->photoProfil = $photoProfil;
+
+        // Initialize collections
+        $this->reviews = new ArrayCollection();
+        $this->vehicules = new ArrayCollection();
+        $this->critiques = new ArrayCollection();
+        $this->complaints = new ArrayCollection();
     }
 
     public function isVerificationStatus(): bool
