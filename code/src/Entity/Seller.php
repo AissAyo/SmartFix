@@ -70,7 +70,4 @@ class Seller extends Garagiste
     }
 
 
-
-
-
 }

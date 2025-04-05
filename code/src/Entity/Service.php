@@ -29,9 +29,9 @@ class Service
     #[ORM\Column(type: 'string', length: 20)]
     private string $status;
 
-   
+
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'category_service_id', nullable: false)]
     private CategoryService $categoryService;
     
 

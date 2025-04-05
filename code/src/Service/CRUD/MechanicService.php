@@ -41,4 +41,11 @@ class MechanicService
     {
         $this->mechanicRepository->deleteEntity($mechanic, true);
     }
+    public function getAllMechanicsQuery()
+    {
+        return $this->entityManager
+            ->getRepository(Mechanic::class)
+            ->createQueryBuilder('m')
+            ->orderBy('m.name', 'ASC');
+    }
 }

@@ -22,11 +22,11 @@ class ServiceClient extends User
         string $name,
         string $email,
         string $roles,
-        ?string $password ,
-        ?string $resetToken ,
-        ?\DateTimeInterface $tokenExpiration ,
-        ?string $phoneNumber ,
-        ?string $logo ,
+        ?string $password = null,
+        ?string $resetToken = null,
+        ?\DateTimeInterface $tokenExpiration = null,
+        ?string $phoneNumber = null,
+        ?string $logo = null,
         string $serviceDetails
     ) {
         parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo);

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 abstract class Garagiste extends User
 {
 
-    #[ORM\Column(type: "string", length: 20, nullable: true)]
+    #[ORM\Column(name :"phone_number",type: "string", length: 20, nullable: true)]
     private ?string $phoneNumber = null;
 
     #[ORM\Column( type: 'string', length: 255, nullable: true)]
@@ -63,6 +63,14 @@ abstract class Garagiste extends User
     public function setLogo(?string $logo): void
     {
         $this->logo = $logo;
+
+    public function getworkingHours(): ?string
+    {
+    return $this->working_hours;
+    }
+    public function setworkingHours(?string $working_hours): void
+    {
+    $this->working_hours = $working_hours;
     }
 
 }

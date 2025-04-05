@@ -5,13 +5,8 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-use phpDocumentor\Reflection\Types\String_;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
 
 #[ORM\MappedSuperclass]
-#[Vich\Uploadable]
 abstract class User
 {
     #[ORM\Id]
@@ -19,13 +14,13 @@ abstract class User
     #[ORM\Column(type: "integer")]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $name;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $password = null;
+    private string $password = null;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
@@ -35,6 +30,10 @@ abstract class User
     private ?File $photoProfilFile = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'logo')]
+    private ?File $logoFile = null;
+
+    #[ORM\Column(type: "string", nullable: true)]
     private string $roles;
     #[ORM\Column(type: "string", length: 20, nullable: true)]
     private ?string $phone = null;
@@ -46,9 +45,9 @@ abstract class User
     private ?DateTimeInterface $tokenExpiration = null;
 
     public function __construct(
-        string $name,
-        string $email,
-        string $roles,
+        string $name = '',
+        string $email = '',
+        string $roles = 'ROLE_USER',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
@@ -133,6 +132,10 @@ abstract class User
         $this->tokenExpiration = $tokenExpiration;
         return $this;
     }
+
+
+
+
 
     public function getphotoProfil(): ?string
     {
