@@ -29,7 +29,7 @@ services:
         - ./infra/php/config/php.ini:/usr/local/etc/php/php.ini
       ports:
         - "8000:8000"
-      command: php -S 0.0.0.0:8000 -t public
+      command: php-fpm
       depends_on:
         - mysql
       networks:
