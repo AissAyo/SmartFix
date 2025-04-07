@@ -34,25 +34,22 @@ class  AdminCrudSellerController extends AbstractController
         $form = $this->createForm(SellerType::class, $seller);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
                 $this->sellerService->createSeller($seller);
                 $this->addFlash('success', 'Seller created successfully!');
                 return $this->redirectToRoute('admin_list_seller');
-            } else {
-                // Debug form errors
-                $errors = $form->getErrors(true);
-                foreach ($errors as $error) {
-                    $this->addFlash('error', $error->getMessage());
-                }
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'An error occurred while creating the seller: '.$e->getMessage());
             }
+        } elseif ($form->isSubmitted() && !$form->isValid()) {
+            $this->addFlash('error', 'Please correct the errors in the form.');
         }
 
         return $this->render('Admin/CRUD/Seller/adminCrudSellerAdd.html.twig', [
             'form' => $form->createView(),
         ]);
     }
-
     #[Route('/editseller/{id}', name: 'admin_sellers_edit', methods: ['GET', 'POST'])]
     public function editSeller(Request $request, int $id): Response
     {

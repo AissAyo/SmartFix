@@ -32,6 +32,7 @@
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Password</th>
+                            <th scope="col">City</th>
                             <th scope="col">roles</th>
                             <th scope="col">Phone</th>
                             <th scope="col">sign in</th>
@@ -42,10 +43,18 @@
                         <tbody>
                         {% for clients in clients %}
                             <tr>
-                                <th scope="row">{{ clients.photoprofil}}</th>
+                                <th scope="row">
+                                    <img src="{{ asset( 'uploads/' ~ clients.photoProfil) }}" alt="Profile Photo" style="width: 50px;  /* Adjust size */
+    height: 50px;  /* Ensure the height and width are the same to make it a circle */
+    border-radius: 50%;  /* Makes the image circular */
+    object-fit: cover;  /* Ensures the image covers the area without distorting */
+    border: 2px solid #ddd;">
+                                </th>
+
                                 <td>{{ clients.name}}</td>
                                 <td>{{ clients.email}}</td>
                                 <td>{{ clients.password }}</td>
+                                <td>{{ clients.city }}</td>
                                 <td>{{ clients.roles }}</td>
                                 <td>{{ clients.phone}}</td>
                                 <td>{{ clients.formattedDate}}</td>
