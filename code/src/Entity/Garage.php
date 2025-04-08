@@ -38,12 +38,19 @@ class Garage
     #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: 'garages')]
     private Collection $critiques;
 
+    /**
+     * @var Collection<int, GarageService>
+     */
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_garage')]
+    private Collection $garageServices;
+
 
 
     public function __construct()
     {
         $this->mechanics = new ArrayCollection();
         $this->categoryServices = new ArrayCollection();
+        $this->garageServices = new ArrayCollection();
     }
 
     // Getters and setters for the properties
@@ -103,6 +110,36 @@ class Garage
     public function setLocation(string $location): self
     {
         $this->location = $location;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GarageService>
+     */
+    public function getGarageServices(): Collection
+    {
+        return $this->garageServices;
+    }
+
+    public function addGarageService(GarageService $garageService): static
+    {
+        if (!$this->garageServices->contains($garageService)) {
+            $this->garageServices->add($garageService);
+            $garageService->setIdGarage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGarageService(GarageService $garageService): static
+    {
+        if ($this->garageServices->removeElement($garageService)) {
+            // set the owning side to null (unless already changed)
+            if ($garageService->getIdGarage() === $this) {
+                $garageService->setIdGarage(null);
+            }
+        }
+
         return $this;
     }
 }

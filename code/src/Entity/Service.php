@@ -40,6 +40,17 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private CategoryService $categoryService;
 
+    /**
+     * @var Collection<int, GarageService>
+     */
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_service')]
+    private Collection $garageServices;
+
+    public function __construct()
+    {
+        $this->garageServices = new ArrayCollection();
+    }
+
     public function getId(): int
     {
         return $this->serviceId;
@@ -75,6 +86,36 @@ class Service
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GarageService>
+     */
+    public function getGarageServices(): Collection
+    {
+        return $this->garageServices;
+    }
+
+    public function addGarageService(GarageService $garageService): static
+    {
+        if (!$this->garageServices->contains($garageService)) {
+            $this->garageServices->add($garageService);
+            $garageService->setIdService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGarageService(GarageService $garageService): static
+    {
+        if ($this->garageServices->removeElement($garageService)) {
+            // set the owning side to null (unless already changed)
+            if ($garageService->getIdService() === $this) {
+                $garageService->setIdService(null);
+            }
+        }
 
         return $this;
     }
