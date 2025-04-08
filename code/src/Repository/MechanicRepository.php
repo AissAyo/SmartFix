@@ -4,6 +4,7 @@ namespace App\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Mechanic;
 
+
 class MechanicRepository implements MechanicRepositoryInterface
 {
     private EntityManagerInterface $entityManager;

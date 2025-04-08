@@ -4,7 +4,8 @@ namespace App\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Category;
 
-class CategoryRepository implements CategoryRepositoryInterface
+
+class CategoryRepository
 {
     private EntityManagerInterface $entityManager;
 

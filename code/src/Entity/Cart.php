@@ -26,7 +26,7 @@ class Cart
     private Client $client;
 
     #[ORM\OneToOne(targetEntity: Or_der::class, mappedBy: 'cart')]
-    private ?Or_der $Or_der = null;
+    private ?Or_der $orDer = null;
 
     public function __construct()
     {
@@ -54,28 +54,12 @@ class Cart
         return $this->products;
     }
 
-    public function addProduct(Product $product): self
+    public function addProduct(Product $product): void
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->addCart($this);
+            $product->addCart($this);  // Assumed method in Product entity
         }
-
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            $product->removeCart($this);
-        }
-
-        return $this;
-    }
-
-    public function getClient(): Client
-    {
-        return $this->client;
     }
 
     public function setClient(Client $client): self
@@ -84,14 +68,19 @@ class Cart
         return $this;
     }
 
-    public function getOr_der(): ?Or_der
+    public function getClient(): Client
     {
-        return $this->Or_der;
+        return $this->client;
     }
 
-    public function setOr_der(?Or_der $Or_der): self
+    public function getOrDer(): ?Or_der
     {
-        $this->Or_der = $Or_der;
+        return $this->orDer;
+    }
+
+    public function setOrDer(?Or_der $orDer): self
+    {
+        $this->orDer = $orDer;
         return $this;
     }
 }

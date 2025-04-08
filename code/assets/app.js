@@ -1,23 +1,4 @@
-import './styles/bootstrap.min.css'
-import './css/animation.css'
-import './css/style.css'
-import './css/responsive.css'
-import './css/blog.css'
-//import './styles/css/bootstrap-icons.css'
-import './css/bootstrap-icons.css.map'
-import './css/bootstrap.min.css'
-import './css/components.css'
-import './css/contact.css'
-import './css/footer.css'
-import './css/header.css'
-import './css/global.css'
-import './css/landing.css'
-import './css/light.css'
-import './css/main.css'
-import './css/portfolio.css'
-import './css/preloader.css'
-import './css/shop.css'
-import './css/sidebar.css'
+
 
 // js
 
@@ -26,11 +7,19 @@ import './js/jquery-3.6.0.min.js'
 import './js/map.js'
 import './js/theme.js'
 import './js/pricetable-toggler.js'
+import '@symfony/ux-chartjs'; // This is necessary
 
 // font awesome
-import './fonts/bootstrap-icons.woff'
-import './fonts/bootstrap-icons.woff2'
-//import './bootstrap.icons.css'
-//import './bootstrap.icons.css'
-//import './bootstrap.icons.css'
-//import './font/icons
+
+
+import { Chart } from 'chart.js';
+import zoomPlugin from 'chartjs-plugin-zoom';
+
+Chart.register(zoomPlugin);  // Register the plugin with Chart.js
+
+// document.addEventListener('chartjs:init', function (event) {
+//     const Chart = event.detail.Chart;
+//     Chart.register(zoomPlugin);
+// });
+
+// ...

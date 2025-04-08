@@ -6,6 +6,7 @@ use App\Entity\Mechanic;
 use App\Repository\MechanicRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
+
 class MechanicService
 {
     private MechanicRepository $mechanicRepository;

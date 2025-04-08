@@ -22,19 +22,20 @@ class ServiceClient extends User
         string $name,
         string $email,
         string $roles,
+        string $serviceDetails,
+        ?string $city = null,
         ?string $password = null,
         ?string $resetToken = null,
         ?\DateTimeInterface $tokenExpiration = null,
-        ?string $phoneNumber = null,
-        ?string $logo = null,
-        string $serviceDetails
+        ?string $phone = null,
+        ?string $photoProfil = null
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo);
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phone, $photoProfil);
 
         $this->complaints = new ArrayCollection();
-
         $this->serviceDetails = $serviceDetails;
     }
+
     public function getServiceDetails(): string
     {
         return $this->serviceDetails;

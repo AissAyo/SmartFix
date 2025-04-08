@@ -18,22 +18,19 @@ services:
     networks:
       - symfony
 
-    symfony:
-      image: php-symfony:latest
-      build:
-        context: ./infra/
-        dockerfile: ./php/Dockerfile
-      volumes:
-        - ./code:/var/www/html:cached
-        - ./infra/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
-        - ./infra/php/config/php.ini:/usr/local/etc/php/php.ini
-      ports:
-        - "8000:8000"
-      command: php-fpm
-      depends_on:
-        - mysql
-      networks:
-        - symfony
+  symfony:
+    image: php-symfony:latest
+    build:
+      context: ./infra/
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ./code:/var/www/html:cached
+      - ./infra/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./infra/php/config/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - mysql
+    networks:
+      - symfony
 
   mysql:
     image: mysql
@@ -62,11 +59,9 @@ services:
     volumes:
       - db_admin_data:/var/www/html
 
-
 volumes:
   db_admin_data:
   mysql:
-
 networks:
   symfony:
     name: symfony

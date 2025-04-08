@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
@@ -63,14 +64,6 @@ abstract class Garagiste extends User
     public function setLogo(?string $logo): void
     {
         $this->logo = $logo;
-
-    public function getworkingHours(): ?string
-    {
-    return $this->working_hours;
-    }
-    public function setworkingHours(?string $working_hours): void
-    {
-    $this->working_hours = $working_hours;
     }
 
 }

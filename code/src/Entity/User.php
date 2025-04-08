@@ -18,21 +18,13 @@ abstract class User
     private string $name;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $password = null;
+    private ?string $password ;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $photoProfil = null;
-
-    #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
-    private ?File $photoProfilFile = null;
-
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'logo')]
-    private ?File $logoFile = null;
-
+    private ?string $city;
     #[ORM\Column(type: "string", nullable: true)]
     private string $roles;
     #[ORM\Column(type: "string", length: 20, nullable: true)]
@@ -44,15 +36,18 @@ abstract class User
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $tokenExpiration = null;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $photoProfil;
     public function __construct(
         string $name = '',
         string $email = '',
-        string $roles = 'ROLE_USER',
+        ?string $city = '',
+        string $roles = '',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string $photoProfil = null,
-        ?String $phone=null
+        ?string $phone = null,  // Moved after other optional parameters
+        ?string $photoProfil = "avatar5-67f2b22f9551d.png"  // Default value for photoProfil
     ) {
         $this->name = $name;
         $this->email = $email;
@@ -60,8 +55,10 @@ abstract class User
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->photoProfil=$photoProfil;
+        $this->photoProfil = $photoProfil;
+        $this->phone = $phone;
     }
+
 
     public function getId(): ?int
     {
@@ -133,30 +130,6 @@ abstract class User
         return $this;
     }
 
-
-
-
-
-    public function getphotoProfil(): ?string
-    {
-        return $this->photoProfil;
-    }
-
-    public function setphotoProfil(?string $photoProfil): void
-    {
-        $this->photoProfil = $photoProfil;
-    }
-
-    public function getphotoProfilFile(): ?File
-    {
-        return $this->photoProfilFile;
-    }
-
-    public function setphotoProfilFile(?File $photoProfilFile): void
-    {
-        $this->photoProfilFile = $photoProfilFile;
-    }
-
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -165,5 +138,29 @@ abstract class User
     public function setPhone(string $phone): void
     {
         $this->phone = $phone;
+    }
+
+    // In Client class
+    public function getPhotoProfil(): string
+    {
+        return $this->photoProfil ?? 'img/avatar5.png';  // Or handle null as a fallback
+    }
+
+
+    public function setphotoProfil(string $photoProfil): self
+    {
+
+         $this->photoProfil ? $this->photoProfil : 'avatar5-67f2b22f9551d.png';
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
     }
 }

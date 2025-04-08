@@ -84,6 +84,7 @@ class Garage
         $this->rating = $rating;
     }
 
+    // Getter and Setter for $status
     public function getStatus(): string
     {
         return $this->status;
@@ -94,6 +95,7 @@ class Garage
         $this->status = $status;
     }
 
+    // Getter and Setter for $name
     public function getName(): string
     {
         return $this->name;

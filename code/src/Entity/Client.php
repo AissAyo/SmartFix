@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
-use DateTimeInterface;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use phpDocumentor\Reflection\Types\Boolean;
-
+use DateTimeImmutable;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity]
 #[ORM\Table(name: "clients")]
@@ -16,7 +17,6 @@ use phpDocumentor\Reflection\Types\Boolean;
 #[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User
 {
-
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -25,8 +25,6 @@ class Client extends User
 
     #[ORM\Column(type: "integer")]
     private int $loyaltyPoints = 0;
-
-
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
     private Collection $reviews;
@@ -43,34 +41,67 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
+    #[ORM\Column(type: "string", length: 500, nullable: true)]
+    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
+    private ?File $ClientphotoProfilFile = null;
 
+    
+
+    // Constructor
     public function __construct(
-        string $name,
-        string $email,
-        ?string $roles  = "client",
-        ?string $password = null,
+        string $name = '',
+        string $email = '',
+        string $password = '123qsd',
+        string $city = '',
+        ?string $roles = "client",
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         bool $verificationStatus = false,
-        ?string $photoProfil = null,
-        ?string $phone=null
+        ?string $phone = null
     ) {
-        // Call the parent constructor (User) to initialize common properties
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration);
+        parent::__construct($name, $email, $roles, $password,$city, $resetToken, $tokenExpiration);
 
-        // Initialize the Client-specific properties
-        $this->username = $name; // or adjust if you have a separate username logic.
+        // Initialize Client-specific properties
+        $this->username = $name;
         $this->dateInscription = new DateTimeImmutable();
         $this->verificationStatus = $verificationStatus;
-        $this->photoProfil = $photoProfil;
 
         // Initialize collections
         $this->reviews = new ArrayCollection();
         $this->vehicules = new ArrayCollection();
         $this->critiques = new ArrayCollection();
+        $this->carts = new ArrayCollection();
         $this->complaints = new ArrayCollection();
+
+        // If you want to initialize the profile photo in the constructor, use the setter:
     }
 
+    // Getter and setter for the uploaded file
+    public function getClientphotoProfilFile(): ?File
+    {
+        return $this->ClientphotoProfilFile;
+    }
+
+    public function setClientphotoProfilFile(?File $ClientphotoProfilFile): void
+    {
+        $this->ClientphotoProfilFile = $ClientphotoProfilFile;
+        if ($ClientphotoProfilFile) {
+            // Trigger file upload immediately
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    // Getter and setter for the filename (photo profile)
+
+
+    
+
+
+
+
+
+
+    // Other getters and setters
     public function isVerificationStatus(): bool
     {
         return $this->verificationStatus;
@@ -150,7 +181,4 @@ class Client extends User
     {
         $this->username = $username;
     }
-
-
 }
-
