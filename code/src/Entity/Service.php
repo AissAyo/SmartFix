@@ -35,7 +35,7 @@ class Service
     private CategoryService $categoryService;
     
 
-<<<<<<< HEAD
+
     /**
      * @var Collection<int, GarageService>
      */
@@ -55,13 +55,6 @@ class Service
     }
 
     public function getId(): int
-=======
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'service')]
-    private Collection $garageServices;
-
-
-    public function getId(): int 
->>>>>>> feature/HomeAyoub
     {
         return $this->serviceId;
     }
@@ -99,7 +92,6 @@ class Service
 
         return $this;
     }
-<<<<<<< HEAD
 
     /**
      * @return Collection<int, GarageService>
@@ -149,15 +141,7 @@ class Service
         return $this;
     }
 
-    public function removeIdGarage(GarageService $idGarage): static
-    {
-        if ($this->id_garage->removeElement($idGarage)) {
-            // set the owning side to null (unless already changed)
-            if ($idGarage->getIdService() === $this) {
-                $idGarage->setIdService(null);
-            }
-        }
-=======
+
     public function getServiceCode(): string
     {
         return $this->serviceCode;
@@ -167,7 +151,6 @@ class Service
     public function setServiceCode(string $serviceCode): self
     {
         $this->serviceCode = $serviceCode;
->>>>>>> feature/HomeAyoub
 
         return $this;
     }

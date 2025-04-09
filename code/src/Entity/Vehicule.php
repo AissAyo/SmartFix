@@ -21,30 +21,6 @@ class Vehicule
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
-<<<<<<< HEAD
-   
-=======
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $licensePlate;
-
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Client", inversedBy: "vehicules")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Client $client;
-
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'vehicle')]
-    private Collection $reservations;
-
-    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'vehicles')]
-#[ORM\JoinColumn(nullable: false)]
-private ?CarAPI $carAPI = null;
-
-    public function __construct()
-    {
-        $this->reservations = new ArrayCollection();
-        $this->carAPIs = new ArrayCollection();
-    }
->>>>>>> feature/HomeAyoub
-
   
     // Getters and setters
     public function getId(): int
@@ -74,83 +50,4 @@ private ?CarAPI $carAPI = null;
         return $this;
     }
 
-<<<<<<< HEAD
-    
-=======
-    public function getLicensePlate(): string
-    {
-        return $this->licensePlate;
-    }
-
-    public function setLicensePlate(string $licensePlate): self
-    {
-        $this->licensePlate = $licensePlate;
-        return $this;
-    }
-
-    public function getClient(): Client
-    {
-        return $this->client;
-    }
-
-    public function setClient(Client $client): self
-    {
-        $this->client = $client;
-        return $this;
-    }
-
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
-    }
-
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setVehicule($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): self
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getVehicule() === $this) {
-                $reservation->setVehicule(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getCarAPIs(): Collection
-    {
-        return $this->carAPIs;
-    }
-
-    public function addCarAPI(CarAPI $carAPI): self
-    {
-        if (!$this->carAPIs->contains($carAPI)) {
-            $this->carAPIs[] = $carAPI;
-            $carAPI->setVehicle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCarAPI(CarAPI $carAPI): self
-    {
-        if ($this->carAPIs->removeElement($carAPI)) {
-            // set the owning side to null (unless already changed)
-            if ($carAPI->getVehicle() === $this) {
-                $carAPI->setVehicle(null);
-            }
-        }
-
-        return $this;
-    }
->>>>>>> feature/HomeAyoub
 }

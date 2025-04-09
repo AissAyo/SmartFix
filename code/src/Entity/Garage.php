@@ -47,8 +47,6 @@ class Garage
     /**
      * @var Collection<int, GarageService>
      */
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_garage')]
-    private Collection $garageServices;
 
     /**
      * @var Collection<int, GarageService>
@@ -158,14 +156,10 @@ class Garage
         $this->location = $location;
     }
 
-<<<<<<< HEAD
     /**
      * @return Collection<int, GarageService>
      */
-    public function getGarageServices(): Collection
-    {
-        return $this->garageServices;
-    }
+
 
     public function addGarageService(GarageService $garageService): static
     {
@@ -218,7 +212,5 @@ class Garage
 
         return $this;
     }
-=======
 
->>>>>>> feature/HomeAyoub
 }

@@ -32,11 +32,8 @@ class Location
 
     public function getId(): int
     {
-<<<<<<< HEAD
+
         return $this->Id;
-=======
-        return $this->id;
->>>>>>> feature/HomeAyoub
     }
 
     public function getAddress(): string

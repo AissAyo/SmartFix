@@ -15,21 +15,17 @@ abstract class User
     private int $id;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-<<<<<<< HEAD
-    protected ?string $password = null;
-=======
+
     private ?string $name = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $password = null;
->>>>>>> feature/HomeAyoub
+
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $email;
 
-<<<<<<< HEAD
-    // Tu peux ajouter d'autres propriétés ou méthodes ici
-    
+
     // Getter et Setter pour email
     public function getEmail(): ?string
     {
@@ -42,7 +38,7 @@ abstract class User
 
         return $this;
     }
-=======
+
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $photoProfil = null;
 
@@ -110,16 +106,7 @@ abstract class User
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-        return $this;
-    }
 
     public function getResetToken(): ?string
     {
@@ -186,5 +173,5 @@ abstract class User
     {
         $this->phone = $phone;
     }
->>>>>>> feature/HomeAyoub
+
 }

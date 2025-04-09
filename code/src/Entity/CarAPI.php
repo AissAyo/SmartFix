@@ -17,20 +17,35 @@ class CarAPI
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'carAPI')]
-    private Collection $cars;
+    #[ORM\Column(type: "string", length: 255)]
+    private string $model;
 
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'carAPI')]
-    private Collection $garageServices;
+    #[ORM\Column(type: "string", length: 255)]
+    private string $brand;
 
-    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'carAPI')]
-    private Collection $vehicles;
+    #[ORM\Column(type: 'integer')]
+    private int $annee;  // Ajout du champ "annee"
 
-    public function __construct()
+    public function getModel(): string
     {
-        $this->cars = new ArrayCollection();
-        $this->garageServices = new ArrayCollection();
-        $this->vehicles = new ArrayCollection();
+        return $this->model;
+    }
+
+    public function setModel(string $model): self
+    {
+        $this->model = $model;
+        return $this;
+    }
+
+    public function getBrand(): string
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(string $brand): self
+    {
+        $this->brand = $brand;
+        return $this;
     }
 
     public function getId(): int
@@ -49,5 +64,15 @@ class CarAPI
         return $this;
     }
 
-    // Getters and setters...
+    // Getter et setter pour le champ "annee"
+    public function getAnnee(): int
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(int $annee): self
+    {
+        $this->annee = $annee;
+        return $this;
+    }
 }

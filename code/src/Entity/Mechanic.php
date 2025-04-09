@@ -21,14 +21,6 @@ class Mechanic extends Garagiste
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
 
-<<<<<<< HEAD
-=======
-    #[ORM\Column(type: 'json', nullable: true)]
-    private array $certifications = [];
-    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
-    private Collection $garages;
-
->>>>>>> feature/HomeAyoub
 
     public function __construct(
         string $name = '',

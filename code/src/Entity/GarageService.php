@@ -2,21 +2,19 @@
 
 namespace App\Entity;
 
-<<<<<<< HEAD
-use App\Repository\GarageServiceRepository;
+
 use Doctrine\ORM\Mapping as ORM;
-=======
-use Doctrine\ORM\Mapping as ORM;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
->>>>>>> feature/HomeAyoub
+
 
 #[ORM\Entity]
 class GarageService
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-<<<<<<< HEAD
+
     #[ORM\Column]
     private ?int $id = null;
 
@@ -29,10 +27,7 @@ class GarageService
     #[ORM\ManyToOne(inversedBy: 'garageServices')]
     private ?vehicule $id_voiture = null;
 
-    public function getId(): ?int
-=======
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+
 
     #[ORM\Column(type: 'float')]
     private float $price;
@@ -63,12 +58,9 @@ class GarageService
     }
 
     public function getId(): int
->>>>>>> feature/HomeAyoub
     {
         return $this->id;
     }
-
-<<<<<<< HEAD
     public function setId(int $id): static
     {
         $this->id = $id;
@@ -108,8 +100,9 @@ class GarageService
     public function setIdVoiture(?vehicule $id_voiture): static
     {
         $this->id_voiture = $id_voiture;
+        return $this;
+    }
 
-=======
     public function getPrix(): float
     {
         return $this->price;
@@ -118,7 +111,6 @@ class GarageService
     public function setPrix(float $price): self
     {
         $this->price = $price;
->>>>>>> feature/HomeAyoub
         return $this;
     }
 }
