@@ -31,9 +31,16 @@ class Vehicule
     #[ORM\JoinColumn(nullable: false)]
     private Service $service;
 
+    /**
+     * @var Collection<int, GarageService>
+     */
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_voiture')]
+    private Collection $garageServices;
+
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->garageServices = new ArrayCollection();
     }
 
     // Getters and setters
@@ -110,6 +117,36 @@ class Vehicule
     public function setService(Service $service): self
     {
         $this->service = $service;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, GarageService>
+     */
+    public function getGarageServices(): Collection
+    {
+        return $this->garageServices;
+    }
+
+    public function addGarageService(GarageService $garageService): static
+    {
+        if (!$this->garageServices->contains($garageService)) {
+            $this->garageServices->add($garageService);
+            $garageService->setIdVoiture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGarageService(GarageService $garageService): static
+    {
+        if ($this->garageServices->removeElement($garageService)) {
+            // set the owning side to null (unless already changed)
+            if ($garageService->getIdVoiture() === $this) {
+                $garageService->setIdVoiture(null);
+            }
+        }
+
         return $this;
     }
 }

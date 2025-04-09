@@ -13,18 +13,14 @@ class GarageService
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'garageServices')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'id_garage')]
+    private ?Service $id_service = null;
+
+    #[ORM\ManyToOne(inversedBy: 'service')]
     private ?garage $id_garage = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $prix = null;
-
     #[ORM\ManyToOne(inversedBy: 'garageServices')]
-    private ?service $id_service = null;
-
-    #[ORM\ManyToOne(inversedBy: 'garageServices')]
-    private ?garage $id_garages = null;
+    private ?vehicule $id_voiture = null;
 
     public function getId(): ?int
     {
@@ -34,6 +30,18 @@ class GarageService
     public function setId(int $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getIdService(): ?Service
+    {
+        return $this->id_service;
+    }
+
+    public function setIdService(?Service $id_service): static
+    {
+        $this->id_service = $id_service;
 
         return $this;
     }
@@ -50,38 +58,14 @@ class GarageService
         return $this;
     }
 
-    public function getPrix(): ?float
+    public function getIdVoiture(): ?vehicule
     {
-        return $this->prix;
+        return $this->id_voiture;
     }
 
-    public function setPrix(?float $prix): static
+    public function setIdVoiture(?vehicule $id_voiture): static
     {
-        $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getIdService(): ?service
-    {
-        return $this->id_service;
-    }
-
-    public function setIdService(?service $id_service): static
-    {
-        $this->id_service = $id_service;
-
-        return $this;
-    }
-
-    public function getIdGarages(): ?garage
-    {
-        return $this->id_garages;
-    }
-
-    public function setIdGarages(?garage $id_garages): static
-    {
-        $this->id_garages = $id_garages;
+        $this->id_voiture = $id_voiture;
 
         return $this;
     }
