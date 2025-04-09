@@ -2,20 +2,33 @@
 
 // js
 
-import './js/bootstrap.min.js'
-import './js/jquery-3.6.0.min.js'
+import 'jquery';
+import $ from 'jquery';
+window.$ = $;
+window.jQuery = $;
+import 'bootstrap';
+
+import '@symfony/ux-chartjs'; // Correct way to import Symfony UX packages
+import '@hotwired/stimulus';
+import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
+import '@symfony/ux-chartjs';
+Chart.register(zoomPlugin);
+
 import './js/map.js'
 import './js/theme.js'
 import './js/pricetable-toggler.js'
-import '@symfony/ux-chartjs'; // This is necessary
+import './js/adminlte'
+// import  './js/adminlte.js.map'
+// import  './js/adminlte.min.js.map'
+// import  './js/adminlte.min.js'
+
 
 // font awesome
 
 
-import { Chart } from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
 
-Chart.register(zoomPlugin);  // Register the plugin with Chart.js
+
 
 // document.addEventListener('chartjs:init', function (event) {
 //     const Chart = event.detail.Chart;

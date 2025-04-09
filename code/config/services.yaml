@@ -13,9 +13,9 @@ services:
         tags: ['controller.service_arguments']
 
     # Bind the ChartBuilderInterface to the TestController constructor
-    App\Controller\AdminController\TestController:
-        bind:
-            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
+#    App\Controller\AdminController\TestController:
+#        bind:
+#            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
 
     # FileUploader service, passing the client_directory parameter
     App\Service\FileUploader:

@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "file-loader": "^6.2.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0",
+    "bootstrap": "^5.1.3"
   }
 }

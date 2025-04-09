@@ -15,10 +15,10 @@ abstract class User
     private int $id;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $name;
+    private ?string $name=null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $password ;
+    private string $password ;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $email;

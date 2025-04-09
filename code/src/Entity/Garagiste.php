@@ -9,11 +9,10 @@ use Symfony\Component\HttpFoundation\File\File;
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
 {
-
-    #[ORM\Column(name :"phone_number",type: "string", length: 20, nullable: true)]
+    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column( type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $workingHours = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -37,23 +36,27 @@ abstract class Garagiste extends User
 
         $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
+        $this->logo = $logo;
     }
 
-    public function getphoneNumber(): ?string
+    public function getPhoneNumber(): ?string
     {
         return $this->phoneNumber;
     }
 
-    public function setphoneNumber(?string $phoneNumber): void
+    public function setPhoneNumber(?string $phoneNumber): void
     {
         $this->phoneNumber = $phoneNumber;
     }
-    public function getworkingHours(): ?string
+
+    public function getWorkingHours(): ?string
     {
-    return $this->workingHours;
-    }public function setworkingHours(?string $workingHours): void
+        return $this->workingHours;
+    }
+
+    public function setWorkingHours(?string $workingHours): void
     {
-    $this->workingHours = $workingHours;
+        $this->workingHours = $workingHours;
     }
 
     public function getLogo(): ?string
@@ -65,5 +68,6 @@ abstract class Garagiste extends User
     {
         $this->logo = $logo;
     }
+
 
 }

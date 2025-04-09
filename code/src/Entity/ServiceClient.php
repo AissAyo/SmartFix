@@ -22,8 +22,6 @@ class ServiceClient extends User
         string $name,
         string $email,
         string $roles,
-        string $serviceDetails,
-        ?string $city = null,
         ?string $password = null,
         ?string $resetToken = null,
         ?\DateTimeInterface $tokenExpiration = null,

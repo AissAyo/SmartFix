@@ -59,9 +59,11 @@ services:
     volumes:
       - db_admin_data:/var/www/html
 
+
 volumes:
   db_admin_data:
   mysql:
+
 networks:
   symfony:
     name: symfony
