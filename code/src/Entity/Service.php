@@ -17,6 +17,9 @@ class Service
     #[ORM\Column(type: 'string', length: 100)]
     private string $serviceName;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $serviceCode;
+
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $prix;
 
@@ -26,20 +29,13 @@ class Service
     #[ORM\Column(type: 'string', length: 20)]
     private string $status;
 
-    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'service', cascade: ["persist", "remove"])]
-    private Collection $vehicules;
-
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "service")]
-    private Collection $critiques;
-
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "critique")]
-    private Collection $comments;
-
 
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'category_service_id', nullable: false)]
     private CategoryService $categoryService;
+    
 
+<<<<<<< HEAD
     /**
      * @var Collection<int, GarageService>
      */
@@ -59,6 +55,13 @@ class Service
     }
 
     public function getId(): int
+=======
+    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'service')]
+    private Collection $garageServices;
+
+
+    public function getId(): int 
+>>>>>>> feature/HomeAyoub
     {
         return $this->serviceId;
     }
@@ -96,6 +99,7 @@ class Service
 
         return $this;
     }
+<<<<<<< HEAD
 
     /**
      * @return Collection<int, GarageService>
@@ -153,6 +157,17 @@ class Service
                 $idGarage->setIdService(null);
             }
         }
+=======
+    public function getServiceCode(): string
+    {
+        return $this->serviceCode;
+    }
+
+    
+    public function setServiceCode(string $serviceCode): self
+    {
+        $this->serviceCode = $serviceCode;
+>>>>>>> feature/HomeAyoub
 
         return $this;
     }

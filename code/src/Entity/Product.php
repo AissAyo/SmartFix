@@ -3,21 +3,24 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
+#[ORM\Table(name: 'products')]
+
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private int $productId;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
     #[ORM\Column(type: 'float')]
     private float $price;
-    
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $description;
@@ -25,20 +28,30 @@ class Product
     #[ORM\Column(type: 'integer')]
     private int $stockQuantity;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private Category $category;
+    private Shop $shop;
 
-    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'products')]
+    #[ORM\ManyToOne(targetEntity: CategoryProduct::class, inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private Cart $cart;
+    private CategoryProduct $categoryProduct;
 
-    
+    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'products')]
+    private Collection $carts;
 
-
-    public function getProductId(): int
+    public function __construct()
     {
-        return $this->productId;
+        $this->carts = new ArrayCollection();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): string
@@ -46,10 +59,9 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): void
     {
         $this->name = $name;
-        return $this;
     }
 
     public function getPrice(): float
@@ -57,10 +69,9 @@ class Product
         return $this->price;
     }
 
-    public function setPrice(float $price): self
+    public function setPrice(float $price): void
     {
         $this->price = $price;
-        return $this;
     }
 
     public function getDescription(): string
@@ -68,10 +79,9 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(string $description): void
     {
         $this->description = $description;
-        return $this;
     }
 
     public function getStockQuantity(): int
@@ -79,31 +89,40 @@ class Product
         return $this->stockQuantity;
     }
 
-    public function setStockQuantity(int $stockQuantity): self
+    public function setStockQuantity(int $stockQuantity): void
     {
         $this->stockQuantity = $stockQuantity;
-        return $this;
     }
 
-    public function getCategory(): Category
+    public function getShop(): Shop
     {
-        return $this->category;
+        return $this->shop;
     }
 
-    public function setCategory(Category $category): self
+    public function setShop(Shop $shop): void
     {
-        $this->category = $category;
-        return $this;
+        $this->shop = $shop;
     }
 
-    public function getCart(): Cart
+    public function getCategoryProduct(): CategoryProduct
     {
-        return $this->cart;
+        return $this->categoryProduct;
     }
 
-    public function setCart(Cart $cart): self
+    public function setCategoryProduct(CategoryProduct $categoryProduct): void
     {
-        $this->cart = $cart;
-        return $this;
+        $this->categoryProduct = $categoryProduct;
     }
+
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function setCarts(Collection $carts): void
+    {
+        $this->carts = $carts;
+    }
+
+
 }

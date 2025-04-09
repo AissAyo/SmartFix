@@ -6,19 +6,21 @@ declare(strict_types=1);
 
 namespace App\Listener\Indexer;
 
-use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PostRemoveEventArgs;
 use Doctrine\ORM\Events;
 
-#[AsDoctrineListener(event: Events::postRemove)]
+// #[AsDoctrineListener(event: Events::postRemove)]  // Listener is commented out
 class ElasticsearchIndexer
 {
+    // The method is commented out as well
+    /*
     public function index(PostRemoveEventArgs $event): void
     {
-        $object = $event->getObject();  // l'entité qu'on souhaite supprimer
+        $object = $event->getObject();  // Entity to be deleted
+        $manager = $event->getObjectManager(); // Object manager
 
-        $manager = $event->getObjectManager(); // le manager
-
-        // ... on tester si $object est une instance d'une classe précise : if ($object instanceof Blog::class)
+        // Check if the object is an instance of a specific class
+        // if ($object instanceof Blog::class)
     }
+    */
 }

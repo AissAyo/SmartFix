@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mechanic Profile{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h1 class="h4 mb-0">Mechanic Profile</h1>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    {# Left Column - Profile Info #}
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <h2 class="h5">{{ mechanic.name }}</h2>
+                            {% if mechanic.specialization %}
+                                <span class="badge bg-secondary">{{ mechanic.specialization }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="list-group list-group-flush">
+                            <div class="list-group-item">
+                                <h3 class="h6 text-muted">Contact Information</h3>
+                                <p class="mb-1"><i class="bi bi-envelope me-2"></i> {{ mechanic.email }}</p>
+                                {% if mechanic.phoneNumber %}
+                                    <p class="mb-1"><i class="bi bi-telephone me-2"></i> {{ mechanic.phoneNumber }}</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="list-group-item">
+                                <h3 class="h6 text-muted">Professional Details</h3>
+                                <p><i class="bi bi-briefcase me-2"></i>
+                                    Experience: {{ mechanic.experienceYears ?? '0' }} years
+                                </p>
+                                {% if mechanic.certifications %}
+                                    <p><i class="bi bi-award me-2"></i>
+                                        Certifications: {{ mechanic.certifications|join(', ') }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Right Column - Profile Image #}
+                    <div class="col-md-4 text-center">
+                        {% if mechanic.logo %}
+                            <img src="{{ asset('uploads/user_uploads/' ~ mechanic.logo) }}"
+                                 alt="{{ mechanic.name }}'s profile photo"
+                                 class="img-fluid rounded-circle mb-3"
+                                 style="max-width: 200px; border: 3px solid #eee;">
+                        {% else %}
+                            <div class="bg-light rounded-circle d-flex align-items-center justify-content-center"
+                                 style="width: 200px; height: 200px; margin: 0 auto;">
+                                <i class="bi bi-person text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-3">
+                            <a href="{{ path('admin_mechanics_edit', {'id': mechanic.id}) }}"
+                               class="btn btn-outline-primary btn-sm me-2">
+                                <i class="bi bi-pencil"></i> Edit Profile
+                            </a>
+                            <a href="{{ path('admin_list_mechanic') }}"
+                               class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-arrow-left"></i> Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

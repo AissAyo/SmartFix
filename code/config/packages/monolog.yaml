@@ -1,6 +1,20 @@
 monolog:
-    channels:
-        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+    channels: ["security"]  # Définition du canal "security"
+
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            channels: ["!event"]
+
+        security:
+            type: stream
+            path: "%kernel.logs_dir%/security.log"
+            level: info
+            channels: ["security"]
+
+
 
 when@dev:
     monolog:

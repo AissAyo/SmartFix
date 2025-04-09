@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block container %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="text-center">Add Mechanic</h1>
+                <div class="mt-4">
+                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+                    {# Name Field #}
+                    <div class="form-group">
+                        {{ form_label(form.name, 'Name', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter mechanic name'}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+
+                    {# Email Field #}
+                    <div class="form-group">
+                        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter mechanic email'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    {# Specialization Field #}
+                    <div class="form-group">
+                        {{ form_label(form.specialization, 'Specialization', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.specialization, {'attr': {'class': 'form-control', 'placeholder': 'Enter specialization (e.g., Engine, Electrical)'}}) }}
+                        {{ form_errors(form.specialization) }}
+                    </div>
+
+                    {# Password Field #}
+                    <div class="form-group">
+                        {{ form_label(form.password, 'Password', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter password'}}) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+
+                    {# Phone Number Field #}
+                    <div class="form-group">
+                        {{ form_label(form.phoneNumber, 'Phone Number', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Enter phone number'}}) }}
+                        {{ form_errors(form.phoneNumber) }}
+                    </div>
+
+                    {# Experience Years Field #}
+                    <div class="form-group">
+                        {{ form_label(form.experienceYears, 'Experience (Years)', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.experienceYears, {'attr': {'class': 'form-control', 'placeholder': 'Enter years of experience'}}) }}
+                        {{ form_errors(form.experienceYears) }}
+                    </div>
+
+                    {# Certifications Field #}
+                    {# Replace the certifications field section with: #}
+                    <div class="form-group">
+                        {{ form_label(form.certifications, 'Certifications', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.certifications, {'attr': {
+                            'class': 'form-control',
+                            'rows': 3,
+                            'placeholder': 'Enter one certification per line'
+                        }}) }}
+                        <small class="form-text text-muted">Enter one certification per line</small>
+                        {{ form_errors(form.certifications) }}
+                    </div>
+                    {# Logo File Field #}
+                    <div class="form-group">
+                        {{ form_label(form.logoFile, 'Profile Photo', {'label_attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.logoFile, {'attr': {'class': 'form-control-file'}}) }}
+                        <small class="form-text text-muted">Upload a clear photo of the mechanic (JPEG/PNG, max 2MB)</small>
+                        {{ form_errors(form.logoFile) }}
+                    </div>
+
+                    {# CSRF Token and Submit Button #}
+                    <div class="form-group text-center">
+                        {{ form_rest(form) }} {# Includes CSRF token #}
+                        <button type="submit" class="btn btn-primary mt-3">Add Mechanic</button>
+                    </div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

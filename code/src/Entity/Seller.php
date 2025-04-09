@@ -2,101 +2,72 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: "sellers")]
-class Seller extends Garagiste implements UserInterface
+class Seller extends Garagiste
 {
     #[ORM\Column(type: "string", length: 255)]
     protected string $contactInfo;
 
-  
+    #[ORM\OneToMany(targetEntity: Shop::class, mappedBy: 'seller')]
+    private Collection $shops;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $shopName;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $shopEmail;
+    /**
+     * @param string $name
+     * @param string $email
+     * @param string $contactInfo
+     * @param string $roles
+     * @param string|null $password
+     * @param string|null $resetToken
+     * @param \DateTimeInterface|null $tokenExpiration
+     * @param string|null $phoneNumber
+     * @param string|null $logo
+     * @param string|null $workingHours
+     */
+    public function __construct(
+        string $name='',
+        string $email='',
+        string $contactInfo='',
+        string $roles = "Seller",
+        ?string $password = null,
+        ?string $resetToken = null,
+        ?string  $logo = null,
 
-    #[ORM\Column(type: "string", length: 15)]
-    private string $shopPhone;
+        ?\DateTimeInterface $tokenExpiration = null,
+        ?string $phoneNumber = null,
+        ?string $workingHours = null
+    ) {
 
-    #[ORM\ManyToOne(targetEntity: Shop::class, inversedBy: 'sellers')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Shop $shop;
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo, $workingHours);
 
-    // Getter and setter methods
 
-    public function getWorkingHours(): string
-    {
-        return $this->workingHours;
+        $this->contactInfo = $contactInfo;
     }
 
-    public function setWorkingHours(string $workingHours): self
-    {
-        $this->workingHours = $workingHours;
-        return $this;
-    }
 
     public function getContactInfo(): string
     {
         return $this->contactInfo;
     }
 
-    public function setContactInfo(string $contactInfo): self
+    public function setContactInfo(string $contactInfo): void
     {
         $this->contactInfo = $contactInfo;
-        return $this;
     }
 
-    public function getShopEmail(): string
+    public function getShops(): Collection
     {
-        return $this->shopEmail;
+        return $this->shops;
     }
 
-    public function setShopEmail(string $shopEmail): self
+    public function setShops(Collection $shops): void
     {
-        $this->shopEmail = $shopEmail;
-        return $this;
+        $this->shops = $shops;
     }
 
-    public function getShop(): Shop
-    {
-        return $this->shop;
-    }
 
-    public function setShop(Shop $shop): self
-    {
-        $this->shop = $shop;
-        return $this;
-    }
-
-    // Implementing the required method from UserInterface
-    public function getUserIdentifier(): string
-    {
-        return $this->shopEmail;
-    }
-
-    // Other methods required by UserInterface
-    public function getRoles(): array
-    {
-        return ['ROLE_USER'];
-    }
-
-    public function getPassword(): ?string
-    {
-        return null; // Assuming Seller does not have a password
-    }
-
-    public function getSalt(): ?string
-    {
-        return null; // Not needed when using modern algorithms
-    }
-
-    public function eraseCredentials(): void
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-    }
 }

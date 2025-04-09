@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-class ServiceClient extends User implements UserInterface
+class ServiceClient extends User
 {
 
     
@@ -17,36 +18,42 @@ class ServiceClient extends User implements UserInterface
     private Collection $complaints;
 
 
-    public function __construct()
-    {
-    $this->complaints = new ArrayCollection();
-    }
+    public function __construct(
+        string $name,
+        string $email,
+        string $roles,
+        string $serviceDetails,
+        ?string $password = null,
+        ?string $resetToken = null,
+        ?\DateTimeInterface $tokenExpiration = null,
+        ?string $phoneNumber = null,
+        ?string $logo = null
+    ) {
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo);
 
+        $this->complaints = new ArrayCollection();
+        $this->serviceDetails = $serviceDetails;
+    }
 
     public function getServiceDetails(): string
     {
         return $this->serviceDetails;
     }
 
-    public function setServiceDetails(string $serviceDetails): self
+    public function setServiceDetails(string $serviceDetails): void
     {
         $this->serviceDetails = $serviceDetails;
-        return $this;
     }
 
-    public function getRoles(): array
+    public function getComplaints(): Collection
     {
-        return $this->roles;
+        return $this->complaints;
     }
 
-    public function eraseCredentials(): void
+    public function setComplaints(Collection $complaints): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->complaints = $complaints;
     }
 
-    public function getUserIdentifier(): string
-    {
-        return $this->username;
-    }
+
 }

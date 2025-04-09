@@ -31,7 +31,7 @@ class MechanicRepository implements MechanicRepositoryInterface
 
     public function updateEntity($entity): void
     {
-        $this->entityManager->merge($entity);
+        $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
 

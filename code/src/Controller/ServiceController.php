@@ -20,10 +20,4 @@ class ServiceController extends AbstractController
             'services' => $services,
         ]);
     }
-
-    #[Route(name: 'mecanics', path: '/mecanics')]
-    public function mecanics(): Response
-    {
-        return $this->render('page/services.html.twig');
-    }
 }

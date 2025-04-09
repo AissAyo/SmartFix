@@ -14,18 +14,19 @@ class Cart
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private string $totalAmount;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'cart')]
+    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'carts')]
+    #[ORM\JoinTable(name: 'cart_products')]
     private Collection $products;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
+    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: 'cart')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\OneToOne(targetEntity: Order::class, mappedBy: 'cart')]
-    private ?order $Order = null;
+    #[ORM\OneToOne(targetEntity: Or_der::class, mappedBy: 'cart')]
+    private ?Or_der $Or_der = null;
 
     public function __construct()
     {
@@ -37,12 +38,12 @@ class Cart
         return $this->id;
     }
 
-    public function getTotalAmount(): float
+    public function getTotalAmount(): string
     {
         return $this->totalAmount;
     }
 
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalAmount(string $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
         return $this;
@@ -51,6 +52,25 @@ class Cart
     public function getProducts(): Collection
     {
         return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->addCart($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeCart($this);
+        }
+
+        return $this;
     }
 
     public function getClient(): Client
@@ -64,14 +84,14 @@ class Cart
         return $this;
     }
 
-    public function getCommande(): ?Commande
+    public function getOr_der(): ?Or_der
     {
-        return $this->commande;
+        return $this->Or_der;
     }
 
-    public function setCommande(?Commande $commande): self
+    public function setOr_der(?Or_der $Or_der): self
     {
-        $this->commande = $commande;
+        $this->Or_der = $Or_der;
         return $this;
     }
 }
