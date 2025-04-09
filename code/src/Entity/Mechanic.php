@@ -18,12 +18,6 @@ class Mechanic extends Garagiste implements UserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private string $garageEmail;
 
-    #[ORM\OneToMany(targetEntity: garage::class, mappedBy: 'mechanic')]
-    private Collection $garages;
-
-    #[ORM\ManyToOne(targetEntity: Location::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Location $location;
 
     #[ORM\ManyToOne(targetEntity: Role::class)]
     #[ORM\JoinColumn(nullable: false)]

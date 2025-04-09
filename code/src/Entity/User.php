@@ -22,4 +22,17 @@ abstract class User
     protected string $Email;
 
     // Tu peux ajouter d'autres propriétés ou méthodes ici
+    
+    // Getter et Setter pour email
+    public function getEmail(): ?string
+    {
+        return $this->Email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->Email = $email;
+
+        return $this;
+    }
 }

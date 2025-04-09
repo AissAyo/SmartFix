@@ -23,7 +23,7 @@ class Location
 
     public function getLocationId(): int
     {
-        return $this->locationId;
+        return $this->Id;
     }
 
     public function getAddress(): string

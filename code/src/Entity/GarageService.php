@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\GarageServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GarageServiceRepository::class)]
+#[ORM\Entity]
 class GarageService
 {
     #[ORM\Id]
