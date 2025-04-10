@@ -42,7 +42,7 @@ abstract class User
         string $name = '',
         string $email = '',
         ?string $city = '',
-        string $roles = '',
+        string $roles ='role',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
