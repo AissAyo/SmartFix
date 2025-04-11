@@ -1,0 +1,186 @@
+/* Style global pour le corps du site */
+body {
+    background-color: #121212; /* Fond sombre pour le corps */
+    color: #ffffff; /* Texte clair pour le corps */
+    font-family: Arial, sans-serif;
+}
+
+/* Style du formulaire */
+form {
+    max-width: 600px; /* Limite la largeur du formulaire */
+    margin: 50px auto;  /* Centrer le formulaire */
+    padding: 20px;
+    background-color: #000000; /* Fond noir pour le formulaire */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour un effet moderne */
+}
+
+/* Style pour les champs de saisie dans le formulaire */
+input[type="text"], input[type="datetime-local"], textarea, select {
+    background-color: #1c1c1c;  /* Fond sombre pour les champs */
+    color: #ffffff;  /* Texte clair dans les champs */
+    border: 1px solid #444444;  /* Bordure grise */
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;  /* Occupe toute la largeur disponible */
+    box-sizing: border-box; /* Prend en compte les bordures dans la largeur totale */
+    margin-bottom: 15px; /* Espacement entre les champs */
+    font-size: 1rem;
+}
+
+/* Style des labels pour une meilleure visibilité */
+label {
+    color: #ffffff;  /* Texte des labels en blanc */
+    font-size: 1.1rem;  /* Taille du texte des labels */
+    margin-bottom: 5px;
+    display: block; /* Pour garantir que les labels sont bien positionnés */
+}
+
+/* Style des boutons */
+button {
+    background-color: #ff0000;  /* Rouge vif pour le bouton */
+    color: #ffffff;  /* Texte du bouton en blanc */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%; /* Largeur totale pour le bouton */
+    transition: background-color 0.3s ease; /* Animation sur hover */
+}
+
+/* Effet de survol pour le bouton */
+button:hover {
+    background-color: #cc0000;  /* Rouge plus foncé au survol */
+}
+
+/* Style pour les formulaires avec Bootstrap */
+.form-control {
+    background-color: #1c1c1c !important;  /* Conflit avec Bootstrap, on garde le fond sombre */
+    color: #ffffff !important;  /* Texte clair */
+    border: 1px solid #444444 !important;  /* Bordure grise */
+}
+
+/* Pour améliorer la lisibilité des champs avec des icônes (si tu en utilises) */
+.form-group .input-group-text {
+    background-color: #444444;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+/* Ajouter un peu d'espace entre les éléments du formulaire */
+form {
+    max-width: 600px; /* Limite la largeur du formulaire */
+    margin: 0 auto;  /* Centrer le formulaire */
+    padding: 20px;
+    background-color: #000000; /* Fond noir */
+    border-radius: 8px;
+}
+
+/* Style pour les messages d'erreur ou d'alerte */
+.alert {
+    background-color: #ffcccc;  /* Fond rouge clair */
+    color: #990000;  /* Texte rouge foncé */
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+/* Style pour l'alignement des éléments dans le tableau */
+table {
+    width: 100%; /* Utilise toute la largeur du parent */
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #444444;
+}
+
+th {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+tr:nth-child(even) {
+    background-color: #2a2a2a;
+}
+
+tr:nth-child(odd) {
+    background-color: #1f1f1f;
+}
+
+button.icon-btn {
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    background-color: transparent;
+    border: 1px solid #444444;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+button.icon-btn:hover {
+    background-color: #444444;
+}
+
+button.icon-btn i {
+    margin: 0;
+}
+
+/* Style des alertes (messages success/error) */
+.alert {
+    padding: 10px;
+    background-color: #f44336;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.alert.success {
+    background-color: #4CAF50;
+}
+
+.alert.error {
+    background-color: #f44336;
+}
+
+.alert.info {
+    background-color: #2196F3;
+}
+
+.alert.warning {
+    background-color: #ff9800;
+}
+
+/* Option pour le menu hamburger (si utilisé) */
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-toggler-icon {
+    background-color: #ffffff;
+}
+
+/* Ajouter un peu d'espace entre les éléments */
+.container {
+    padding: 20px;
+}
+
+.card {
+    background-color: #1c1c1c;
+    border: 1px solid #444444;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.card-header {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.card-body {
+    background-color: #000000;
+}
