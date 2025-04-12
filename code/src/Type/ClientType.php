@@ -73,9 +73,32 @@ class ClientType extends AbstractType
                     'Errachidia' => 'errachidia',
                     'Taroudant' => 'taroudant',
                     'Taza' => 'taza',
+                    'Tinghir' => 'tinghir',
+                    'Settat' => 'settat',
+                    'Sidi Kacem' => 'sidi_kacem',
+                    'El Hoceima' => 'el_hoceima',
+                    'Berkane' => 'berkane',
+                    'Beni Mella' => 'beni_mella',
+                    'Khemisset' => 'khemisset',
+                    'Taza' => 'taza',
+                    'Fkih Ben Salah' => 'fkih_ben_salah',
+                    'Ouarzazate' => 'ouarzazate',
+                    'Midelt' => 'midelt',
+                    'Ifrane' => 'ifrane',
+                    'Ksar el-Kébir' => 'ksar_el_kebir',
+                    'Nador' => 'nador',
+                    'Azrou' => 'azrou',
+                    'Guelmim' => 'guelmim',
+                    'Al Hoceima' => 'al_hoceima',
+                    'Sidi Ifni' => 'sidi_ifni',
+                    'Dakhla' => 'dakhla',
+                    'M’diq' => 'mdiq',
+                    'Chefchaouen' => 'chefchaouen',
+                    'Imzouren' => 'imzouren',
                 ],
                 'placeholder' => 'Choose a city',
             ])
+
             ->add('phone', TextType::class, [
                 'label' => 'Phone Number',
                 'required' => false,
@@ -89,6 +112,7 @@ class ClientType extends AbstractType
             ->add('ClientphotoProfilFile', FileType::class, [
                 'label' => 'Profile Photo',
                 'required' => false,
+
                 'mapped' => false,
                 'constraints' => [
                     new Image([

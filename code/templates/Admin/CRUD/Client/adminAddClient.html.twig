@@ -6,7 +6,12 @@
             <div class="col-lg-12">
                 <h1 class="text-center">Add Client</h1>
                 <div class="mt-4">
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                    {{ form_start(form, {
+                        'attr': {
+                            'class': 'form-horizontal',
+                            'enctype': 'multipart/form-data'
+                        }
+                    }) }}
 
                     {# Name Field #}
                     <div class="form-group">

@@ -51,4 +51,17 @@ class ClientRepository implements ClientRepositoryInterface
 
         return $query->getResult();
     }
+    public function getClientBystatus(): array
+    {
+        // Correcting the GROUP BY clause syntax
+        $query = $this->entityManager->createQuery('
+        SELECT c.verificationStatus, COUNT(c.id) as client_count
+        FROM App\Entity\Client c
+        GROUP BY c.verificationStatus
+    ');
+
+        // Execute the query and return the result
+        return $query->getResult();
+    }
+
 }

@@ -55,15 +55,18 @@ class Client extends User
     public function __construct(
         string $name = '',
         string $email = '',
+        ?string $adress = null,
+
         string $roles = "client",
         string $password = '',
         string $city = '',
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         bool $verificationStatus = false,
-        ?string $phone = null
+        ?string $phone = null,
+        string $photoProfil = null
     ) {
-        parent::__construct($name, $email, $roles, $password,$city, $resetToken, $tokenExpiration);
+        parent::__construct($name, $email, $roles, $password,$city, $resetToken, $tokenExpiration, $phone, $photoProfil);
 
         // Initialize Client-specific properties
         $this->username = $name;
