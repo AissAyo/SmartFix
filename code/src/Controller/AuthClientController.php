@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Form\ClientType;
 use App\Service\AuthClientService;
-use App\Service\ClientService;
 use App\Service\CRUD\ClientService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
