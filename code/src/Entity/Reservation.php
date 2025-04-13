@@ -37,14 +37,15 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'reservations')]
     private Client $client;
 
-    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: ReservationService::class, cascade: ['persist', 'remove'])]
-    private Collection $reservationServiceLinks;
+    #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'reservations')]
+    private Collection $services;
+
 
     #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')]
     private Collection $repairParts;
 
-    #[ORM\ManyToMany(targetEntity: Garage::class, mappedBy: 'reservations')]
-    private Collection $garages;
+    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'reservations')]
+    private Garage $garage;  // Change $garages to $garage
 
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
@@ -52,7 +53,6 @@ class Reservation
     public function __construct()
     {
         $this->repairParts = new ArrayCollection();
-        $this->reservationServiceLinks = new ArrayCollection();
         $this->garages = new ArrayCollection();
     }
 
@@ -175,19 +175,17 @@ class Reservation
         return $this;
     }
 
-    public function getGarages(): Collection
+    public function getGarage(): Garage
     {
-        return $this->garages;
+        return $this->garage;
     }
 
-    public function addGarage(Garage $garage): self
+    public function setGarage(Garage $garage): self
     {
-        if (!$this->garages->contains($garage)) {
-            $this->garages[] = $garage;
-        }
-
+        $this->garage = $garage;
         return $this;
     }
+
 
     public function removeGarage(Garage $garage): self
     {
@@ -196,29 +194,6 @@ class Reservation
         return $this;
     }
 
-    public function getReservationServiceLinks(): Collection
-    {
-        return $this->reservationServiceLinks;
-    }
 
-    public function addReservationServiceLink(ReservationService $reservationServiceLink): self
-    {
-        if (!$this->reservationServiceLinks->contains($reservationServiceLink)) {
-            $this->reservationServiceLinks[] = $reservationServiceLink;
-            $reservationServiceLink->setReservation($this);
-        }
 
-        return $this;
-    }
-
-    public function removeReservationServiceLink(ReservationService $reservationServiceLink): self
-    {
-        if ($this->reservationServiceLinks->removeElement($reservationServiceLink)) {
-            if ($reservationServiceLink->getReservation() === $this) {
-                $reservationServiceLink->setReservation(null);
-            }
-        }
-
-        return $this;
-    }
 }

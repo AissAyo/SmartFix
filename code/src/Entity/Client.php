@@ -39,7 +39,6 @@ class Client extends User
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
     private Collection $reservations;
-    #[ORM\Column(type: "string", length: 500, nullable: true)]
     #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
     private ?File $ClientphotoProfilFile = null;
 

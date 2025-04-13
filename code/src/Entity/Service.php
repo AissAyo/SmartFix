@@ -29,21 +29,21 @@ class Service
     #[ORM\Column(type: 'string', length: 20)]
     private string $status;
 
-
-    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'service')]
-    #[ORM\JoinColumn(name: 'category_service_id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
+    #[ORM\JoinColumn(nullable: false)]  // Optionally add this if categoryService cannot be null
     private CategoryService $categoryService;
 
-    #[ORM\OneToMany(mappedBy: 'service', targetEntity: ReservationService::class, cascade: ['persist', 'remove'])]
-    private Collection $reservationServiceLinks;
+
+    #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'services')]
+    #[ORM\JoinTable(name: 'reservation_services')] // Define join table directly
+    private Collection $reservations;
 
 
 
 
-
-    public function getId(): int 
+    public function getId(): int
     {
-        return $this->serviceId;
+        return $this->Id;
     }
 
     public function isAvailable(): bool
@@ -84,11 +84,22 @@ class Service
         return $this->serviceCode;
     }
 
-    
+
     public function setServiceCode(string $serviceCode): self
     {
         $this->serviceCode = $serviceCode;
 
         return $this;
     }
+    public function getCategoryService(): CategoryService
+    {
+        return $this->categoryService;
+    }
+
+    public function setCategoryService(CategoryService $categoryService): self
+    {
+        $this->categoryService = $categoryService;
+        return $this;
+    }
+
 }

@@ -32,8 +32,7 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(targetEntity: MechanicServices::class, inversedBy: "Mechanic")]
-    private Collection $MechanicServices;
+
 
     public function __construct(
         string $name = '',

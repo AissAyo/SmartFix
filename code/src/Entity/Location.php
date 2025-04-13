@@ -25,15 +25,8 @@ class Location
     private ?Garage $garage = null;
 
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
+
 
     public function setAddress(string $address): self
     {
@@ -73,6 +66,14 @@ class Location
         $this->garage = $garage;
         return $this;
     }
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
+    public function getAddress(): string
+    {
+        return $this->address;
+    }
 
 }
