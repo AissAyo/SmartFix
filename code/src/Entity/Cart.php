@@ -14,18 +14,19 @@ class Cart
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'float')]
-    private float $totalAmount;
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    private string $totalAmount;
 
-    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'cart')]
-    private Collection $products;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "carts")]
+
+    #[ORM\OneToOne(targetEntity: Client::class, inversedBy: 'cart')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
+
+
+
     public function __construct()
     {
-        $this->products = new ArrayCollection();
     }
 
     public function getId(): int
@@ -33,12 +34,12 @@ class Cart
         return $this->id;
     }
 
-    public function getTotalAmount(): float
+    public function getTotalAmount(): string
     {
         return $this->totalAmount;
     }
 
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalAmount(string $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
         return $this;
@@ -49,33 +50,33 @@ class Cart
         return $this->products;
     }
 
-    public function addProduct(Product $product): self
+    public function addProduct(Product $product): void
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setCart($this);
+            $product->addCart($this);  // Assumed method in Product entity
         }
+    }
 
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function getClient(): Client
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCart() === $this) {
-                $product->setCart(null);
-            }
-        }
-
-        return $this;
+        return $this->client;
     }
 
-    public function calculateTotalAmount(): void
+    public function getOrDer(): ?Or_der
     {
-        $this->totalAmount = 0;
-        foreach ($this->products as $product) {
-            $this->totalAmount += $product->getPrice();
-        }
+        return $this->orDer;
+    }
+
+    public function setOrDer(?Or_der $orDer): self
+    {
+        $this->orDer = $orDer;
+        return $this;
     }
 }

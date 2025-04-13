@@ -17,6 +17,9 @@ class Service
     #[ORM\Column(type: 'string', length: 100)]
     private string $serviceName;
 
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $serviceCode;
+
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $prix;
 
@@ -26,23 +29,21 @@ class Service
     #[ORM\Column(type: 'string', length: 20)]
     private string $status;
 
-    #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'service', cascade: ["persist", "remove"])]
-    private Collection $vehicules;
-
-    #[ORM\OneToMany(targetEntity: Critique::class, mappedBy: "service")]
-    private Collection $critiques;
-
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: "critique")]
-    private Collection $comments;
-
-
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false)]  // Optionally add this if categoryService cannot be null
     private CategoryService $categoryService;
+
+
+    #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'services')]
+    #[ORM\JoinTable(name: 'reservation_services')] // Define join table directly
+    private Collection $reservations;
+
+
+
 
     public function getId(): int
     {
-        return $this->serviceId;
+        return $this->Id;
     }
 
     public function isAvailable(): bool
@@ -78,4 +79,27 @@ class Service
 
         return $this;
     }
+    public function getServiceCode(): string
+    {
+        return $this->serviceCode;
+    }
+
+
+    public function setServiceCode(string $serviceCode): self
+    {
+        $this->serviceCode = $serviceCode;
+
+        return $this;
+    }
+    public function getCategoryService(): CategoryService
+    {
+        return $this->categoryService;
+    }
+
+    public function setCategoryService(CategoryService $categoryService): self
+    {
+        $this->categoryService = $categoryService;
+        return $this;
+    }
+
 }

@@ -20,20 +20,24 @@ class Vehicule
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $licensePlate;
+
     #[ORM\ManyToOne(targetEntity: "App\Entity\Client", inversedBy: "vehicules")]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\OneToMany(targetEntity: "App\Entity\Reservation", mappedBy: "vehicule")]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'vehicle')]
     private Collection $reservations;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Service", inversedBy: "vehicules")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Service $service;
+    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'vehicles')]
+#[ORM\JoinColumn(nullable: false)]
+private ?CarAPI $carAPI = null;
 
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->carAPIs = new ArrayCollection();
     }
 
     // Getters and setters
@@ -61,6 +65,17 @@ class Vehicule
     public function setBrand(string $brand): self
     {
         $this->brand = $brand;
+        return $this;
+    }
+
+    public function getLicensePlate(): string
+    {
+        return $this->licensePlate;
+    }
+
+    public function setLicensePlate(string $licensePlate): self
+    {
+        $this->licensePlate = $licensePlate;
         return $this;
     }
 
@@ -102,14 +117,30 @@ class Vehicule
         return $this;
     }
 
-    public function getService(): Service
+    public function getCarAPIs(): Collection
     {
-        return $this->service;
+        return $this->carAPIs;
     }
 
-    public function setService(Service $service): self
+    public function addCarAPI(CarAPI $carAPI): self
     {
-        $this->service = $service;
+        if (!$this->carAPIs->contains($carAPI)) {
+            $this->carAPIs[] = $carAPI;
+            $carAPI->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarAPI(CarAPI $carAPI): self
+    {
+        if ($this->carAPIs->removeElement($carAPI)) {
+            // set the owning side to null (unless already changed)
+            if ($carAPI->getVehicle() === $this) {
+                $carAPI->setVehicle(null);
+            }
+        }
+
         return $this;
     }
 }

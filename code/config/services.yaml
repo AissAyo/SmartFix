@@ -1,27 +1,40 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    client_directory: '%kernel.project_dir%/public/uploads/client'  # Define the upload directory
 
 services:
-    # default configuration for services in *this* file
+    # Default configuration for services in this file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true
+        autoconfigure: true
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+    # Services for controllers (automatically wired and configured)
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
 
-    App\Command\SeedClientCommand:
-        tags: ['console.command']
+    # Bind the ChartBuilderInterface to the TestController constructor
+#    App\Controller\AdminController\TestController:
+#        bind:
+#            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # FileUploader service, passing the client_directory parameter
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
+#            $targetDirectory: '%kernel.project_dir%/public/uploads/mechanics'
+
+    App\Service\CRUD\MechanicService:
+        autowire: true
+    App\Service\CRUD\SellerService:
+        autowire: true
+    App\Repository\:
+        resource: '../src/Repository/'
+        tags: [ 'doctrine.repository_service' ]
+        autowire: true
+        autoconfigure: true
+    App\Controller\MenuController:
+        tags: ['controller.service_arguments']
+    App\Service\AuthService:
+        autowire: true
+        autoconfigure: true
+

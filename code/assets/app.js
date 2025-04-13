@@ -1,36 +1,25 @@
-import './styles/bootstrap.min.css'
-import './styles/css/animate.css'
-import './styles/css/style.css'
-import './styles/css/responsive.css'
-import './styles/css/blog.css'
-import './styles/css/bootstrap.icon.css'
-import './styles/css/bootstrap.icon.css.map'
-import './styles/css/bootstrap.min.css'
-import './styles/css/components.css'
-import './styles/css/contact.css'
-import './styles/css/footer.css'    
-import './styles/css/header.css'
-import './styles/css/global.css'
-import './styles/css/landing.css'
-import './styles/css/light.css'
-import './styles/css/main.css'
-import './styles/css/protfolio.css'
-import './styles/css/preloader.css'
-import './styles/css/shop.css'
-import './styles/css/slidbar.css'
+// ✅ FIRST: Import jQuery and assign it globally
+import $ from 'jquery';
+window.$ = $;
+window.jQuery = $;
 
-// js
+// ✅ THEN: Import other libraries that rely on jQuery
+import 'bootstrap';
+import './js/adminlte'; // This one uses jQuery too
 
-import './js/bootstrap.min.js'
-import './js/jquery-3.6.0.min.js'
-import './js/map.js'
-import './js/theme.js'
-import './js/pricetable-toggler.js'
+// ✅ ChartJS and plugins
+import Chart from 'chart.js/auto';
+import zoomPlugin from 'chartjs-plugin-zoom';
+Chart.register(zoomPlugin);
+import '@symfony/ux-chartjs';
 
-// font awesome
-import './font/fonts/bootstrap-icons.woff'
-import './font/fonts/bootstrap-icons.woff2'
-import './font/bootstrap-icons.css'
-import './font/bootstrap-icons.css'
-import './font/bootstrap-icons.scss'
-//import './font/icons
+// ✅ Stimulus
+import '@hotwired/stimulus';
+
+// ✅ Other custom scripts (map, theme, etc.)
+import './js/map.js';
+import './js/theme.js';
+import './js/pricetable-toggler.js';
+
+// ✅ Optional: Font Awesome
+// import '@fortawesome/fontawesome-free/js/all';

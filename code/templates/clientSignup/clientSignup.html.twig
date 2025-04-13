@@ -1,0 +1,135 @@
+{% extends 'layout.html.twig' %}
+
+{# {% form_theme signup_form 'form/security/signup.html.twig' %} #}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block container %}
+    <main>
+        <section class="pd-bottom-300">
+            <div class="container">
+                <div class="wptb-signup-form">
+                    <div class="wptb-form--wrapper">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
+                                {# Display flash messages #}
+                                {% for message in app.flashes('error') %}
+                                    <div class="alert alert-danger">
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+
+                                <div class="wptb-heading">
+                                    <div class="wptb-item--inner">
+                                        <h1 class="wptb-item--title">Sign Up</h1>
+                                    </div>
+                                </div>
+
+                                {{ form_start(signup_form, { attr: {class: 'wptb-form'} }) }}
+
+                                <div class="wptb-form--inner">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.name, 'Name') }}
+                                                {{ form_widget(signup_form.name, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Enter your name'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.name) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.email, 'Email ') }}
+                                                {{ form_widget(signup_form.email, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'emailexample@domaine.com'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.email) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.password, 'Password') }}
+                                                {{ form_widget(signup_form.password, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Enter your password'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.password) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.confirmPassword, 'Confirm Password') }}
+                                                {{ form_widget(signup_form.confirmPassword, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Confirm your password'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.confirmPassword) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.address, 'Address') }}
+                                                {{ form_widget(signup_form.address, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Enter your address'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.address) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.phone, 'Phone Number') }}
+                                                {{ form_widget(signup_form.phone, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Enter your phone number'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.phone) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 col-lg-12">
+                                            <div class="wptb-item--button mt-4">
+                                                <button class="btn-two white" type="submit">
+                                                    <div class="btn-wrap">
+                                                        <span class="text-first">Sign Up</span>
+                                                        <span class="text-second"><i class="bi bi-plus"></i></span>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <p class="mt-4">
+                                    <a href="{{ path('app_login') }}">Already have an account? Login here</a>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

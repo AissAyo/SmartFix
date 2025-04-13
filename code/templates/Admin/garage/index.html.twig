@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garage List{% endblock %}
+
+{% block body %}
+    <h1>Garages</h1>
+
+    <a href="{{ path('garage_new') }}" class="btn btn-primary">Create New Garage</a>
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Rating</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for garage in garages %}
+            <tr>
+                <td>{{ garage.id }}</td>
+                <td>{{ garage.name }}</td>
+                <td>{{ garage.emailGarage }}</td>
+                <td>{{ garage.status }}</td>
+                <td>{{ garage.rating }}</td>
+                <td>
+                    <a href="{{ path('garage_show', {id: garage.id}) }}" class="btn btn-info btn-sm">Show</a>
+                    <a href="{{ path('garage_edit', {id: garage.id}) }}" class="btn btn-secondary btn-sm">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No garages found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
