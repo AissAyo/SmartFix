@@ -28,29 +28,32 @@ class Reservation
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $estimatedPrice;
 
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations")]
+    private Vehicule $vehicle;
+
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToMany(targetEntity: GarageService::class, mappedBy: 'reservations')]
-    private Collection $garageServices;
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'reservations')]
+    private Client $client;
 
-    #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')] 
+    #[ORM\OneToMany(mappedBy: 'reservation', targetEntity: ReservationService::class, cascade: ['persist', 'remove'])]
+    private Collection $reservationServiceLinks;
+
+    #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')]
     private Collection $repairParts;
 
-    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'reservations')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Vehicule $vehicle;
-    #[ORM\Column(type: "integer")]
-    private int $VehiculeId;
+    #[ORM\ManyToMany(targetEntity: Garage::class, mappedBy: 'reservations')]
+    private Collection $garages;
+
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
 
-    
-
-    public function __construct() 
+    public function __construct()
     {
-        $this->garageServices = new ArrayCollection();
         $this->repairParts = new ArrayCollection();
+        $this->reservationServiceLinks = new ArrayCollection();
+        $this->garages = new ArrayCollection();
     }
 
     public function getId(): int
@@ -113,26 +116,6 @@ class Reservation
         return $this;
     }
 
-    public function getGarageServices(): Collection
-    {
-        return $this->garageServices;
-    }
-
-    public function addGarageService(GarageService $garageService): self
-    {
-        if (!$this->garageServices->contains($garageService)) {
-            $this->garageServices[] = $garageService;
-        }
-
-        return $this;
-    }
-
-    public function removeGarageService(GarageService $garageService): self
-    {
-        $this->garageServices->removeElement($garageService);
-        return $this;
-    }
-
     public function getRepairParts(): Collection
     {
         return $this->repairParts;
@@ -151,7 +134,6 @@ class Reservation
     public function removeRepairPart(RepairPart $repairPart): self
     {
         if ($this->repairParts->removeElement($repairPart)) {
-            // set the owning side to null (unless already changed)
             if ($repairPart->getReservation() === $this) {
                 $repairPart->setReservation(null);
             }
@@ -160,12 +142,12 @@ class Reservation
         return $this;
     }
 
-    public function getVehicle(): Vehicle
+    public function getVehicle(): Vehicule
     {
         return $this->vehicle;
     }
 
-    public function setVehicle(Vehicle $vehicle): self
+    public function setVehicle(Vehicule $vehicle): self
     {
         $this->vehicle = $vehicle;
         return $this;
@@ -190,6 +172,53 @@ class Reservation
     public function setClient(Client $client): self
     {
         $this->client = $client;
+        return $this;
+    }
+
+    public function getGarages(): Collection
+    {
+        return $this->garages;
+    }
+
+    public function addGarage(Garage $garage): self
+    {
+        if (!$this->garages->contains($garage)) {
+            $this->garages[] = $garage;
+        }
+
+        return $this;
+    }
+
+    public function removeGarage(Garage $garage): self
+    {
+        $this->garages->removeElement($garage);
+
+        return $this;
+    }
+
+    public function getReservationServiceLinks(): Collection
+    {
+        return $this->reservationServiceLinks;
+    }
+
+    public function addReservationServiceLink(ReservationService $reservationServiceLink): self
+    {
+        if (!$this->reservationServiceLinks->contains($reservationServiceLink)) {
+            $this->reservationServiceLinks[] = $reservationServiceLink;
+            $reservationServiceLink->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservationServiceLink(ReservationService $reservationServiceLink): self
+    {
+        if ($this->reservationServiceLinks->removeElement($reservationServiceLink)) {
+            if ($reservationServiceLink->getReservation() === $this) {
+                $reservationServiceLink->setReservation(null);
+            }
+        }
+
         return $this;
     }
 }

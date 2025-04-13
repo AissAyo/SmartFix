@@ -11,10 +11,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity]
-#[ORM\Table(name: "clients")]
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "discr", type: "string")]
-#[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User
 {
     #[ORM\Column(type: "boolean")]
@@ -41,9 +37,12 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
+    private Collection $reservations;
     #[ORM\Column(type: "string", length: 500, nullable: true)]
     #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
     private ?File $ClientphotoProfilFile = null;
+
 
     public function setRoles(string $roles): User
     {

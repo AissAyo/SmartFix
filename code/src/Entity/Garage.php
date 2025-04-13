@@ -35,15 +35,15 @@ class Garage
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'garage')]
-    private Collection $garageServices;
 
-
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'garage')]
+    private Collection $reservation;
     #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Location $location = null;
 
-
+    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
+    private Collection $mechanicServices;
 
 
     public function __construct()

@@ -17,20 +17,16 @@ class Cart
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $totalAmount;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'carts')]
-    #[ORM\JoinTable(name: 'cart_products')]
-    private Collection $products;
+
 
     #[ORM\OneToOne(targetEntity: Client::class, inversedBy: 'cart')]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
-    #[ORM\OneToOne(targetEntity: Or_der::class, mappedBy: 'cart')]
-    private ?Or_der $orDer = null;
+
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
     }
 
     public function getId(): int

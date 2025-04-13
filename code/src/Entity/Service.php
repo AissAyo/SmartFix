@@ -30,13 +30,15 @@ class Service
     private string $status;
 
 
-    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
+    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'service')]
     #[ORM\JoinColumn(name: 'category_service_id', nullable: false)]
     private CategoryService $categoryService;
-    
 
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'service')]
-    private Collection $garageServices;
+    #[ORM\OneToMany(mappedBy: 'service', targetEntity: ReservationService::class, cascade: ['persist', 'remove'])]
+    private Collection $reservationServiceLinks;
+
+
+
 
 
     public function getId(): int 

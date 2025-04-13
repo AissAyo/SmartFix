@@ -20,18 +20,20 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $certifications ;
-
-        #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
-        private ?File $logoFile = null; // Initialize to null    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
-    private Collection $garages;
     #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
     private ?File $MechanicphotoProfilFile = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $certifications ;
+    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
+     private ?File $logoFile = null; // Initialize to null    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
+    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
+    private Collection $garages;
+
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
+    #[ORM\ManyToOne(targetEntity: MechanicServices::class, inversedBy: "Mechanic")]
+    private Collection $MechanicServices;
 
     public function __construct(
         string $name = '',
@@ -120,6 +122,16 @@ class Mechanic extends Garagiste
     public function setMechanicphotoProfilFile(?File $MechanicphotoProfilFile): void
     {
         $this->MechanicphotoProfilFile = $MechanicphotoProfilFile;
+    }
+
+    public function getMechanicServices(): Collection
+    {
+        return $this->MechanicServices;
+    }
+
+    public function setMechanicServices(Collection $MechanicServices): void
+    {
+        $this->MechanicServices = $MechanicServices;
     }
 
 }
