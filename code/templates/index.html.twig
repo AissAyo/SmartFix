@@ -1,0 +1,99 @@
+{% extends 'adminNavBar.html.twig' %}
+
+{% block container %}
+    <br><br><br>
+    <section class="content ">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- CIRCULAR CHART -->
+                    <div class="card card-primary mx-auto" style="max-width: 600px;">
+                        <div class="card-header">
+                            <h3 class="card-title">Client Status Distribution</h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <canvas id="statusChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-danger mx-auto" style="max-width: 600px;">
+            <div class="card-header">
+                <h3 class="card-title">Client Sign-ups</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h4>Total Clients Signed Up:</h4>
+                        <p id="client-signups">Loading...</p> <!-- Placeholder for client sign-ups -->
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('statusChart').getContext('2d');
+        var statusChart = new Chart(ctx, {
+            type: '{{ chart.type }}',
+            data: {
+                labels: {{ chart.data.labels|json_encode|raw }},
+                datasets: [{
+                    label: '{{ chart.data.datasets[0].label }}',
+                    data: {{ chart.data.datasets[0].data|json_encode|raw }},
+                    backgroundColor: {{ chart.data.datasets[0].backgroundColor|json_encode|raw }},
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: true
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block javascript %}
+{#    <script src=" {{ asset('plugins/jquery/jquery.min.js') }}"></script>#}
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('dashboard/dist/js/adminlte.min.js') }}"></script>
+    {{ encore_entry_script_tags('app') }}
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+        integrity="sha256-pvN3U3mtdK+tD3GK9hNfFZGSqtGc5kGPCbZcEmJRSvA="
+        crossorigin="anonymous"></script>
+    <script>
+    <script>
+    $(document).ready(function () {
+        console.log("jQuery is working!");
+    });
+</script>
+
+        $(function () {
+            // Toggle section visibility
+            $('#toggleButton').click(function () {
+                $('.section').toggle();
+            });
+        });
+    </script>
+    <script>
+
+</script>
+{% endblock %}

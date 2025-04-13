@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Mechanic{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Edit Mechanic</h1>
+
+        <div class="card">
+            <div class="card-body">
+                {{ form_start(form) }}
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.name, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+
+                        {{ form_row(form.email, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+
+                        {{ form_row(form.specialization, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                    </div>
+
+                    <div class="col-md-6">
+                        {{ form_row(form.phoneNumber, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+
+                        {{ form_row(form.experienceYears, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+
+                        {{ form_row(form.certifications, {
+                            'attr': {'class': 'form-control'},
+                            'label_attr': {'class': 'form-label'}
+                        }) }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form_row(form.logoFile, {
+                        'attr': {'class': 'form-control'},
+                        'label_attr': {'class': 'form-label'}
+                    }) }}
+                    {% if mechanic.logo %}
+                        <div class="mt-2">
+                            <img src="{{ asset('uploads/user_uploads/' ~ mechanic.logo) }}"
+                                 alt="Current logo"
+                                 class="img-thumbnail"
+                                 style="max-width: 150px;">
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save me-2"></i>Save Changes
+                    </button>
+
+                    <a href="{{ path('admin_list_mechanic') }}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Back to list
+                    </a>
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

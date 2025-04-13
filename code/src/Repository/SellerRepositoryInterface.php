@@ -1,7 +1,9 @@
 <?php
 namespace App\Repository;
 
+use App\Entity\Seller;
+
 interface SellerRepositoryInterface extends RepositoryInterface
 {
-    // Add methods specific to Seller entity if needed
+    public function deleteEntity($entity): void;
 }
