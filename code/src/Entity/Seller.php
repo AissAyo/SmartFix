@@ -32,6 +32,7 @@ class Seller extends Garagiste
     public function __construct(
         string $name='',
         string $email='',
+        ?string $adress = null,
         string $contactInfo='',
         string $roles = "Seller",
         ?string $password = null,
@@ -39,9 +40,11 @@ class Seller extends Garagiste
         ?string  $logo = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string $phoneNumber = null,
-        ?string $workingHours = null
+        ?string $workingHours = null ,
+            ?string $city = '',
+
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo, $workingHours);
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo, $workingHours,$city);
         $this->contactInfo = $contactInfo;
     }
 

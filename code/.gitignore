@@ -37,3 +37,6 @@ code/assets/fonts/bootstrap-icons-1.1/font/bootstrap-icons.min.css
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+public/uploads/
+package-lock.json
+yarn.lock

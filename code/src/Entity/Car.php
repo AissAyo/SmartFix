@@ -18,7 +18,8 @@ class Car
 
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
-
+    #[ORM\Column(type: "string", length: 255)]
+    private string $year;
     #[ORM\Column(type: "boolean", length: 255)]
     private bool $Status;
 
@@ -36,11 +37,22 @@ class Car
     #[ORM\JoinColumn(nullable: false)]
     private ?CarAPI $carAPI = null;
 
-    public function __construct()
+//    public function __construct()
+//    {
+//        $this->carAPIs = new ArrayCollection();
+//    }
+    public function  __construct(
+        int $id,
+        string $model,
+        string $brand,
+        string $year,
+    )
     {
-        $this->carAPIs = new ArrayCollection();
+        $this->id = $id;
+        $this->model = $model;
+        $this->brand = $brand;
+        $this->year = $year;
     }
-
     public function getId(): int
     {
         return $this->id;
@@ -99,5 +111,15 @@ class Car
     {
         $this->carRentalService = $carRentalService;
         return $this;
+    }
+
+    public function getYear(): string
+    {
+        return $this->year;
+    }
+
+    public function setYear(string $year): void
+    {
+        $this->year = $year;
     }
 }

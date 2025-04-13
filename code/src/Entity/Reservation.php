@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\Types\Integer;
 
 #[ORM\Entity]
 #[ORM\Table(name: "reservations")]
@@ -39,7 +40,8 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'reservations')]
     #[ORM\JoinColumn(nullable: false)]
     private Vehicule $vehicle;
-
+    #[ORM\Column(type: "integer")]
+    private int $VehiculeId;
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
 

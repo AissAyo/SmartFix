@@ -1,0 +1,149 @@
+{% extends 'adminNavBar.html.twig' %}
+{% block stylesheet %}
+    {% block stylesheets %}
+        {{ parent( ) }}
+        <style>
+            .chart-container {
+                position: relative;
+                width: 80%; /* Set the width to 80% of its parent container */
+                max-width: 600px; /* Set a max-width so the chart doesn't grow too large */
+                height: 300px;  /* Set a fixed height */
+                margin: auto;  /* Center the chart within its container */
+            }
+
+            canvas {
+                width: 100% !important; /* Make canvas take 100% of the container width */
+                height: 100% !important; /* Make canvas take 100% of the container height */
+            }
+        </style>
+    {% endblock %}
+    </style>
+{% endblock %}
+{% block container %}
+    <br>
+    <br>
+{#    <h1>Clients by City</h1>#}
+
+{#    {% if chart is not null %}#}
+
+{#        <div class="chart-container">#}
+{#            <canvas id="myChart" style="width: 400px; height: 300px;"></canvas>        </div>#}
+
+{#    {% else %}#}
+{#        <p>No data available to display.</p>#}
+{#    {% endif %}#}
+    <div class="card card-danger mx-auto" style="max-width: 600px;">
+        <div class="card-header">
+            <h3 class="card-title">Client Sign-ups</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12">
+                    <h4 id="client-signups">Total Clients Signed Up:    {{ clientcount }}</h4>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+    <div class="card card-success mx-auto" style="max-width: 600px;">
+        <div class="card-header">
+            <h3 class="card-title">Stacked Bar Chart</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="chart">
+                {% if chart is not null %}
+
+                    <div class="chart-container">
+                        <canvas id="myChart" style="width: 400px; height: 300px;"></canvas>        </div>
+
+                {% else %}
+                    <p>No data available to display.</p>
+                {% endif %}            </div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <div class="card card-primary mx-auto" style="max-width: 600px;">
+        <div class="card-header">
+            <h3 class="card-title">Client Status Distribution</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="chart">
+                <canvas id="statusChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        console.log('Chart Data:', {{ chart.data|json_encode|raw }});
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: '{{ chart.type }}',
+            data: {
+                labels: {{ chart.data.labels|json_encode|raw }},
+                datasets: [{
+                    label: '{{ chart.data.datasets[0].label }}',
+                    data: {{ chart.data.datasets[0].data|json_encode|raw }},
+                    backgroundColor: '{{ chart.data.datasets[0].backgroundColor }}',
+                    borderColor: '{{ chart.data.datasets[0].borderColor }}',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+        <script>
+            //cyrcle
+
+            var ctx = document.getElementById('statusChart').getContext('2d');
+            var statusChart = new Chart(ctx, {
+            type: '{{ chartc.type }}',
+            data: {
+            labels: {{ chartc.data.labels|json_encode|raw }},
+            datasets: [{
+            label: '{{ chartc.data.datasets[0].label }}',
+            data: {{ chartc.data.datasets[0].data|json_encode|raw }},
+            backgroundColor: {{ chartc.data.datasets[0].backgroundColor|json_encode|raw }},
+            borderColor: '#fff',
+            borderWidth: 1
+        }]
+        },
+            options: {
+            plugins: {
+            legend: {
+            display: true
+        }
+        }
+        }
+        });
+    </script>
+
+
+
+{% endblock %}

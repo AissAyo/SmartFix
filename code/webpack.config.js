@@ -25,6 +25,7 @@ Encore
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     .enableVersioning(Encore.isProduction())
+    Encore.autoProvidejQuery()
 
     // Configure Babel for polyfills (core-js)
     .configureBabelPresetEnv((config) => {

@@ -4,6 +4,7 @@ namespace App\Controller\AdminController\CRUD;
 use App\Entity\Client;
 use App\Type\ClientType;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,20 +13,27 @@ use App\Service\FileUploader;
 
 class AdminCrudClientController extends AbstractController
 {
-#[Route('listclients', name: 'listclient', methods: ['GET'])]
-public function index(EntityManagerInterface $entityManager): Response
-{
-$clients = $entityManager->getRepository(Client::class)->findAll();
+    #[Route('listclients/{page}', name: 'listclient', defaults: ['page' => 1], methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager, int $page, PaginatorInterface $paginator): Response
+    {
+        $client = $entityManager->getRepository(Client::class)
+            ->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC');  // Default sorting
+        $pagination = $paginator->paginate(
+            $client,
+            $page,  // Automatically takes from URL (e.g., `/listclients/2`)
+            10      // Items per page
+        );
 
-// Format the dateInscription for each client
-foreach ($clients as $client) {
-$client->formattedDate = $client->getDateInscription()->format('Y-m-d H:i:s');
-}
+        // Format dates
+        foreach ($pagination as $client) {
+            $client->formattedDate = $client->getDateInscription()->format('Y-m-d H:i:s');
+        }
 
-return $this->render('Admin/CRUD/Client/adminCrudClient.html.twig', [
-'clients' => $clients,
-]);
-}
+        return $this->render('Admin/CRUD/Client/adminCrudClient.html.twig', [
+            'pagination' => $pagination,
+        ]);
+    }
 
 #[Route('/admin/clients/{id}', name: 'app_admin_crud_client_show', methods: ['GET'])]
 public function show(Client $client): Response
@@ -62,22 +70,42 @@ return $this->render('Admin/CRUD/Client/adminAddClient.html.twig', [
 ]);
 }
 
-#[Route('/admin/clients/{id}/edit', name: 'admin_clients_edit', methods: ['GET', 'POST'])]
-public function edit(Request $request, Client $client, EntityManagerInterface $entityManager): Response
+#[Route('/adminEditClient/{id}', name: 'admin_clients_edit', methods: ['GET', 'POST'])]
+public function edit(int $id, Request $request, FileUploader $fileUploader, EntityManagerInterface $entityManager): Response
 {
-$form = $this->createForm(ClientType::class, $client);
-$form->handleRequest($request);
+    // Find the client by its ID
+    $client = $entityManager->getRepository(Client::class)->find($id);
 
-if ($form->isSubmitted() && $form->isValid()) {
-$entityManager->flush();
+    if (!$client) {
+        throw $this->createNotFoundException('No client found for id ' . $id);
+    }
 
-return $this->redirectToRoute('listclient');
-}
+    // Create the form and bind it to the existing client data
+    $form = $this->createForm(ClientType::class, $client);
+    $form->handleRequest($request);
 
-return $this->render('Admin/CRUD/Client/adminEditClient.html.twig', [
-'client' => $client,
-'form' => $form->createView(),
-]);
+    if ($form->isSubmitted() ) {
+        // Handle file upload for the profile photo
+        $photoProfil = $form->get('ClientphotoProfilFile')->getData();
+        //dd($photoProfil);
+        if ($photoProfil) {
+
+            $clientPhotoProfilFile = $fileUploader->upload($photoProfil);
+            $client->setPhotoProfil($clientPhotoProfilFile);
+        }
+
+        // Persist the updated client entity
+        $entityManager->persist($client);
+        $entityManager->flush();
+
+        // Redirect to the list of clients after successful update
+        return $this->redirectToRoute('listclient');
+    }
+
+    return $this->render('Admin/CRUD/Client/adminEditClient.html.twig', [
+        'client' => $client,
+        'form' => $form->createView(),
+    ]);
 }
 
 #[Route('/admin/clients/{id}/delete', name: 'admin_clients_delete', methods: ['POST'])]

@@ -1,38 +1,25 @@
-
-
-// js
-
-import 'jquery';
+// ✅ FIRST: Import jQuery and assign it globally
 import $ from 'jquery';
 window.$ = $;
 window.jQuery = $;
-import 'bootstrap';
 
-import '@symfony/ux-chartjs'; // Correct way to import Symfony UX packages
-import '@hotwired/stimulus';
+// ✅ THEN: Import other libraries that rely on jQuery
+import 'bootstrap';
+import './js/adminlte'; // This one uses jQuery too
+
+// ✅ ChartJS and plugins
 import Chart from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import '@symfony/ux-chartjs';
 Chart.register(zoomPlugin);
+import '@symfony/ux-chartjs';
 
-import './js/map.js'
-import './js/theme.js'
-import './js/pricetable-toggler.js'
-import './js/adminlte'
-// import  './js/adminlte.js.map'
-// import  './js/adminlte.min.js.map'
-// import  './js/adminlte.min.js'
+// ✅ Stimulus
+import '@hotwired/stimulus';
 
+// ✅ Other custom scripts (map, theme, etc.)
+import './js/map.js';
+import './js/theme.js';
+import './js/pricetable-toggler.js';
 
-// font awesome
-
-
-
-
-
-// document.addEventListener('chartjs:init', function (event) {
-//     const Chart = event.detail.Chart;
-//     Chart.register(zoomPlugin);
-// });
-
-// ...
+// ✅ Optional: Font Awesome
+// import '@fortawesome/fontawesome-free/js/all';

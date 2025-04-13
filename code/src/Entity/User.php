@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\MappedSuperclass]
-abstract class User
+abstract class User implements  PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -15,18 +14,20 @@ abstract class User
     private int $id;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $name=null;
+    private ?string $name = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $password ;
+    private ?string $password;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $email;
+    private ?string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $city;
+
     #[ORM\Column(type: "string", nullable: true)]
-    private string $roles;
+    private ?string $roles=null;
+
     #[ORM\Column(type: "string", length: 20, nullable: true)]
     private ?string $phone = null;
 
@@ -38,25 +39,30 @@ abstract class User
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $photoProfil;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $address;
+
     public function __construct(
         string $name = '',
         string $email = '',
+        ?string $address = null,
         ?string $city = '',
-        string $roles ='role',
+        string $roles = '',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string $phone = null,  // Moved after other optional parameters
-        ?string $photoProfil = "avatar5-67f2b22f9551d.png"  // Default value for photoProfil
+        ?string $phone = null,
+        ?string $photoProfil = "avatar5-67f2b22f9551d.png" // Default avatar
     ) {
         $this->name = $name;
-        $this->email = $email;
+        $this->email = $email;  // Ensure email is initialized
         $this->roles = $roles;
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
         $this->photoProfil = $photoProfil;
         $this->phone = $phone;
+        $this->city = $city;
     }
 
 
@@ -92,10 +98,9 @@ abstract class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        return $this;
     }
 
     public function getResetToken(): ?string
@@ -109,10 +114,8 @@ abstract class User
         return $this;
     }
 
-    public function getRoles(): string
-    {
-        return $this->roles;
-    }
+
+
     public function setRoles(string $roles): self
     {
         $this->roles = $roles;
@@ -140,17 +143,14 @@ abstract class User
         $this->phone = $phone;
     }
 
-    // In Client class
     public function getPhotoProfil(): string
     {
-        return $this->photoProfil ?? 'img/avatar5.png';  // Or handle null as a fallback
+        return $this->photoProfil ?? 'img/avatar5.png'; // Default fallback
     }
 
-
-    public function setphotoProfil(string $photoProfil): self
+    public function setPhotoProfil(string $photoProfil): self
     {
-
-         $this->photoProfil ? $this->photoProfil : 'avatar5-67f2b22f9551d.png';
+        $this->photoProfil = $photoProfil;
         return $this;
     }
 
@@ -163,4 +163,21 @@ abstract class User
     {
         $this->city = $city;
     }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getRoles(): ?string
+    {
+        return $this->roles;
+    }
+
+
 }

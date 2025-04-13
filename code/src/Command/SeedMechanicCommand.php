@@ -64,14 +64,18 @@ class SeedMechanicCommand extends Command
             // Generate Fake Data
             $name = $faker->name;
             $email = $faker->unique()->safeEmail;
-            $roles = "ROLE_MECHANIC"; // Default role
+            $roles = "MECHANIC"; // Default role
             $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
             $resetToken = null;
             $tokenExpiration = null;
             $phoneNumber = $faker->phoneNumber;
             $logo = $faker->imageUrl(200, 200, 'business'); // Generates a fake logo URL
             $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
-
+            $city = $faker->randomElement([
+                'Casablanca', 'Rabat', 'Fès', 'Marrakech', 'Tangier', 'Agadir', 'Meknès',
+                'Oujda', 'Tétouan', 'Safi', 'Mohammedia', 'El Jadida', 'Béni Mellal', 'Nador',
+                'Khouribga', 'Kénitra', 'Laâyoune', 'Errachidia', 'Taroudant', 'Taza',
+            ]);
             // Mechanic-specific properties
             $specialization = $faker->randomElement($specializations);
             $experienceYears = $faker->numberBetween(1, 30);
@@ -97,6 +101,7 @@ class SeedMechanicCommand extends Command
                 $phoneNumber,
                 $logo,
                 $workingHours,
+                $city,
                 $specialization,
                 $experienceYears,
                 $certifications

@@ -80,13 +80,13 @@ class ClientType extends AbstractType
                     'Berkane' => 'berkane',
                     'Beni Mella' => 'beni_mella',
                     'Khemisset' => 'khemisset',
-                    'Taza' => 'taza',
+
                     'Fkih Ben Salah' => 'fkih_ben_salah',
                     'Ouarzazate' => 'ouarzazate',
                     'Midelt' => 'midelt',
                     'Ifrane' => 'ifrane',
                     'Ksar el-Kébir' => 'ksar_el_kebir',
-                    'Nador' => 'nador',
+
                     'Azrou' => 'azrou',
                     'Guelmim' => 'guelmim',
                     'Al Hoceima' => 'al_hoceima',
@@ -102,6 +102,7 @@ class ClientType extends AbstractType
             ->add('phone', TextType::class, [
                 'label' => 'Phone Number',
                 'required' => false,
+
                 'constraints' => [
                     new Regex([
                         'pattern' => '/^(\+212|212|0)(6|7|8|5)[0-9]{8}$/',
@@ -121,9 +122,20 @@ class ClientType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image (JPEG, PNG, or GIF).',
                     ]),
                 ],
+            ])
+            ->add('verificationStatus', ChoiceType::class, [
+                'label' => 'Verification Status',
+                'choices' => [
+                    'Verified' => 1,
+                    'Unverified' => 0,
+                ],
+                'expanded' => false, // dropdown
+                'multiple' => false,
+                'required' => true,
             ]);
 
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

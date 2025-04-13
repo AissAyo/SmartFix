@@ -21,6 +21,7 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%kernel.project_dir%/public/uploads'
+#            $targetDirectory: '%kernel.project_dir%/public/uploads/mechanics'
 
     App\Service\CRUD\MechanicService:
         autowire: true
@@ -36,3 +37,4 @@ services:
     App\Service\AuthService:
         autowire: true
         autoconfigure: true
+
