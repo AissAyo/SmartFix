@@ -41,4 +41,10 @@ class ClientService
     {
         $this->clientRepository->deleteEntity($client, true);
     }
+    public function saveClient(Client $client): void
+{
+    $this->entityManager->persist($client);
+    $this->entityManager->flush();
+}
+
 }
