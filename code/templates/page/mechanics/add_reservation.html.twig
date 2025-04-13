@@ -1,0 +1,18 @@
+{# templates/reservation/new.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Create New Reservation</h1>
+
+    {{ form_start(form) }}
+        {{ form_row(form.vehicle.id) }}
+        {{ form_row(form.reservation_date) }}
+        {{ form_row(form.client.id) }}
+        {{ form_row(form.status) }}
+        {{ form_row(form.estimated_price) }}
+        {{ form_row(form.notes) }}
+        {{ form_row(form.service.id) }}
+        {{ form_row(form.time) }}
+        <button type="submit">Submit</button>
+    {{ form_end(form) }}
+{% endblock %}
