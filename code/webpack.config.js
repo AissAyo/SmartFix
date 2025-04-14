@@ -1,108 +1,76 @@
-// Assure-toi d'importer Encore correctement
 const Encore = require('@symfony/webpack-encore');
+const webpack = require('webpack'); // Keep this if you needed webpack for other things, but not needed for ProvidePlugin with Encore
 
-// Manually configure the runtime environment if not already configured yet by the "encore" command.
-// It's useful when you use tools that rely on webpack.config.js file.
+// Manually configure the runtime environment
 if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
 Encore
-    // directory where compiled assets will be stored
     .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // only needed for CDN's or subdirectory deploy
-    //.setManifestKeyPrefix('build/')
 
-    /*
-     * ENTRY CONFIG
-     *
-     * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
-     */
+    // Define your entry points
     .addEntry('app', './assets/app.js')
+    //.addStyleEntry('styles', './assets/main.css') // Use 'styles' or any name you like
+   // .addEntry('main', './assets/main.js')
+    // If main.js imports CSS/SCSS, that's fine.
+    // If you had a separate CSS/SCSS file as an entry, use addStyleEntry:
+    // .addStyleEntry('styles', './assets/main.scss')
 
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+    // Basic Encore features
     .splitEntryChunks()
-
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
-  // Exclude .css.map files from being processed
-  .addRule({
-    test: /\.css\.map$/,
-    use: 'ignore-loader'
-})
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
+    Encore.autoProvidejQuery()
 
-    // configure Babel
-    // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
-    // })
-
-    // enables and configure @babel/preset-env polyfills
+    // Configure Babel for polyfills (core-js)
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
-        config.corejs = '3.38';
+        config.corejs = '3.38'; // Make sure 'core-js' version 3.38+ is in your package.json
     })
 
-    // Ignorer les erreurs causées par les fichiers CSS manquants (comme les images)
-    .configureCssLoader((config) => {
-        config.url = {
-            filter: (url) => {
-                // Ignore les erreurs pour les fichiers spécifiques
-                return !url.includes('ui-icons') && !url.includes('16.png');
-            },
+    // Enable SASS/SCSS loader
+    .enableSassLoader(options => {
+        options.implementation = require('sass');
+        options.sassOptions = {
+            outputStyle: 'compressed' // Use 'expanded' in dev if preferred
         };
     })
 
-    // Exclure les fichiers source maps pour éviter l'erreur liée à bootstrap-icons.css.map
-    .configureDevServerOptions((options) => {
-        options.watchOptions = {
-            ignored: /bootstrap-icons\.css\.map/, // Ignore ce fichier spécifique
-        };
+    // Enable PostCSS loader (important for autoprefixing, etc.)
+    .enablePostCssLoader() // Ensure this is called
+
+    // Provide jQuery automatically (this replaces the need for webpack.ProvidePlugin for jQuery)
+    .autoProvidejQuery()
+
+    // Enable Stimulus bridge if using Stimulus controllers
+    .enableStimulusBridge('./assets/controllers.json')
+
+    // Custom loader configurations (Keep these within the chain)
+    .configureLoaderRule('js', loaderRule => {
+        // Exclude .map files from babel-loader processing (generally okay)
+        loaderRule.exclude = /\.map$/;
+    })
+    // --- Removed configureLoaderRule('css', ...) ---
+    // It's generally safer to let Encore handle CSS rules set up by enableSassLoader/enablePostCssLoader
+    // unless you have a specific, known reason to modify them. Removing this simplifies things.
+
+    .configureLoaderRule('images', loaderRule => {
+        // This rule handles images AND fonts as defined by the regex
+        loaderRule.test = /\.(png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/;
+        // Encore's default asset/resource rule is usually sufficient,
+        // but this explicit rule is fine if you prefer it.
     })
 
-    // enables Sass/SCSS support
-    .enableSassLoader()
-
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
-
-    // uncomment if you use React
-    //.enableReactPreset()
-
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
-
-    // Enable image handling
-    .addRule({
-        test: /\.(png|jpg|jpeg|gif|ico|svg|webp)$/,
-        use: [
-            {
-                loader: 'file-loader',
-                options: {
-                    name: 'img/[name].[hash:8].[ext]',
-                },
-            },
-        ],
-    })
+// --- Removed the incorrect module.exports = { plugins: [...] } block ---
+// ProvidePlugin for jQuery is handled by .autoProvidejQuery() above.
+// If you need *other* webpack plugins, add them using Encore.addPlugin():
+// .addPlugin(new YourOtherWebpackPlugin())
 ;
 
+// Export the final configuration object generated by Encore
 module.exports = Encore.getWebpackConfig();

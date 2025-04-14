@@ -73,12 +73,36 @@ class ClientType extends AbstractType
                     'Errachidia' => 'errachidia',
                     'Taroudant' => 'taroudant',
                     'Taza' => 'taza',
+                    'Tinghir' => 'tinghir',
+                    'Settat' => 'settat',
+                    'Sidi Kacem' => 'sidi_kacem',
+                    'El Hoceima' => 'el_hoceima',
+                    'Berkane' => 'berkane',
+                    'Beni Mella' => 'beni_mella',
+                    'Khemisset' => 'khemisset',
+
+                    'Fkih Ben Salah' => 'fkih_ben_salah',
+                    'Ouarzazate' => 'ouarzazate',
+                    'Midelt' => 'midelt',
+                    'Ifrane' => 'ifrane',
+                    'Ksar el-Kébir' => 'ksar_el_kebir',
+
+                    'Azrou' => 'azrou',
+                    'Guelmim' => 'guelmim',
+                    'Al Hoceima' => 'al_hoceima',
+                    'Sidi Ifni' => 'sidi_ifni',
+                    'Dakhla' => 'dakhla',
+                    'M’diq' => 'mdiq',
+                    'Chefchaouen' => 'chefchaouen',
+                    'Imzouren' => 'imzouren',
                 ],
                 'placeholder' => 'Choose a city',
             ])
+
             ->add('phone', TextType::class, [
                 'label' => 'Phone Number',
                 'required' => false,
+
                 'constraints' => [
                     new Regex([
                         'pattern' => '/^(\+212|212|0)(6|7|8|5)[0-9]{8}$/',
@@ -89,6 +113,7 @@ class ClientType extends AbstractType
             ->add('ClientphotoProfilFile', FileType::class, [
                 'label' => 'Profile Photo',
                 'required' => false,
+
                 'mapped' => false,
                 'constraints' => [
                     new Image([
@@ -97,9 +122,20 @@ class ClientType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image (JPEG, PNG, or GIF).',
                     ]),
                 ],
+            ])
+            ->add('verificationStatus', ChoiceType::class, [
+                'label' => 'Verification Status',
+                'choices' => [
+                    'Verified' => 1,
+                    'Unverified' => 0,
+                ],
+                'expanded' => false, // dropdown
+                'multiple' => false,
+                'required' => true,
             ]);
 
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

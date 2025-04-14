@@ -20,13 +20,9 @@ class CategoryService
     #[ORM\OneToMany(targetEntity: Service::class, mappedBy: 'categoryService')]
     private Collection $services;
 
-
-    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    private Garagiste $mechanic;
-
-  
-
+    #[ORM\ManyToMany(targetEntity: Garage::class, inversedBy: 'categoryServices')]
+    #[ORM\JoinTable(name: 'garageCategoryService')] // Define join table directly
+    private Collection $garages;
 
     public function __construct() 
 

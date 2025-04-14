@@ -1,84 +1,171 @@
-{% extends 'base.html.twig' %}
+{% extends 'adminNavBar.html.twig' %}
 
 {% block container %}
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="text-center">Add Mechanic</h1>
-                <div class="mt-4">
-                    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
-
-                    {# Name Field #}
-                    <div class="form-group">
-                        {{ form_label(form.name, 'Name', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter mechanic name'}}) }}
-                        {{ form_errors(form.name) }}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-danger text-white">
+                        <h2 class="h4 mb-0 text-center"><i class="fas fa-user-cog me-2"></i>Add New Mechanic</h2>
                     </div>
 
-                    {# Email Field #}
-                    <div class="form-group">
-                        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter mechanic email'}}) }}
-                        {{ form_errors(form.email) }}
-                    </div>
+                    <div class="card-body p-4">
+                        {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
-                    {# Specialization Field #}
-                    <div class="form-group">
-                        {{ form_label(form.specialization, 'Specialization', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.specialization, {'attr': {'class': 'form-control', 'placeholder': 'Enter specialization (e.g., Engine, Electrical)'}}) }}
-                        {{ form_errors(form.specialization) }}
-                    </div>
+                        <div class="row g-3">
+                            {# Personal Information Section #}
+                            <div class="col-md-6">
+                                <h5 class="text-danger mb-4"><i class="fas fa-id-card me-2"></i>Personal Information</h5>
 
-                    {# Password Field #}
-                    <div class="form-group">
-                        {{ form_label(form.password, 'Password', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Enter password'}}) }}
-                        {{ form_errors(form.password) }}
-                    </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.name, 'Full Name') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.name) }}
+                                    </div>
+                                </div>
 
-                    {# Phone Number Field #}
-                    <div class="form-group">
-                        {{ form_label(form.phoneNumber, 'Phone Number', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.phoneNumber, {'attr': {'class': 'form-control', 'placeholder': 'Enter phone number'}}) }}
-                        {{ form_errors(form.phoneNumber) }}
-                    </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.email, 'Email Address') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.email) }}
+                                    </div>
+                                </div>
 
-                    {# Experience Years Field #}
-                    <div class="form-group">
-                        {{ form_label(form.experienceYears, 'Experience (Years)', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.experienceYears, {'attr': {'class': 'form-control', 'placeholder': 'Enter years of experience'}}) }}
-                        {{ form_errors(form.experienceYears) }}
-                    </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.phone, 'Phone Number') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.phone) }}
+                                    </div>
+                                </div>
 
-                    {# Certifications Field #}
-                    {# Replace the certifications field section with: #}
-                    <div class="form-group">
-                        {{ form_label(form.certifications, 'Certifications', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.certifications, {'attr': {
-                            'class': 'form-control',
-                            'rows': 3,
-                            'placeholder': 'Enter one certification per line'
-                        }}) }}
-                        <small class="form-text text-muted">Enter one certification per line</small>
-                        {{ form_errors(form.certifications) }}
-                    </div>
-                    {# Logo File Field #}
-                    <div class="form-group">
-                        {{ form_label(form.logoFile, 'Profile Photo', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.logoFile, {'attr': {'class': 'form-control-file'}}) }}
-                        <small class="form-text text-muted">Upload a clear photo of the mechanic (JPEG/PNG, max 2MB)</small>
-                        {{ form_errors(form.logoFile) }}
-                    </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.address, 'Address') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.address) }}
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.garageAddress, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.garageAddress, 'Garage Address') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.garageAddress) }}
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.city, 'City') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.city) }}
+                                    </div>
+                                </div>
 
-                    {# CSRF Token and Submit Button #}
-                    <div class="form-group text-center">
-                        {{ form_rest(form) }} {# Includes CSRF token #}
-                        <button type="submit" class="btn btn-primary mt-3">Add Mechanic</button>
-                    </div>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.password, 'Password') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.password) }}
+                                    </div>
+                                </div>
+                            </div>
 
-                    {{ form_end(form) }}
+                            {# Professional Information Section #}
+                            <div class="col-md-6">
+                                <h5 class="text-danger mb-4"><i class="fas fa-tools me-2"></i>Professional Details</h5>
+
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.specialization, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.specialization, 'Specialization') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.specialization) }}
+                                    </div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.experienceYears, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.experienceYears, 'Experience (Years)') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.experienceYears) }}
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    {{ form_label(form.certifications, 'Certifications', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_widget(form.certifications, {'attr': {
+                                        'class': 'form-control',
+                                        'rows': 3,
+                                        'placeholder': 'ASE Certification\nElectrical Systems Certification\n...'
+                                    }}) }}
+                                    <small class="text-muted">One certification per line</small>
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.certifications) }}
+                                    </div>
+                                </div>
+
+                                {# File Uploads Section #}
+                                <h5 class="text-danger mt-4 mb-3"><i class="fas fa-images me-2"></i>Images</h5>
+
+                                <div class="mb-3">
+                                    <div class="file-upload-card p-3 border rounded">
+                                        {{ form_label(form.logoFile, 'Garage Logo', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.logoFile, {'attr': {'class': 'form-control'}}) }}
+                                        <small class="text-muted">PNG/JPG, max 2MB</small>
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.logoFile) }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="file-upload-card p-3 border rounded">
+                                        {{ form_label(form.MechanicphotoProfilFile, 'Profile Photo', {'label_attr': {'class': 'form-label'}}) }}
+                                        {{ form_widget(form.MechanicphotoProfilFile, {'attr': {'class': 'form-control'}}) }}
+                                        <small class="text-muted">PNG/JPG, max 2MB</small>
+                                        <div class="invalid-feedback">
+                                            {{ form_errors(form.MechanicphotoProfilFile) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="submit" class="btn btn-do btn-lg px-4">
+                                <i class="fas fa-save me-2"></i>Save Mechanic
+                            </button>
+                            <a href="{{ path('admin_list_mechanic') }}" class="btn btn-outline-secondary btn-lg px-4">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .file-upload-card {
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        .file-upload-card:hover {
+            background-color: #e9ecef;
+        }
+        .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .card-header {
+            border-radius: 15px 15px 0 0 !important;
+        }
+    </style>
 {% endblock %}

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use DateTimeInterface;
@@ -7,12 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity]
-
+#[Vich\Uploadable]
 class Mechanic extends Garagiste
 {
-
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     #[Assert\Length(max: 100)]
     private ?string $specialization = null;
@@ -20,46 +20,44 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
-
-    #[ORM\Column(type: 'json', nullable: true)]
-    private array $certifications = [];
+    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
+    private ?File $MechanicphotoProfilFile = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $certifications ;
+    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
+     private ?File $logoFile = null; // Initialize to null    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
     #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
     private Collection $garages;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
 
 
     public function __construct(
         string $name = '',
         string $email = '',
-        string $roles = 'ROLE_MECHANIC', // Default role for mechanics
-        ?string $password = null,
+        ?string $city = '',
+        ?string $address = '',
+        string $roles = 'MECHANIC',
+        ?string $password = 'null123',
         ?string $resetToken = null,
-        ?\DateTimeInterface $tokenExpiration = null,
-        ?string $phoneNumber = null,
-        ?string $logo = null,
-        ?string $workingHours = null,
-        // Mechanic-specific properties:
+        ?DateTimeInterface $tokenExpiration = null,
+        ?string $phone = null,
+        ?string $photoProfil = null,
         ?string $specialization = null,
         ?int $experienceYears = null,
-        ?array $certifications = null
+        ?string $certifications = ''
     ) {
-        parent::__construct(
-            $name,
-            $email,
-            $roles,
-            $password,
-            $resetToken,
-            $tokenExpiration,
-            $phoneNumber, // This now goes to parent
-            $logo,
-            $workingHours
-        );
-
-        // Initialize Mechanic-specific properties
+        parent::__construct($name, $email, $city, $address, $roles, $password, $resetToken, $tokenExpiration, $phone, $photoProfil);
         $this->garages = new ArrayCollection();
         $this->specialization = $specialization;
         $this->experienceYears = $experienceYears;
-        $this->certifications = $certifications ?? [];
+        $this->certifications = $certifications ;  // Initialize as empty array if null
     }
+
+
+
     public function getGarages(): Collection
     {
         return $this->garages;
@@ -68,16 +66,6 @@ class Mechanic extends Garagiste
     public function setGarages(Collection $garages): void
     {
         $this->garages = $garages;
-    }
-
-    public function getLocation(): Location
-    {
-        return $this->location;
-    }
-
-    public function setLocation(Location $location): void
-    {
-        $this->location = $location;
     }
 
     public function getSpecialization(): ?string
@@ -100,15 +88,49 @@ class Mechanic extends Garagiste
         $this->experienceYears = $experienceYears;
     }
 
-    public function getCertifications(): array
+    public function getCertifications(): ?string
     {
-        return $this->certifications;
+        return $this->certifications ; // Return empty string if null
     }
 
-    public function setCertifications(array $certifications): void
+
+
+    public function setCertifications(string $certifications): void
     {
         $this->certifications = $certifications;
     }
 
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    public function setLogoFile(?File $logoFile = null): void
+    {
+        $this->logoFile = $logoFile;
+        if ($logoFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getMechanicphotoProfilFile(): ?File
+    {
+        return $this->MechanicphotoProfilFile;
+    }
+
+    public function setMechanicphotoProfilFile(?File $MechanicphotoProfilFile): void
+    {
+        $this->MechanicphotoProfilFile = $MechanicphotoProfilFile;
+    }
+
+    public function getMechanicServices(): Collection
+    {
+        return $this->MechanicServices;
+    }
+
+    public function setMechanicServices(Collection $MechanicServices): void
+    {
+        $this->MechanicServices = $MechanicServices;
+    }
 
 }

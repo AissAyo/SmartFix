@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\String_;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
@@ -16,24 +18,43 @@ abstract class Garagiste extends User
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $logo = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $garageAddress = null;
+
 
     public function __construct(
-        string             $name,
-        string             $email,
-        string             $roles,
+        string             $name = '',
+        string             $email = '',
+        ?string            $address = '',
+        ?string            $city = '',
+        string             $roles = '',
         ?string            $password = null,
         ?string            $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string            $phoneNumber = null,
         ?string            $logo = null,
-        ?string            $workingHours = null
+        ?string            $workingHours = null,
+        ?string            $garageAddress = null
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $logo);
+        parent::__construct(
+            $name,
+            $email,
+            $address,         // 👈 fix: was missing!
+            $city,
+            $roles,
+            $password,
+            $resetToken,
+            $tokenExpiration,
+            $phoneNumber,    // goes to User::$phone
+            $logo            // goes to User::$photoProfil
+        );
 
         $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
         $this->logo = $logo;
+        $this->garageAddress = $garageAddress;
     }
+
 
     public function getPhoneNumber(): ?string
     {
@@ -64,4 +85,16 @@ abstract class Garagiste extends User
     {
         $this->logo = $logo;
     }
+
+    public function getGarageAddress(): ?string
+    {
+        return $this->garageAddress;
+    }
+
+    public function setGarageAddress(?string $garageAddress): void
+    {
+        $this->garageAddress = $garageAddress;
+    }
+
+
 }

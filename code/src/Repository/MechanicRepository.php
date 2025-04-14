@@ -4,6 +4,7 @@ namespace App\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Mechanic;
 
+
 class MechanicRepository implements MechanicRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
@@ -39,5 +40,17 @@ class MechanicRepository implements MechanicRepositoryInterface
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+    public function getMechanicByCity(): array
+    {
+        // Corrected: Use $this->entityManager, not $manager
+        $query = $this->entityManager->createQuery('
+            SELECT c.city, COUNT(c.id) as city_count
+            FROM App\Entity\Mechanic c
+            GROUP BY c.city
+            
+        ');
+        // if you're using Symfony with debug enabled
+        return $query->getResult();
     }
 }

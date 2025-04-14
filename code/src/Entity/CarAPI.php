@@ -17,11 +17,9 @@ class CarAPI
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\OneToMany(targetEntity: Car::class, mappedBy: 'carAPI')]
-    private Collection $cars;
 
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'carAPI')]
-    private Collection $garageServices;
+
+
 
     #[ORM\OneToMany(targetEntity: Vehicule::class, mappedBy: 'carAPI')]
     private Collection $vehicles;

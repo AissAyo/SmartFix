@@ -11,6 +11,7 @@ use App\Entity\Garagiste;
 use App\Entity\mechanic;
 use App\Entity\ServiceClient;
 
+
 class AuthService
 {
     private ClientRepository $ClientRepository;

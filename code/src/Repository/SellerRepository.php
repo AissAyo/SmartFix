@@ -48,5 +48,17 @@ class SellerRepository extends ServiceEntityRepository implements SellerReposito
             $this->entityManager->flush();
         }
     }
+    public function getSellerByCity(): array
+    {
+        // Corrected: Use $this->entityManager, not $manager
+        $query = $this->entityManager->createQuery('
+            SELECT c.city, COUNT(c.id) as city_count
+            FROM App\Entity\Seller c
+            GROUP BY c.city
+            
+        ');
+         // if you're using Symfony with debug enabled
+            return $query->getResult();
+    }
 
 }

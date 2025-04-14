@@ -24,21 +24,9 @@ class Location
     #[ORM\OneToOne(targetEntity: Garage::class, mappedBy: 'location')]
     private ?Garage $garage = null;
 
-    #[ORM\OneToOne(targetEntity: CarRental::class, mappedBy: 'location')]
-    private ?CarRental $carRental = null;
 
-    #[ORM\OneToOne(targetEntity: Shop::class, mappedBy: 'location')]
-    private ?Shop $shop = null;
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
-    public function getAddress(): string
-    {
-        return $this->address;
-    }
 
     public function setAddress(string $address): self
     {
@@ -78,26 +66,14 @@ class Location
         $this->garage = $garage;
         return $this;
     }
-
-    public function getCarRental(): ?CarRental
+    public function getId(): int
     {
-        return $this->carRental;
+        return $this->id;
     }
 
-    public function setCarRental(?CarRental $carRental): self
+    public function getAddress(): string
     {
-        $this->carRental = $carRental;
-        return $this;
+        return $this->address;
     }
 
-    public function getShop(): ?Shop
-    {
-        return $this->shop;
-    }
-
-    public function setShop(?Shop $shop): self
-    {
-        $this->shop = $shop;
-        return $this;
-    }
 }

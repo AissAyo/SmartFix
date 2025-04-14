@@ -31,19 +31,22 @@ class Garage
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $workingHours = null;
 
+    #[ORM\ManyToMany(targetEntity: CategoryService::class, mappedBy: 'garages')]
+    private Collection $categoryServices;
     #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'garage')]
-    private Collection $garageServices;
 
-
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'garage')]
+    private Collection $reservations;
     #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
 
+//    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
+//    private Collection $mechanicServices;
 
 
     public function __construct()
@@ -84,6 +87,7 @@ class Garage
         $this->rating = $rating;
     }
 
+    // Getter and Setter for $status
     public function getStatus(): string
     {
         return $this->status;
@@ -94,6 +98,7 @@ class Garage
         $this->status = $status;
     }
 
+    // Getter and Setter for $name
     public function getName(): string
     {
         return $this->name;
@@ -143,6 +148,32 @@ class Garage
     {
         $this->location = $location;
     }
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): self
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations[] = $reservation;
+            $reservation->setGarage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            if ($reservation->getGarage() === $this) {
+                $reservation->setGarage(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 
 }

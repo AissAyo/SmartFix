@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Validator\Constraints\File;
+
 
 class MechanicType extends AbstractType
 {
@@ -42,6 +45,82 @@ class MechanicType extends AbstractType
                     new Assert\Email(['message' => 'Please enter a valid email address.']),
                 ],
             ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Password',
+                'required' => true,
+                'constraints' =>  [
+                    new Assert\NotBlank(['message' => 'Please enter a password.']),
+                    new Assert\Length([
+                        'min' => 6,
+                        'minMessage' => 'Password should be at least {{ limit }} characters.',
+                    ]),
+                ],
+            ])
+
+            ->add('city', ChoiceType::class, [
+                'label' => 'City',
+                'required' => true,
+                'choices'  => [
+                    'Casablanca' => 'casablanca',
+                    'Rabat' => 'rabat',
+                    'Fès' => 'fes',
+                    'Marrakech' => 'marrakech',
+                    'Tangier' => 'tangier',
+                    'Agadir' => 'agadir',
+                    'Meknès' => 'meknes',
+                    'Oujda' => 'oujda',
+                    'Tétouan' => 'tetouan',
+                    'Safi' => 'safi',
+                    'Mohammedia' => 'mohammedia',
+                    'El Jadida' => 'el_jadida',
+                    'Béni Mellal' => 'beni_mellal',
+                    'Nador' => 'nador',
+                    'Khouribga' => 'khouribga',
+                    'Kénitra' => 'kenitra',
+                    'Laâyoune' => 'laayoune',
+                    'Errachidia' => 'errachidia',
+                    'Taroudant' => 'taroudant',
+                    'Taza' => 'taza',
+                    'Tinghir' => 'tinghir',
+                    'Settat' => 'settat',
+                    'Sidi Kacem' => 'sidi_kacem',
+                    'El Hoceima' => 'el_hoceima',
+                    'Berkane' => 'berkane',
+                    'Beni Mella' => 'beni_mella',
+                    'Khemisset' => 'khemisset',
+                    'Taza' => 'taza',
+                    'Fkih Ben Salah' => 'fkih_ben_salah',
+                    'Ouarzazate' => 'ouarzazate',
+                    'Midelt' => 'midelt',
+                    'Ifrane' => 'ifrane',
+                    'Ksar el-Kébir' => 'ksar_el_kebir',
+                    'Nador' => 'nador',
+                    'Azrou' => 'azrou',
+                    'Guelmim' => 'guelmim',
+                    'Al Hoceima' => 'al_hoceima',
+                    'Sidi Ifni' => 'sidi_ifni',
+                    'Dakhla' => 'dakhla',
+                    'M’diq' => 'mdiq',
+                    'Chefchaouen' => 'chefchaouen',
+                    'Imzouren' => 'imzouren',
+                ],
+                'placeholder' => 'Choose a city',
+            ])
+            ->add('address',TextareaType::class, [
+                'label' => 'Adress',
+                'required' => true,
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Please enter a address.']),
+                ]
+            ])
+            ->add('garageAddress', TextareaType::class, [
+                'label' => 'Garage Address',
+                'required' => true,
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Please enter a garage address.']),
+                ]
+            ])
+
             ->add('specialization', ChoiceType::class, [
                 'label' => 'Specialization',
                 'required' => false,
@@ -66,29 +145,16 @@ class MechanicType extends AbstractType
                     ]),
                 ],
             ])
-            // Replace the certifications field with this:
-            ->add('certifications', TextareaType::class, [
+            ->add('certifications', TextType::class, [
                 'label' => 'Certifications',
                 'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Enter one certification per line',
-                    'rows' => 3
-                ],
-                'help' => 'Enter one certification per line',
-                'getter' => function (Mechanic $mechanic) {
-                    return implode("\n", $mechanic->getCertifications());
-                },
-                'setter' => function (Mechanic $mechanic, string $certifications) {
-                    $mechanic->setCertifications(
-                        array_filter(
-                            array_map('trim', explode("\n", $certifications)),
-                            function($item) { return !empty($item); }
-                        )
-                    );
-                },
+                'data' => $options['data']->getCertifications() ?? [],  // Ensure default is an empty array
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'Please enter certifications.']),
+                ]
             ])
-            ->add('phoneNumber', TextType::class, [
+
+            ->add('phone', TextType::class, [
                 'label' => 'Phone Number',
                 'required' => false,
                 'constraints' => [
@@ -98,12 +164,11 @@ class MechanicType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('logoFile', VichFileType::class, [
-                'label' => 'Profile Photo',
+            ->add('logoFile', FileType::class, [
+                'label' => 'Logo',
                 'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
-                'delete_label' => 'Remove current photo',
+                'mapped' => false,
+
                 'constraints' => [
                     new Assert\Image([
                         'maxSize' => '2M',
@@ -112,27 +177,18 @@ class MechanicType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'required' => !$options['is_edit'],
-                'help' => $options['is_edit'] ? 'Leave blank to keep current password' : null,
-                'constraints' => $options['is_edit'] ? [] : [
-                    new Assert\NotBlank(['message' => 'Please enter a password.']),
-                    new Assert\Length([
-                        'min' => 6,
-                        'minMessage' => 'Password should be at least {{ limit }} characters.',
-                    ]),
-                ],
+            ->add('MechanicphotoProfilFile', FileType::class, [
+                'label' => 'Profile Photo',
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '5M',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/webp'],
+                        'mimeTypesMessage' => 'Please upload a valid profile photo',
+                    ])
+                ]
             ]);
-    }
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Mechanic::class,
-            'is_edit' => false,
-        ]);
-
-        $resolver->setAllowedTypes('is_edit', 'bool');
     }
 }

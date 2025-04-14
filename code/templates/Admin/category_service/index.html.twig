@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Category Services{% endblock %}
+
+{% block body %}
+    <h1>Category Services</h1>
+    <a href="{{ path('category_service_new') }}">Create new Category Service</a>
+    <ul>
+        {% for categoryService in category_services %}
+            <li>
+                <a href="{{ path('category_service_show', {'id': categoryService.id}) }}">{{ categoryService.Categoryname }}</a>
+                <a href="{{ path('category_service_edit', {'id': categoryService.id}) }}">Edit</a>
+                <form action="{{ path('category_service_delete', {'id': categoryService.id}) }}" method="POST">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categoryService.id) }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

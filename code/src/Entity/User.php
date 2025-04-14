@@ -1,13 +1,12 @@
 <?php
-
 namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\MappedSuperclass]
-abstract class User
+abstract class User implements  PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,23 +17,17 @@ abstract class User
     private ?string $name = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $password = null;
+    private ?string $password;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private string $email;
+    private ?string $email;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $photoProfil = null;
-
-    #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
-    private ?File $photoProfilFile = null;
-
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'logo')]
-    private ?File $logoFile = null;
+    private ?string $city;
 
     #[ORM\Column(type: "string", nullable: true)]
-    private string $roles;
+    private ?string $roles=null;
+
     #[ORM\Column(type: "string", length: 20, nullable: true)]
     private ?string $phone = null;
 
@@ -44,24 +37,34 @@ abstract class User
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $tokenExpiration = null;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $photoProfil;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $address;
+
     public function __construct(
         string $name = '',
         string $email = '',
-        string $roles = 'ROLE_USER',
+        ?string $address = null,
+        ?string $city = '',
+        string $roles = '',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string $photoProfil = null,
-        ?String $phone=null
+        ?string $phone = null,
+        ?string $photoProfil = "avatar5-67f2b22f9551d.png" // Default avatar
     ) {
         $this->name = $name;
-        $this->email = $email;
+        $this->email = $email;  // Ensure email is initialized
         $this->roles = $roles;
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->photoProfil=$photoProfil;
+        $this->photoProfil = $photoProfil;
+        $this->phone = $phone;
+        $this->city = $city;
     }
+
 
     public function getId(): ?int
     {
@@ -95,10 +98,9 @@ abstract class User
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(string $email): void
     {
         $this->email = $email;
-        return $this;
     }
 
     public function getResetToken(): ?string
@@ -112,10 +114,8 @@ abstract class User
         return $this;
     }
 
-    public function getRoles(): string
-    {
-        return $this->roles;
-    }
+
+
     public function setRoles(string $roles): self
     {
         $this->roles = $roles;
@@ -133,30 +133,6 @@ abstract class User
         return $this;
     }
 
-
-
-
-
-    public function getphotoProfil(): ?string
-    {
-        return $this->photoProfil;
-    }
-
-    public function setphotoProfil(?string $photoProfil): void
-    {
-        $this->photoProfil = $photoProfil;
-    }
-
-    public function getphotoProfilFile(): ?File
-    {
-        return $this->photoProfilFile;
-    }
-
-    public function setphotoProfilFile(?File $photoProfilFile): void
-    {
-        $this->photoProfilFile = $photoProfilFile;
-    }
-
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -166,4 +142,42 @@ abstract class User
     {
         $this->phone = $phone;
     }
+
+    public function getPhotoProfil(): string
+    {
+        return $this->photoProfil ?? 'img/avatar5.png'; // Default fallback
+    }
+
+    public function setPhotoProfil(string $photoProfil): self
+    {
+        $this->photoProfil = $photoProfil;
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getRoles(): ?string
+    {
+        return $this->roles;
+    }
+
+
 }
