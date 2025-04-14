@@ -15,6 +15,7 @@
             <th>Email</th>
             <th>Status</th>
             <th>Rating</th>
+            <th>Location</th>  <!-- Added Location column -->
             <th>Actions</th>
         </tr>
         </thead>
@@ -26,6 +27,7 @@
                 <td>{{ garage.emailGarage }}</td>
                 <td>{{ garage.status }}</td>
                 <td>{{ garage.rating }}</td>
+                <td>{{ garage.location.address }}</td>  <!-- Assuming 'location' is a related entity with 'name' property -->
                 <td>
                     <a href="{{ path('garage_show', {id: garage.id}) }}" class="btn btn-info btn-sm">Show</a>
                     <a href="{{ path('garage_edit', {id: garage.id}) }}" class="btn btn-secondary btn-sm">Edit</a>
@@ -33,7 +35,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">No garages found.</td>
+                <td colspan="7">No garages found.</td> <!-- Adjusted colspan for the new column -->
             </tr>
         {% endfor %}
         </tbody>

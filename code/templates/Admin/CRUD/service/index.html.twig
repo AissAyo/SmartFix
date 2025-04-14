@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Service List{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Services</h1>
+
+    <div class="mb-3">
+        <a href="{{ path('service_new') }}" class="btn btn-primary">+ Add New Service</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.id }}</td>
+                <td>{{ service.serviceName }}</td>
+                <td>{{ service.serviceCode }}</td>
+                <td>{{ service.prix }}</td>
+                <td>{{ service.status }}</td>
+                <td>{{ service.categoryService.name ?? 'N/A' }}</td>
+                <td>
+                    <a href="{{ path('service_show', {'id': service.id}) }}" class="btn btn-sm btn-info">View</a>
+                    <a href="{{ path('service_edit', {'id': service.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                    {{ include('admin/service/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">No services found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

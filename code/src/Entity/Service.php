@@ -41,6 +41,7 @@ class Service
 
 
 
+
     public function getId(): int
     {
         return $this->Id;
@@ -101,5 +102,37 @@ class Service
         $this->categoryService = $categoryService;
         return $this;
     }
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
+
+    public function getPrix(): string
+    {
+        return $this->prix;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+
+    public function setReservations(Collection $reservations): self
+    {
+        $this->reservations = $reservations;
+        return $this;
+    }
+
 
 }

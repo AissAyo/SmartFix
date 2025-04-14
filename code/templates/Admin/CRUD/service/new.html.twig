@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Service{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Add New Service</h1>
+
+    {{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.serviceName) }}
+        {{ form_widget(form.serviceName, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.serviceName) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.serviceCode) }}
+        {{ form_widget(form.serviceCode, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.serviceCode) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.prix) }}
+        {{ form_widget(form.prix, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.prix) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.description) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.description) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.status) }}
+        {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.status) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.categoryService) }}
+        {{ form_widget(form.categoryService, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.categoryService) }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <a href="{{ path('service_index') }}" class="btn btn-secondary">Cancel</a>
+    {{ form_end(form) }}
+{% endblock %}

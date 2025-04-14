@@ -12,7 +12,7 @@ class Location
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255 , unique: true)]
     private string $address;
 
     #[ORM\Column(type: 'float')]

@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add New Garage{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Add New Garage</h1>
+
+    {{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.emailGarage) }}
+        {{ form_widget(form.emailGarage, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.emailGarage) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.rating) }}
+        {{ form_widget(form.rating, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.rating) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.status) }}
+        {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.status) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.name) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.workingHours) }}
+        {{ form_widget(form.workingHours, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.workingHours) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.mechanic) }}
+        {{ form_widget(form.mechanic, {'attr': {'class': 'form-select'}}) }}
+        {{ form_errors(form.mechanic) }}
+    </div>
+
+    {# Rendering the Location subform #}
+    <h3 class="mt-4">Location Information</h3>
+
+    <div class="mb-3">
+        {{ form_label(form.location.address) }}
+        {{ form_widget(form.location.address, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.location.address) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.location.latitude) }}
+        {{ form_widget(form.location.latitude, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.location.latitude) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.location.longitude) }}
+        {{ form_widget(form.location.longitude, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(form.location.longitude) }}
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Garage</button>
+    <a href="{{ path('garage_index') }}" class="btn btn-secondary">Cancel</a>
+    {{ form_end(form) }}
+{% endblock %}
