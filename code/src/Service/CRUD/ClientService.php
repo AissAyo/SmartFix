@@ -3,19 +3,16 @@
 namespace App\Service\CRUD;
 
 use App\Entity\Client;
-use App\Repository\ClientRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ClientRepositoryInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ClientService
 {
-    private ClientRepository $clientRepository;
-    private EntityManagerInterface $entityManager;
 
-    public function __construct(ClientRepository $clientRepository, EntityManagerInterface $entityManager)
-    {
-        $this->clientRepository = $clientRepository;
-        $this->entityManager = $entityManager;
-    }
+    public function __construct(
+        private ClientRepositoryInterface $clientRepository,
+        private Security $security  // <-- Add this
+    ) {}
 
     public function getClient(int $id): ?Client
     {
@@ -27,18 +24,30 @@ class ClientService
         return $this->clientRepository->getAllEntities();
     }
 
-    public function createClient(Client $client): void
+    public function saveClient(Client $client, bool $flush = true): void
     {
-        $this->clientRepository->addEntity($client);
+        $this->clientRepository->save($client, $flush);
     }
 
-    public function updateClient(Client $client): void
+    public function deleteClient(Client $client, bool $flush = true): void
     {
-        $this->clientRepository->updateEntity($client);
+        $this->clientRepository->remove($client, $flush);
     }
 
-    public function deleteClient(Client $client): void
+    public function existsByEmail(?string $email): bool
     {
-        $this->clientRepository->deleteEntity($client, true);
+        return $this->clientRepository->existsByEmail($email);
     }
+
+    public function phoneExists(string $phone): bool
+    {
+        return $this->clientRepository->phoneExists($phone);
+    }
+
+    public function getCurrentClient(): ?Client
+    {
+        $user = $this->security->getUser();
+        return $user instanceof Client ? $user : null;
+    }
+
 }

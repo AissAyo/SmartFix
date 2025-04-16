@@ -1,40 +1,37 @@
 parameters:
-    client_directory: '%kernel.project_dir%/public/uploads/client'  # Define the upload directory
+    upload_directory: '%kernel.project_dir%/public/uploads'
+    TWILIO_ACCOUNT_SID: '%env(TWILIO_ACCOUNT_SID)%'
+    TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
+    TWILIO_FROM_NUMBER: '%env(TWILIO_FROM_NUMBER)%'
+    TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
 
 services:
-    # Default configuration for services in this file
     _defaults:
         autowire: true
         autoconfigure: true
+        public: false
 
-    # Services for controllers (automatically wired and configured)
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
 
-    # Bind the ChartBuilderInterface to the TestController constructor
-#    App\Controller\AdminController\TestController:
-#        bind:
-#            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
+    Twilio\Rest\Client:
+        arguments:
+            - '%TWILIO_ACCOUNT_SID%'
+            - '%TWILIO_AUTH_TOKEN%'
 
-    # FileUploader service, passing the client_directory parameter
+    App\Service\AuthClient\WhatsAppVerificationCodeSender:
+        arguments:
+            $twilio: '@Twilio\Rest\Client'
+            $cache: '@cache.app'
+            $logger: '@logger'
+            $twilioFromNumber: '%TWILIO_FROM_NUMBER%'
+            $twilioContentSid: '%TWILIO_CONTENT_SID%'
+
     App\Service\FileUploader:
         arguments:
-            $targetDirectory: '%kernel.project_dir%/public/uploads'
-#            $targetDirectory: '%kernel.project_dir%/public/uploads/mechanics'
-
-    App\Service\CRUD\MechanicService:
-        autowire: true
-    App\Service\CRUD\SellerService:
-        autowire: true
-    App\Repository\:
-        resource: '../src/Repository/'
-        tags: [ 'doctrine.repository_service' ]
-        autowire: true
-        autoconfigure: true
-    App\Controller\MenuController:
-        tags: ['controller.service_arguments']
-    App\Service\AuthService:
-        autowire: true
-        autoconfigure: true
-
+            $targetDirectory: '%upload_directory%'

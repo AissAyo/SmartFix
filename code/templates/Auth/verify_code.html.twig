@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verify Your Phone{% endblock %}
+
+{% block body %}
+    <h1>Verify Your Phone Number</h1>
+
+    <form method="post" action="{{ path('app_verify_code', { 'id': client.id }) }}">
+        <div>
+            <label for="verification_code">Enter your verification code:</label>
+            <input type="text" id="verification_code" name="verification_code" required>
+        </div>
+
+        <div>
+            <button type="submit">Verify</button>
+        </div>
+    </form>
+
+    {% if error %}
+        <div style="color: red;">{{ error }}</div>
+    {% endif %}
+{% endblock %}

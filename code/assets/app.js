@@ -7,12 +7,6 @@ window.jQuery = $;
 import 'bootstrap';
 import './js/adminlte'; // This one uses jQuery too
 
-// ✅ ChartJS and plugins
-import Chart from 'chart.js/auto';
-import zoomPlugin from 'chartjs-plugin-zoom';
-Chart.register(zoomPlugin);
-import '@symfony/ux-chartjs';
-
 // ✅ Stimulus
 import '@hotwired/stimulus';
 
@@ -23,3 +17,8 @@ import './js/pricetable-toggler.js';
 
 // ✅ Optional: Font Awesome
 // import '@fortawesome/fontawesome-free/js/all';
+
+// ✅ Correct CSS imports
+import './css/bootstrap.icon.css'; // Ensure the path is correct
+import './css/portfolio.css'; // Ensure the path is correct
+import './css/sidebar.css'; // Ensure the path is correct

@@ -1,4 +1,8 @@
+@import url('./css/animation.css');
+@import url('./css/blog.css');
+@import url('./css/bootstrap.min.css');
 @import url('./css/bootstrap-icons.css');
+<<<<<<< HEAD
 @import url('./css/bootstrap-icons.css');
 @import url('.css/bootstrap.min.css');
 @import url('.css/animate.css');
@@ -20,3 +24,19 @@
 @import url('.css/preloader.css');
 @import url('.css/shop.css');
 @import url('.css/slidbar.css');
+=======
+@import url('./css/components.css');
+@import url('./css/contact.css');
+@import url('./css/footer.css');
+@import url('./css/global.css');
+@import url('./css/header.css');
+@import url('./css/landing.css');
+@import url('./css/light.css');
+@import url('./css/portfolio.css');
+@import url('./css/preloader.css');
+@import url('./css/responsive.css');
+@import url('./css/shop.css');
+@import url('./css/sidebar.css');
+@import url('./css/style.css');
+@import url('./css/main.css');
+>>>>>>> a504b7516cebe3ba709ca5ac03879ed04944fbea
