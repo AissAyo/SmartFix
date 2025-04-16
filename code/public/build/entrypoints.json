@@ -1,0 +1,40 @@
+{
+  "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.js",
+        "/build/vendors-node_modules_chartjs-plugin-zoom_dist_chartjs-plugin-zoom_esm_js-node_modules_core-js-05152d.js",
+        "/build/app.js"
+      ]
+    },
+    "main": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.js",
+        "/build/main.js"
+      ]
+    },
+    "mechanic/app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/mechanic/app.js"
+      ]
+    },
+    "styles": {
+      "js": [
+        "/build/runtime.js"
+      ]
+    },
+    "appcss": {
+      "js": [
+        "/build/runtime.js"
+      ]
+    },
+    "mechanic/styles": {
+      "js": [
+        "/build/runtime.js"
+      ]
+    }
+  }
+}

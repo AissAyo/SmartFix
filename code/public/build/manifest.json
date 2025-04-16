@@ -1,0 +1,8 @@
+{
+  "build/app.js": "/build/app.js",
+  "build/main.js": "/build/main.js",
+  "build/mechanic/app.js": "/build/mechanic/app.js",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.js": "/build/vendors-node_modules_bootstrap_dist_js_bootstrap_esm_js.js",
+  "build/vendors-node_modules_chartjs-plugin-zoom_dist_chartjs-plugin-zoom_esm_js-node_modules_core-js-05152d.js": "/build/vendors-node_modules_chartjs-plugin-zoom_dist_chartjs-plugin-zoom_esm_js-node_modules_core-js-05152d.js"
+}
