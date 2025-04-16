@@ -38,7 +38,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     private ?DateTimeInterface $tokenExpiration = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $photoProfil;
+    private ?string $photoProfil="avatar5-67f2b22f9551d.png";
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $address;
 

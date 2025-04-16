@@ -47,6 +47,8 @@ class Garage
 
 //    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
 //    private Collection $mechanicServices;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $City;
 
 
     public function __construct()
@@ -174,6 +176,15 @@ class Garage
         return $this;
     }
 
+    public function getCity(): string
+    {
+        return $this->City;
+    }
+
+    public function setCity(string $City): void
+    {
+        $this->City = $City;
+    }
 
 
 }

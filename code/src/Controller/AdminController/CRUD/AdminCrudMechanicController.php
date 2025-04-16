@@ -28,22 +28,23 @@ class AdminCrudMechanicController extends AbstractController
 
 
     #[Route('listmechanic/{page}', name: 'admin_list_mechanic', defaults: ['page' => 1])]
-    public function listMechanic(int $page, PaginatorInterface $paginator): Response
+    public function listMechanic(EntityManagerInterface $entityManager, int $page, PaginatorInterface $paginator): Response
     {
-        $mechanics = $this->mechanicService->getAllMechanicsQuery();
+        $mechanic = $entityManager->getRepository(Mechanic::class)
+            ->createQueryBuilder('c')
+            ->orderBy('c.name', 'ASC');  // Default sorting
         $pagination = $paginator->paginate(
-            $mechanics,
+            $mechanic,
             $page,
-            10 // Items per page
+            10
         );
-
-
-
         return $this->render('Admin/CRUD/Mechanic/adminCrudMechanic.html.twig', [
             'pagination' => $pagination,
          //   'mechanics' => $pagination->getItems(),
         ]);
     }
+
+
 
     #[Route('addmechanic', name: 'admin_mechanics_add', methods: ['GET', 'POST'])]
     public function addMechanic(Request $request): Response
@@ -142,15 +143,17 @@ class AdminCrudMechanicController extends AbstractController
     public function deleteMechanic(Request $request, int $id): Response
     {
         $mechanic = $this->mechanicService->getMechanic($id);
+
         if (!$mechanic) {
             throw $this->createNotFoundException('No mechanic found for id ' . $id);
         }
 
         if ($this->isCsrfTokenValid('delete' . $mechanic->getId(), $request->request->get('_token'))) {
+            // Delete the mechanic
             $this->mechanicService->deleteMechanic($mechanic);
             $this->addFlash('success', 'Mechanic deleted successfully!');
         }
-
-        return $this->redirectToRoute('admin_list_mechanic');
+        $lastPage = 1;
+        return $this->redirectToRoute('admin_list_mechanic',['page' => $lastPage]);
     }
 }

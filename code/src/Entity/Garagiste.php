@@ -34,8 +34,8 @@ abstract class Garagiste extends User
         ?string            $phoneNumber = null,
         ?string            $logo = null,
         ?string            $workingHours = null,
-        ?string            $garageAddress = null
-    ) {
+        ?string            $garageAddress = null,
+        ?string            $photoProfil = "avatar5-67f2b22f9551d.png"    ) {
         parent::__construct(
             $name,
             $email,
@@ -46,7 +46,8 @@ abstract class Garagiste extends User
             $resetToken,
             $tokenExpiration,
             $phoneNumber,    // goes to User::$phone
-            $logo            // goes to User::$photoProfil
+            $logo,
+            $photoProfil// goes to User::$photoProfil
         );
 
         $this->phoneNumber = $phoneNumber;

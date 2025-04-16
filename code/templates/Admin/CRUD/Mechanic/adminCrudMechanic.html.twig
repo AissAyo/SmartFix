@@ -156,19 +156,18 @@
                     <ul class="pagination mb-0">
                         {% if pagination.currentPageNumber != 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('listclient', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
+                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         {% endif %}
 
-                        {# Show limited page numbers around current page #}
                         {% set start = max(1, pagination.currentPageNumber - 2) %}
                         {% set end = min(pagination.pageCount, pagination.currentPageNumber + 2) %}
 
                         {% if start > 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('listclient', {page: 1}) }}">1</a>
+                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: 1}) }}">1</a>
                             </li>
                             {% if start > 2 %}
                                 <li class="page-item disabled">
@@ -180,7 +179,7 @@
                         {% for page in start..end %}
                             <li class="page-item {% if page == pagination.currentPageNumber %}active{% endif %}">
                                 <a class="page-link {% if page != pagination.currentPageNumber %}text-danger{% else %}text-white bg-danger border-danger{% endif %}"
-                                   href="{{ path('listclient', {page: page}) }}">
+                                   href="{{ path('admin_list_mechanic', {page: page}) }}">
                                     {{ page }}
                                 </a>
                             </li>
@@ -193,7 +192,7 @@
                                 </li>
                             {% endif %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('listclient', {page: pagination.pageCount}) }}">
+                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.pageCount}) }}">
                                     {{ pagination.pageCount }}
                                 </a>
                             </li>
@@ -201,13 +200,14 @@
 
                         {% if pagination.currentPageNumber != pagination.pageCount %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('listclient', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
+                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         {% endif %}
                     </ul>
                 </nav>
+
 
             </div>
         </div>

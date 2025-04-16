@@ -16,17 +16,9 @@ class ServiceType extends AbstractType
     {
         $builder
             ->add('serviceName')
-            ->add('serviceCode')
-            ->add('prix', MoneyType::class, [
-                'currency' => 'USD', // Change as needed
-            ])
+
             ->add('description')
-            ->add('status', ChoiceType::class, [
-                'choices' => [
-                    'Active' => 'ACTIVE',
-                    'Inactive' => 'INACTIVE',
-                ],
-            ])
+
             ->add('categoryService', EntityType::class, [
                 'class' => CategoryService::class,
                 'choice_label' => 'Categoryname', // Change depending on your entity

@@ -20,8 +20,9 @@ class VehiculeRepository implements VehiculeRepositoryInterface
 
     public function getAllEntities(): array
     {
-        return $this->entityManager->getRepository(Vehicule::class)->findAll();
+        return $this->entityManager->getRepository(vehicule::class)->findAll();
     }
+
 
     public function addEntity($entity): void
     {

@@ -37,7 +37,7 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client")]
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: "client" ,cascade: ['remove'])]
     private Collection $reservations;
     #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
     private ?File $ClientphotoProfilFile = null;

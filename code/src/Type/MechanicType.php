@@ -168,7 +168,7 @@ class MechanicType extends AbstractType
                 'label' => 'Logo',
                 'required' => false,
                 'mapped' => false,
-
+                'empty_data' => 'avatar5-67f2b22f9551d.png', // fallback default
                 'constraints' => [
                     new Assert\Image([
                         'maxSize' => '2M',

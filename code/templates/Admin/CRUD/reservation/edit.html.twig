@@ -1,6 +1,6 @@
 {% extends 'adminNavBar.html.twig' %}
 
-{% block title %}Add New Garage{% endblock %}
+{% block title %}Edit Reservation{% endblock %}
 
 {% block container %}
     <div class="container py-5">
@@ -10,10 +10,10 @@
                     <div class="card-header bg-danger text-white">
                         <div class="d-flex justify-content-between align-items-center">
                             <h2 class="h4 mb-0">
-                                <i class="bi bi-house-add me-2"></i>Add New Garage
+                                <i class="bi bi-tools me-2"></i>Edit Reservation
                             </h2>
-                            <a href="{{ path('garage_index') }}" class="btn btn-sm btn-light">
-                                <i class="bi bi-arrow-left me-1"></i> Back to Garages
+                            <a href="{{ path('reservation_index') }}" class="btn btn-sm btn-light">
+                                <i class="bi bi-arrow-left me-1"></i> Back to Reservations
                             </a>
                         </div>
                     </div>
@@ -22,74 +22,25 @@
                         {{ form_start(form, {
                             'attr': {
                                 'class': 'needs-validation',
-                                'novalidate': 'novalidate'
+                                'novalidate': 'novalidate',
+                                'enctype': 'multipart/form-data'
                             }
                         }) }}
 
                         <div class="row g-3">
-                            {# Name Field #}
+                            {# Reservation Date Field #}
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.name, {
+                                    {{ form_widget(form.reservationDate, {
                                         'attr': {
                                             'class': 'form-control',
                                             'placeholder': ' ',
                                             'required': 'required'
                                         }
                                     }) }}
-                                    {{ form_label(form.name) }}
+                                    {{ form_label(form.reservationDate, 'Reservation Date') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.name) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {# Email Field #}
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.emailGarage, {
-                                        'attr': {
-                                            'class': 'form-control',
-                                            'placeholder': ' ',
-                                            'required': 'required'
-                                        }
-                                    }) }}
-                                    {{ form_label(form.emailGarage) }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.emailGarage) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {# City Field #}
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.City, {
-                                        'attr': {
-                                            'class': 'form-select',
-                                            'placeholder': ' ',
-                                            'required': 'required'
-                                        }
-                                    }) }}
-                                    {{ form_label(form.City) }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.City) }}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {# Rating Field #}
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.rating, {
-                                        'attr': {
-                                            'class': 'form-select',
-                                            'placeholder': ' '
-                                        }
-                                    }) }}
-                                    {{ form_label(form.rating) }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.rating) }}
+                                        {{ form_errors(form.reservationDate) }}
                                     </div>
                                 </div>
                             </div>
@@ -99,98 +50,95 @@
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.status, {
                                         'attr': {
-                                            'class': 'form-select',
-                                            'placeholder': ' '
+                                            'class': 'form-control',
+                                            'placeholder': ' ',
+                                            'required': 'required'
                                         }
                                     }) }}
-                                    {{ form_label(form.status) }}
+                                    {{ form_label(form.status, 'Status') }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.status) }}
                                     </div>
                                 </div>
                             </div>
 
-                            {# Working Hours Field #}
+                            {# Notes Field #}
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.workingHours, {
+                                    {{ form_widget(form.notes, {
                                         'attr': {
                                             'class': 'form-control',
-                                            'placeholder': ' '
+                                            'placeholder': ' ',
+                                            'required': 'required'
                                         }
                                     }) }}
-                                    {{ form_label(form.workingHours) }}
+                                    {{ form_label(form.notes, 'Notes') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.workingHours) }}
+                                        {{ form_errors(form.notes) }}
                                     </div>
                                 </div>
                             </div>
 
-                            {# Mechanic Field #}
-                            <div class="col-12">
+                            {# Vehicle Field #}
+                            <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.mechanic, {
+                                    {{ form_widget(form.vehicle, {
                                         'attr': {
                                             'class': 'form-select',
                                             'placeholder': ' '
                                         }
                                     }) }}
-                                    {{ form_label(form.mechanic) }}
+                                    {{ form_label(form.vehicle, 'Vehicle') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.mechanic) }}
+                                        {{ form_errors(form.vehicle) }}
                                     </div>
                                 </div>
                             </div>
 
-                            {# Location Section Header #}
-                            <div class="col-12 mt-4">
-                                <h5 class="mb-3 border-bottom pb-2">
-                                    <i class="bi bi-geo-alt me-2"></i>Location Information
-                                </h5>
-                            </div>
-
-                            {# Location Fields #}
-                            <div class="col-12">
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.location.address, {
-                                        'attr': {
-                                            'class': 'form-control',
-                                            'placeholder': ' '
-                                        }
-                                    }) }}
-                                    {{ form_label(form.location.address) }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.location.address) }}
-                                    </div>
-                                </div>
-                            </div>
-
+                            {# Client Field #}
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.location.latitude, {
+                                    {{ form_widget(form.client, {
                                         'attr': {
-                                            'class': 'form-control',
+                                            'class': 'form-select',
                                             'placeholder': ' '
                                         }
                                     }) }}
-                                    {{ form_label(form.location.latitude) }}
+                                    {{ form_label(form.client, 'Client') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.location.latitude) }}
+                                        {{ form_errors(form.client) }}
                                     </div>
                                 </div>
                             </div>
 
+                            {# Garage Field #}
                             <div class="col-md-6">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.location.longitude, {
+                                    {{ form_widget(form.garage, {
                                         'attr': {
-                                            'class': 'form-control',
+                                            'class': 'form-select',
                                             'placeholder': ' '
                                         }
                                     }) }}
-                                    {{ form_label(form.location.longitude) }}
+                                    {{ form_label(form.garage, 'Garage') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.location.longitude) }}
+                                        {{ form_errors(form.garage) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Services Field #}
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.services, {
+                                        'attr': {
+                                            'class': 'form-select',
+                                            'placeholder': ' '
+                                        }
+                                    }) }}
+                                    {{ form_label(form.services, 'Services') }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.services) }}
                                     </div>
                                 </div>
                             </div>
@@ -198,10 +146,10 @@
                             {# Form Actions #}
                             <div class="col-12 mt-4">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="submit" class="btn btn-danger ybtn-lg px-4 me-md-2">
-                                        <i class="bi bi-plus-circle me-2"></i> Create Garage
+                                    <button type="submit" class="btn btn-danger btn-lg px-4 me-md-2">
+                                        <i class="bi bi-save me-2"></i> Save Changes
                                     </button>
-                                    <a href="{{ path('garage_index') }}" class="btn btn-outline-secondary btn-lg px-4">
+                                    <a href="{{ path('reservation_index') }}" class="btn btn-outline-secondary btn-lg px-4">
                                         Cancel
                                     </a>
                                 </div>
@@ -227,16 +175,18 @@
         .card-header {
             border-radius: 1rem 1rem 0 0 !important;
         }
-        .form-floating > label {
-            color: #6c757d;
+        .img-thumbnail {
+            transition: transform 0.3s ease;
         }
-        .form-floating > .form-control:focus ~ label,
-        .form-floating > .form-control:not(:placeholder-shown) ~ label,
-        .form-floating > .form-select ~ label {
-            color: #dc3545;
+        .img-thumbnail:hover {
+            transform: scale(1.05);
         }
-        .text-muted {
-            font-size: 0.875rem;
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+        }
+        .form-floating>label {
+            padding: 0.5rem 0.75rem;
         }
     </style>
 {% endblock %}

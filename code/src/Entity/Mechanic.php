@@ -44,8 +44,9 @@ class Mechanic extends Garagiste
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string $phone = null,
-        ?string $photoProfil = null,
-        ?string $specialization = null,
+        ?string $photoProfil = "avatar5-67f2b22f9551d.png",
+
+            ?string $specialization = null,
         ?int $experienceYears = null,
         ?string $certifications = ''
     ) {
@@ -53,7 +54,9 @@ class Mechanic extends Garagiste
         $this->garages = new ArrayCollection();
         $this->specialization = $specialization;
         $this->experienceYears = $experienceYears;
-        $this->certifications = $certifications ;  // Initialize as empty array if null
+        $this->certifications = $certifications ;
+        $this->photoProfil = $photoProfil ?? "avatar5-67f2b22f9551d.png";
+// Initialize as empty array if null
     }
 
 

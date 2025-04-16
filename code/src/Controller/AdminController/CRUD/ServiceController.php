@@ -18,7 +18,7 @@ class ServiceController extends AbstractController
     #[Route('/', name: 'service_index', methods: ['GET'])]
     public function index(ServiceRepository $serviceRepository): Response
     {
-        return $this->render('Admin/Crud/service/index.html.twig', [
+        return $this->render('Admin/CRUD/service/index.html.twig', [
             'services' => $serviceRepository->getAllEntities(),
         ]);
     }
@@ -30,14 +30,15 @@ class ServiceController extends AbstractController
         $form = $this->createForm(ServiceType::class, $service);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+       // dd($service);
+        if ($form->isSubmitted() ) {
             $entityManager->persist($service);
             $entityManager->flush();
 
             return $this->redirectToRoute('service_index');
         }
 
-        return $this->render('Admin/Crud/service/new.html.twig', [
+        return $this->render('Admin/CRUD/service/new.html.twig', [
             'form' => $form->createView(),
             'service' => $service,
         ]);
@@ -46,7 +47,7 @@ class ServiceController extends AbstractController
     #[Route('/{id}', name: 'service_show', methods: ['GET'])]
     public function show(Service $service): Response
     {
-        return $this->render('Admin/Crud/service/show.html.twig', [
+        return $this->render('Admin/CRUD/service/show.html.twig', [
             'service' => $service,
         ]);
     }
@@ -63,7 +64,7 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('service_index');
         }
 
-        return $this->render('Admin/Crud/service/edit.html.twig', [
+        return $this->render('Admin/CRUD/service/edit.html.twig', [
             'form' => $form->createView(),
             'service' => $service,
         ]);
