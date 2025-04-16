@@ -17,16 +17,16 @@ class Service
     #[ORM\Column(type: 'string', length: 100)]
     private string $serviceName;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $serviceCode;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $serviceCode = null;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2 ,nullable: true)]
     private string $prix;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', length: 20 ,nullable: true)]
     private string $status;
 
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
@@ -37,6 +37,7 @@ class Service
     #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'services')]
     #[ORM\JoinTable(name: 'reservation_services')] // Define join table directly
     private Collection $reservations;
+
 
 
 
@@ -79,13 +80,13 @@ class Service
 
         return $this;
     }
-    public function getServiceCode(): string
+    public function getServiceCode(): ?string
     {
         return $this->serviceCode;
     }
 
 
-    public function setServiceCode(string $serviceCode): self
+    public function setServiceCode(?string $serviceCode): self
     {
         $this->serviceCode = $serviceCode;
 
@@ -101,5 +102,37 @@ class Service
         $this->categoryService = $categoryService;
         return $this;
     }
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
+
+    public function getPrix(): string
+    {
+        return $this->prix;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+
+    public function setReservations(Collection $reservations): self
+    {
+        $this->reservations = $reservations;
+        return $this;
+    }
+
 
 }

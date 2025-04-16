@@ -194,6 +194,15 @@ class Reservation
         return $this;
     }
 
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function setServices(Collection $services): void
+    {
+        $this->services = $services;
+    }
 
 
 }
