@@ -1,67 +1,102 @@
 <?php
+namespace App\Service\AuthClient;
 
-namespace App\Service\Verification;
-
-use Twilio\Rest\Client;
 use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
+use Twilio\Rest\Client as TwilioClient;
 
 class WhatsAppVerificationCodeSender
 {
-    private Client $twilio;
-    private CacheItemPoolInterface $cache;
-    private string $twilioFromNumber;
+private TwilioClient $twilio;
+private CacheItemPoolInterface $cache;
+private LoggerInterface $logger;
+private string $twilioFromNumber;
+private string $twilioContentSid;
 
-    public function __construct(Client $twilio, CacheItemPoolInterface $cache, string $twilioFromNumber)
+public function __construct(
+TwilioClient $twilio,
+CacheItemPoolInterface $cache,
+LoggerInterface $logger,
+string $twilioFromNumber,
+string $twilioContentSid
+) {
+$this->twilio = $twilio;
+$this->cache = $cache;
+$this->logger = $logger;
+$this->twilioFromNumber = $twilioFromNumber;
+$this->twilioContentSid = $twilioContentSid;
+}
+
+public function sendVerificationCode(string $phoneNumber): bool
+{
+$formattedNumber = $this->formatPhoneNumber($phoneNumber);
+$code = str_pad((string) rand(0, 999999), 6, '0', STR_PAD_LEFT);
+
+try {
+$params = [
+'from' => $this->twilioFromNumber,
+];
+
+if ($this->twilioContentSid) {
+$params['contentSid'] = $this->twilioContentSid;
+$params['contentVariables'] = json_encode(['1' => $code]);
+} else {
+$params['body'] = "Your verification code is: $code";
+}
+
+$this->twilio->messages->create($formattedNumber, $params);
+
+$cacheItem = $this->cache->getItem('verification_code_' . md5($formattedNumber));
+$cacheItem->set($code);
+$cacheItem->expiresAfter(300);
+$this->cache->save($cacheItem);
+
+return true;
+} catch (\Exception $e) {
+$this->logger->error('Failed to send verification code: ' . $e->getMessage());
+return false;
+}
+}
+
+public function formatPhoneNumber(string $phoneNumber): string
+{
+$phoneNumber = preg_replace('/\D/', '', $phoneNumber);
+
+if (empty($phoneNumber)) {
+throw new \InvalidArgumentException('Phone number cannot be empty');
+}
+
+if (str_starts_with($phoneNumber, '0')) {
+$phoneNumber = '212' . substr($phoneNumber, 1);
+}
+
+if (!str_starts_with($phoneNumber, '212') && !str_starts_with($phoneNumber, '+')) {
+$phoneNumber = '+' . $phoneNumber;
+} elseif (!str_starts_with($phoneNumber, '+')) {
+$phoneNumber = '+' . $phoneNumber;
+}
+
+return 'whatsapp:' . $phoneNumber;
+}
+    public function verifyCode(string $phoneNumber, string $inputCode): bool
     {
-        $this->twilio = $twilio;
-        $this->cache = $cache;
-        $this->twilioFromNumber = $twilioFromNumber;
-    }
+        $formattedNumber = $this->formatPhoneNumber($phoneNumber);
+        $cacheKey = 'verification_code_' . md5($formattedNumber);
+        $cacheItem = $this->cache->getItem($cacheKey);
 
-    public function sendVerificationCode(string $phoneNumber): bool
-    {
-        // Generate a 6-digit verification code
-        $verificationCode = random_int(100000, 999999);
-
-        // Store the verification code in cache with 10-minute expiration
-        $cacheItem = $this->cache->getItem('whatsapp_verification_' . $phoneNumber);
-        $cacheItem->set($verificationCode);
-        $cacheItem->expiresAfter(600);  // 10 minutes
-        $this->cache->save($cacheItem);
-
-        // Send the verification code via WhatsApp to the phone number
-        try {
-            $message = $this->twilio->messages->create(
-                'whatsapp:' . $phoneNumber,  // The recipient phone number (WhatsApp format)
-                [
-                    'from' => 'whatsapp:' . $this->twilioFromNumber,  // Sender's number (Twilio sandbox number)
-                    'body' => "Your verification code is: $verificationCode"
-                ]
-            );
-
-            return $message->sid ? true : false;
-        } catch (\Exception $e) {
-            // Handle any errors in sending the message
-            return false;
+        if (!$cacheItem->isHit()) {
+            return false; // Code not found or expired
         }
-    }
 
-    public function verifyCode(string $phoneNumber, string $code): bool
-    {
-        // Check if the code is stored in cache
-        $cacheItem = $this->cache->getItem('whatsapp_verification_' . $phoneNumber);
-        if ($cacheItem->isHit()) {
-            // Retrieve the stored code from cache
-            $storedCode = $cacheItem->get();
+        $cachedCode = $cacheItem->get();
 
-            // Compare the codes
-            if ((string) $storedCode === $code) {
-                // Code is correct, return true
-                return true;
-            }
+        if ($cachedCode === $inputCode) {
+            // Optionally delete the code after successful verification
+            $this->cache->deleteItem($cacheKey);
+            return true;
         }
 
-        // If code is incorrect or expired
         return false;
     }
+
 }

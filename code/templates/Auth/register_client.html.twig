@@ -1,6 +1,4 @@
-{% extends 'layout.html.twig' %}
-
-{# {% form_theme signup_form 'form/security/signup.html.twig' %} #}
+{% extends 'base.html.twig' %}
 
 {% block title %}Sign Up{% endblock %}
 
@@ -12,7 +10,6 @@
                     <div class="wptb-form--wrapper">
                         <div class="row">
                             <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
-                                {# Display flash messages #}
                                 {% for message in app.flashes('error') %}
                                     <div class="alert alert-danger">
                                         {{ message }}
@@ -31,24 +28,25 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                {{ form_label(signup_form.name, 'Name') }}
+                                                {{ form_label(signup_form.name, 'Full Name') }}
                                                 {{ form_widget(signup_form.name, {
                                                     'attr': {
                                                         'class': 'form-control',
-                                                        'placeholder': 'Enter your name'
+                                                        'placeholder': 'John Doe'
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.name) }}
+
                                             </div>
                                         </div>
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                {{ form_label(signup_form.email, 'Email ') }}
+                                                {{ form_label(signup_form.email, 'Email Address') }}
                                                 {{ form_widget(signup_form.email, {
                                                     'attr': {
                                                         'class': 'form-control',
-                                                        'placeholder': 'emailexample@domaine.com'
+                                                        'placeholder': 'your@email.com'
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.email) }}
@@ -61,36 +59,11 @@
                                                 {{ form_widget(signup_form.password, {
                                                     'attr': {
                                                         'class': 'form-control',
-                                                        'placeholder': 'Enter your password'
+                                                        'placeholder': 'At least 8 characters'
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.password) }}
-                                            </div>
-                                        </div>
 
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                {{ form_label(signup_form.confirmPassword, 'Confirm Password') }}
-                                                {{ form_widget(signup_form.confirmPassword, {
-                                                    'attr': {
-                                                        'class': 'form-control',
-                                                        'placeholder': 'Confirm your password'
-                                                    }
-                                                }) }}
-                                                {{ form_errors(signup_form.confirmPassword) }}
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                {{ form_label(signup_form.address, 'Address') }}
-                                                {{ form_widget(signup_form.address, {
-                                                    'attr': {
-                                                        'class': 'form-control',
-                                                        'placeholder': 'Enter your address'
-                                                    }
-                                                }) }}
-                                                {{ form_errors(signup_form.address) }}
                                             </div>
                                         </div>
 
@@ -100,10 +73,35 @@
                                                 {{ form_widget(signup_form.phone, {
                                                     'attr': {
                                                         'class': 'form-control',
-                                                        'placeholder': 'Enter your phone number'
+                                                        'placeholder': '06 12 34 56 78'
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.phone) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.city, 'City') }}
+                                                {{ form_widget(signup_form.city, {
+                                                    'attr': {
+                                                        'class': 'form-control',
+                                                        'placeholder': 'Casablanca'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.city) }}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {{ form_label(signup_form.profileImage, 'Profile Picture (optional)') }}
+                                                {{ form_widget(signup_form.profileImage, {
+                                                    'attr': {
+                                                        'class': 'form-control'
+                                                    }
+                                                }) }}
+                                                {{ form_errors(signup_form.profileImage) }}
                                             </div>
                                         </div>
 
@@ -120,11 +118,11 @@
                                     </div>
                                 </div>
 
-
                                 <p class="mt-4">
                                     <a href="{{ path('app_login') }}">Already have an account? Login here</a>
                                 </p>
 
+                                {{ form_end(signup_form) }}
                             </div>
                         </div>
                     </div>

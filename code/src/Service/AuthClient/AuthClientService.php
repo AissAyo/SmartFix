@@ -1,33 +1,85 @@
 <?php
-namespace App\Service\Auth;
+
+namespace App\Service\AuthClient;
 
 use App\Entity\Client;
 use App\Service\CRUD\ClientService;
-use App\Service\Verification\WhatsAppVerificationCodeSender;
+use Psr\Log\LoggerInterface;
 
 class AuthClientService
 {
-private ClientService $clientService;
-private WhatsAppVerificationCodeSender $codeSender;
+    private ClientService $clientService;
+    private WhatsAppVerificationCodeSender $codeSender;
+    private LoggerInterface $logger;
 
-public function __construct(ClientService $clientService, WhatsAppVerificationCodeSender $codeSender)
-{
-$this->clientService = $clientService;
-$this->codeSender = $codeSender;
-}
+    public function __construct(
+        ClientService $clientService,
+        WhatsAppVerificationCodeSender $codeSender,
+        LoggerInterface $logger
+    ) {
+        $this->clientService = $clientService;
+        $this->codeSender = $codeSender;
+        $this->logger = $logger;
+    }
 
-public function registerClient(Client $client): void
-{
-$this->clientService->createClient($client);
-}
+    public function registerClient(Client $client): bool
+    {
+        try {
+            if ($this->clientService->existsByEmail($client->getEmail())) {
+                $this->logger->warning('Registration attempt with existing email', [
+                    'email' => $client->getEmail()
+                ]);
+                return false;
+            }
 
-public function sendVerificationCode(string $phone): void
-{
-$this->codeSender->sendCode($phone);
-}
+            if ($this->clientService->phoneExists($client->getPhone())) {
+                $this->logger->warning('Registration attempt with existing phone', [
+                    'phone' => $client->getPhone()
+                ]);
+                return false;
+            }
 
-public function verifyCode(string $phone, string $code): bool
-{
-return $this->codeSender->verifyCode($phone, $code);
-}
+            $this->clientService->saveClient($client);
+
+            return $this->sendVerificationCode($client->getPhone());
+
+        } catch (\Throwable $e) {
+            $this->logger->error('Client registration failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return false;
+        }
+    }
+
+    public function sendVerificationCode(string $phone): bool
+    {
+        try {
+            return $this->codeSender->sendVerificationCode($phone);
+        } catch (\Throwable $e) {
+            $this->logger->error('Failed to send verification code', [
+                'phone' => $phone,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
+
+    public function verifyCode(string $phone, string $code): bool
+    {
+        try {
+            return $this->codeSender->verifyCode($phone, $code);
+        } catch (\Throwable $e) {
+            $this->logger->error('Verification failed', [
+                'phone' => $phone,
+                'error' => $e->getMessage()
+            ]);
+            return false;
+        }
+    }
+
+    public function isLoggedIn(): bool
+    {
+        return $this->clientService->getCurrentClient() !== null;
+    }
 }

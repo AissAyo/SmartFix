@@ -1,4 +1,9 @@
-# config/services.yaml
+parameters:
+    upload_directory: '%kernel.project_dir%/public/uploads'
+    TWILIO_ACCOUNT_SID: '%env(TWILIO_ACCOUNT_SID)%'
+    TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
+    TWILIO_FROM_NUMBER: '%env(TWILIO_FROM_NUMBER)%'
+    TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
 
 services:
     _defaults:
@@ -12,8 +17,21 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    App\Service\WhatsAppVerificationCodeSender:
+            - '../src/Tests/'
+
+    Twilio\Rest\Client:
         arguments:
-            $twilioSid: '%env(TWILIO_ACCOUNT_SID)%'
-            $twilioToken: '%env(TWILIO_AUTH_TOKEN)%'
-            $verifyServiceSid: '%env(TWILIO_VERIFY_SERVICE_SID)%'
+            - '%TWILIO_ACCOUNT_SID%'
+            - '%TWILIO_AUTH_TOKEN%'
+
+    App\Service\AuthClient\WhatsAppVerificationCodeSender:
+        arguments:
+            $twilio: '@Twilio\Rest\Client'
+            $cache: '@cache.app'
+            $logger: '@logger'
+            $twilioFromNumber: '%TWILIO_FROM_NUMBER%'
+            $twilioContentSid: '%TWILIO_CONTENT_SID%'
+
+    App\Service\FileUploader:
+        arguments:
+            $targetDirectory: '%upload_directory%'
