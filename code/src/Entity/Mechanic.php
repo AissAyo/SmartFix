@@ -20,12 +20,22 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
-    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'photoProfil')]
-    private ?File $MechanicphotoProfilFile = null;
+    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
+    private ?File $logoFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $logo = null;  // Initialize as null
+
+    #[Vich\UploadableField(mapping: 'mechanic_photoProfil', fileNameProperty: 'photoProfil')]
+    private ?File $photoProfilFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $photoProfil = null;
+
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $certifications ;
-    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
-     private ?File $logoFile = null; // Initialize to null    #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
+
     #[ORM\OneToMany(targetEntity: Garage::class, mappedBy: 'mechanic')]
     private Collection $garages;
 
@@ -100,18 +110,6 @@ class Mechanic extends Garagiste
         $this->certifications = $certifications;
     }
 
-    public function getLogoFile(): ?File
-    {
-        return $this->logoFile;
-    }
-
-    public function setLogoFile(?File $logoFile = null): void
-    {
-        $this->logoFile = $logoFile;
-        if ($logoFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
-    }
 
     public function getMechanicphotoProfilFile(): ?File
     {
@@ -132,5 +130,46 @@ class Mechanic extends Garagiste
     {
         $this->MechanicServices = $MechanicServices;
     }
+
+    public function getPhotoProfilFile(): ?File
+    {
+        return $this->photoProfilFile;
+    }
+
+    public function setPhotoProfilFile(?File $photoProfilFile): void
+    {
+        $this->photoProfilFile = $photoProfilFile;
+    }
+
+    public function getPhotoProfil(): ?string
+    {
+        return $this->photoProfil;
+    }
+
+    public function setPhotoProfil(?string $photoProfil): void
+    {
+        $this->photoProfil = $photoProfil;
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    public function setLogoFile(?File $logoFile): void
+    {
+        $this->logoFile = $logoFile;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): void
+    {
+        $this->logo = $logo;
+    }
+
 
 }

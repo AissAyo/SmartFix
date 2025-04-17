@@ -16,8 +16,7 @@ abstract class Garagiste extends User
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $workingHours = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $logo = null;
+
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $garageAddress = null;
 
@@ -46,12 +45,10 @@ abstract class Garagiste extends User
             $resetToken,
             $tokenExpiration,
             $phoneNumber,    // goes to User::$phone
-            $logo            // goes to User::$photoProfil
         );
 
         $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
-        $this->logo = $logo;
         $this->garageAddress = $garageAddress;
     }
 
@@ -76,15 +73,7 @@ abstract class Garagiste extends User
         $this->workingHours = $workingHours;
     }
 
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
 
-    public function setLogo(?string $logo): void
-    {
-        $this->logo = $logo;
-    }
 
     public function getGarageAddress(): ?string
     {

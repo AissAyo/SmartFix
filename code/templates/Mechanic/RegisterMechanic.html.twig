@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register Mechanic{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="mb-4">Mechanic Registration</h2>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.name) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.password) }}
+                {{ form_row(form.phone_number) }}
+                {{ form_row(form.city) }}
+                {{ form_row(form.address) }}
+                {{ form_row(form.garageAddress) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.specialization) }}
+                {{ form_row(form.experienceYears) }}
+                {{ form_row(form.certifications) }}
+                {{ form_row(form.workingHours) }}
+                {{ form_row(form.logoFile) }}
+                {{ form_row(form.photoProfilFile) }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Register</button>
+        {{ form_end(form) }}
+
+        <p class="mt-3">Already have an account? <a href="{{ path('mechanic_login') }}">Login here</a>.</p>
+    </div>
+{% endblock %}

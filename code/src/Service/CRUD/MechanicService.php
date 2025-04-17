@@ -48,11 +48,17 @@ class MechanicService
     {
         $this->mechanicRepository->deleteEntity($mechanic, true);
     }
-    public function getAllMechanicsQuery()
+    public function getAllMechanicsQuery(): \Doctrine\ORM\QueryBuilder
     {
         return $this->entityManager
             ->getRepository(Mechanic::class)
             ->createQueryBuilder('m')
             ->orderBy('m.name', 'ASC');
     }
+
+    public function getMechanicByEmail(string $email): ?Mechanic
+    {
+        return $this->mechanicRepository->findOneByEmail($email);
+    }
+
 }

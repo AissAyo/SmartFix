@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Mechanic;
-use App\Repository\Service\MechanicRepository;
+use App\Repository\MechanicRepository;
 
 class MechanicService
 {
@@ -16,26 +16,26 @@ class MechanicService
 
     public function getMechanic(int $id): ?Mechanic
     {
-        return $this->mechanicRepository->find($id);
+        return $this->mechanicRepository->getEntityById($id);
     }
 
     public function getAllMechanics(): array
     {
-        return $this->mechanicRepository->findAll();
+        return $this->mechanicRepository->getAllEntities();
     }
 
     public function createMechanic(Mechanic $mechanic): void
     {
-        $this->mechanicRepository.save($mechanic);
+        $this->mechanicRepository->addEntity($mechanic);
     }
 
     public function updateMechanic(Mechanic $mechanic): void
     {
-        $this->mechanicRepository.save($mechanic);
+        $this->mechanicRepository->updateEntity($mechanic);
     }
 
     public function deleteMechanic(Mechanic $mechanic): void
     {
-        $this->mechanicRepository.delete($mechanic);
+        $this->mechanicRepository->deleteEntity($mechanic);
     }
 }

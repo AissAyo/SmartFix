@@ -37,8 +37,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $tokenExpiration = null;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $photoProfil;
+
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $address;
 
@@ -52,7 +51,6 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string $phone = null,
-        ?string $photoProfil = "avatar5-67f2b22f9551d.png" // Default avatar
     ) {
         $this->name = $name;
         $this->email = $email;  // Ensure email is initialized
@@ -60,7 +58,6 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->photoProfil = $photoProfil;
         $this->phone = $phone;
         $this->city = $city;
     }
@@ -143,16 +140,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         $this->phone = $phone;
     }
 
-    public function getPhotoProfil(): string
-    {
-        return $this->photoProfil ?? 'img/avatar5.png'; // Default fallback
-    }
 
-    public function setPhotoProfil(string $photoProfil): self
-    {
-        $this->photoProfil = $photoProfil;
-        return $this;
-    }
 
     public function getCity(): ?string
     {

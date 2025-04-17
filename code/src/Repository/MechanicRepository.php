@@ -1,17 +1,21 @@
 <?php
 namespace App\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Mechanic;
+use Doctrine\Persistence\ManagerRegistry;
 
 
-class MechanicRepository implements MechanicRepositoryInterface
+class MechanicRepository extends ServiceEntityRepository implements MechanicRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, Mechanic::class);
+
+        $this->entityManager = $registry->getManager();
     }
 
     public function getEntityById(int $id): ?Mechanic
@@ -52,5 +56,13 @@ class MechanicRepository implements MechanicRepositoryInterface
         ');
         // if you're using Symfony with debug enabled
         return $query->getResult();
+    }
+    public function findOneByEmail(string $email): ?Mechanic
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

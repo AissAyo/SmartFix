@@ -94,7 +94,8 @@ class ClientType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image (JPEG or PNG)',
                     ])
                 ]
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
