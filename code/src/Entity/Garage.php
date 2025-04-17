@@ -37,6 +37,8 @@ class Garage
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $City;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'garage')]
     private Collection $reservations;
@@ -47,14 +49,12 @@ class Garage
 
 //    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
 //    private Collection $mechanicServices;
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $City;
 
 
     public function __construct()
     {
-        $this->mechanics = new ArrayCollection();
         $this->categoryServices = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
     }
 
     // Getters and setters for the properties
@@ -131,15 +131,11 @@ class Garage
         $this->mechanic = $mechanic;
     }
 
-    public function getGarageServices(): Collection
+    public function getCategoryServices(): Collection
     {
-        return $this->garageServices;
+        return $this->categoryServices;
     }
-
-    public function setGarageServices(Collection $garageServices): void
-    {
-        $this->garageServices = $garageServices;
-    }
+    
 
     public function getLocation(): ?Location
     {
@@ -155,36 +151,12 @@ class Garage
         return $this->reservations;
     }
 
-    public function addReservation(Reservation $reservation): self
-    {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setGarage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReservation(Reservation $reservation): self
-    {
-        if ($this->reservations->removeElement($reservation)) {
-            if ($reservation->getGarage() === $this) {
-                $reservation->setGarage(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->City;
     }
-
-    public function setCity(string $City): void
+    public function setCity(?string $City): void
     {
         $this->City = $City;
     }
-
-
 }
