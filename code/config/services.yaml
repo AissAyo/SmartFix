@@ -1,4 +1,6 @@
 parameters:
+    client_directory: '%kernel.project_dir%/public/uploads/client'  # Define the upload directory
+parameters:
     upload_directory: '%kernel.project_dir%/public/uploads'
     TWILIO_ACCOUNT_SID: '%env(TWILIO_ACCOUNT_SID)%'
     TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
@@ -6,10 +8,15 @@ parameters:
     TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
 
 services:
+    # Default configuration for services in this file
     _defaults:
         autowire: true
         autoconfigure: true
-        public: false
+
+    # Services for controllers (automatically wired and configured)
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
 
     App\:
         resource: '../src/'
@@ -25,7 +32,30 @@ services:
             - '%TWILIO_AUTH_TOKEN%'
 
     App\Service\AuthClient\WhatsAppVerificationCodeSender:
+    # Bind the ChartBuilderInterface to the TestController constructor
+    #    App\Controller\AdminController\TestController:
+    #        bind:
+    #            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
+
+    # FileUploader service, passing the client_directory parameter
+    App\Service\FileUploader:
         arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads'
+
+    App\Service\CRUD\MechanicService:
+        autowire: true
+    App\Service\CRUD\SellerService:
+        autowire: true
+    App\Repository\:
+        resource: '../src/Repository/'
+        tags: [ 'doctrine.repository_service' ]
+        autowire: true
+        autoconfigure: true
+    App\Controller\MenuController:
+        tags: ['controller.service_arguments']
+    App\Service\AuthService:
+        autowire: true
+        autoconfigure: true
             $twilio: '@Twilio\Rest\Client'
             $cache: '@cache.app'
             $logger: '@logger'
