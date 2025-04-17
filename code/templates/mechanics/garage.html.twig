@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.emailGarage) }}
+    <!-- Afficher d'autres champs ici -->
+    
+    {% if form.errors|length > 0 %}
+        <div class="errors">
+            <ul>
+                {% for error in form.errors %}
+                    <li>{{ error.message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    
+    {{ form_row(form.save) }}
+{{ form_end(form) }}

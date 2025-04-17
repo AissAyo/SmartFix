@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un nouveau garage{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: #f8f8f8;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .garage-form-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            padding: 30px 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .garage-form-container h1 {
+            color: #c90000;
+            margin-bottom: 25px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-submit {
+            background-color: #c90000;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #a80000;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="garage-form-container">
+        <h1>Ajouter un nouveau garage</h1>
+
+        {{ form_start(form) }}
+            {{ form_row(form.name, {'attr': {'class': 'form-control'}, 'label_attr': {'class': 'form-label'}}) }}
+            {{ form_row(form.emailGarage, {'attr': {'class': 'form-control'}, 'label_attr': {'class': 'form-label'}}) }}
+            {{ form_row(form.rating, {'attr': {'class': 'form-control'}, 'label_attr': {'class': 'form-label'}}) }}
+            {{ form_row(form.status, {'attr': {'class': 'form-control'}, 'label_attr': {'class': 'form-label'}}) }}
+            {{ form_row(form.workingHours, {'attr': {'class': 'form-control'}, 'label_attr': {'class': 'form-label'}}) }}
+
+            <button class="btn btn-submit mt-3">Créer le garage</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
