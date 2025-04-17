@@ -1,0 +1,24 @@
+{% extends 'adminNavBar.html.twig' %}
+
+{% block container %}
+    <section class="bg-light p-5">
+        <div class="container">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Edit Category Service</h4>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    <div class="mb-3">
+                        {{ form_label(form.Categoryname) }}
+                        {{ form_widget(form.Categoryname, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.Categoryname) }}
+                    </div>
+
+                    <button type="submit" class="btn btn-danger">Update</button>
+                    {{ form_end(form, {'render_rest': false}) }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -19,9 +19,11 @@
         }
     </style>
 {% endblock %}
+
 {% block container %}
     <section class="bg-light p-3 p-sm-5">
         <div class="container-fluid px-4 px-lg-12">
+            <!-- Start coding here -->
             <div class="bg-white shadow-sm rounded-lg overflow-hidden">
                 <div class="d-flex flex-column flex-md-row align-items-center justify-content-between p-4">
                     <div class="w-100 w-md-50">
@@ -29,106 +31,52 @@
                             <label for="simple-search" class="visually-hidden">Search</label>
                             <div class="input-group w-100">
                                 <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                <input type="text" id="simple-search" class="form-control" placeholder="Search mechanics" required>
+                                <input type="text" id="simple-search" class="form-control" placeholder="Search categories..." required>
                             </div>
                         </form>
                     </div>
                     <div class="w-100 w-md-auto d-flex flex-column flex-md-row align-items-stretch justify-content-end mt-2 mt-md-0">
-                        <a href="{{ path('admin_mechanics_add') }}" class="btn btn-danger d-flex align-items-center">
+                        <a href="{{ path('category_service_new') }}" class="btn btn-danger d-flex align-items-center">
                             <i class="bi bi-plus me-2"></i>
-                            Add Mechanic
+                            Add Category
                         </a>
                     </div>
                 </div>
-
-                <!-- Start Table -->
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th scope="col">logo</th>
-                            <th scope="col">Photo Profil</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Phone</th>
-                            <th scope="col">City</th>
-                            <th scope="col">Adress</th>
-                            <th scope="col">Garage Adress</th>
-                            <th scope="col">Role</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Specialization</th>
-                            <th scope="col">Experience</th>
-                            <th scope="col">Certifications</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Category Name</th>
                             <th scope="col" class="text-end">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for mechanic in pagination.items %}                            <tr>
+                        {% for category_service_indexe in pagination %}
                             <tr>
-                                <th scope="row">
-                                    {% if mechanic.logo %}
-                                        <img src="{{ asset('uploads/' ~ mechanic.logo) }}" alt="Mechanic Logo"style="width: 50px;  /* Adjust size */
-    height: 50px;  /* Ensure the height and width are the same to make it a circle */
-    border-radius: 50%;  /* Makes the image circular */
-    object-fit: cover;  /* Ensures the image covers the area without distorting */
-    border: 2px solid #ddd;">
-                                    {% else %}
-                                        <p>No logo uploaded.</p>
-                                    {% endif %}
-                                </th>
-                                <td>
-                                    {% if mechanic.photoProfil %}
-                                        <img src="{{ asset('uploads/' ~ mechanic.photoProfil) }}" alt="Mechanic Logo"style="width: 50px;  /* Adjust size */
-    height: 50px;  /* Ensure the height and width are the same to make it a circle */
-    border-radius: 50%;  /* Makes the image circular */
-    object-fit: cover;  /* Ensures the image covers the area without distorting */
-    border: 2px solid #ddd;">
-                                    {% else %}
-                                        <p>No logo uploaded.</p>
-                                    {% endif %}
-                                </td>
-                                <td>{{ mechanic.name }}</td>
-                                <td>{{ mechanic.email }}</td>
-                                <td>{{ mechanic.phone ?? 'N/A' }}</td>
-                                <td>{{ mechanic.city }}</td>
-                                <td>{{ mechanic.address }}</td>
-                                <td>{{ mechanic.garageAddress }}</td>
-                                <td>{{ mechanic.roles}}</td>
-                                <td>{{ mechanic.password}}</td>
-                                <td>{{ mechanic.specialization ?? 'General' }}</td>
-                                <td>{{ mechanic.experienceYears ?? '0' }} years</td>
-                                <td>
-                                    {% if mechanic.certifications %}
-                                        <ul>
-                                            {% for cert in mechanic.certifications %}
-                                                <li>{{ cert }}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    {% else %}
-                                        <p class="text-muted">No certifications</p>
-                                    {% endif %}
-                                </td>
+                                <th scope="row">{{ category_service_indexe.id }}</th>
+                                <td>{{ category_service_indexe.Categoryname }}</td>
                                 <td class="text-end">
                                     <div class="dropdown">
-                                        <button class="btn btn-link p-0" type="button" id="mechanic-{{ mechanic.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-link p-0" type="button" id="category-{{ category_service_indexe.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="mechanic-{{ mechanic.id }}-dropdown-button">
+                                        <ul class="dropdown-menu" aria-labelledby="category-{{ category_service_indexe.id }}-dropdown-button">
                                             <li>
-                                                <a href="{{ path('admin_mechanics_edit', {id: mechanic.id}) }}" class="dropdown-item">
+                                                <a href="{{ path('category_service_show', {'id': category_service_indexe.id}) }}" class="dropdown-item">
+                                                    <i class="bi bi-eye me-2"></i>
+                                                    View
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ path('category_service_edit', {'id': category_service_indexe.id}) }}" class="dropdown-item">
                                                     <i class="bi bi-pencil me-2"></i>
                                                     Edit
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ path('admin_mechanics_show', {id: mechanic.id}) }}" class="dropdown-item">
-                                                    <i class="bi bi-eye me-2"></i>
-                                                    View Details
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <form method="post" action="{{ path('admin_mechanics_delete', {id: mechanic.id}) }}" onsubmit="return confirm('Are you sure you want to delete this mechanic?');">
-                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ mechanic.id) }}">
+                                                <form method="post" action="{{ path('category_service_delete', {'id': category_service_indexe.id}) }}" onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category_service_indexe.id) }}">
                                                     <button type="submit" class="dropdown-item text-danger">
                                                         <i class="bi bi-trash me-2"></i>
                                                         Delete
@@ -143,8 +91,7 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- End Table -->
-
+                {# Pagination would go here if you implement it #}
                 <nav aria-label="Table navigation" class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center p-4">
     <span class="text-muted">
         Showing
@@ -156,18 +103,19 @@
                     <ul class="pagination mb-0">
                         {% if pagination.currentPageNumber != 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
+                                <a class="page-link text-danger" href="{{ path('category_service_index', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
                         {% endif %}
 
+                        {# Show limited page numbers around current page #}
                         {% set start = max(1, pagination.currentPageNumber - 2) %}
                         {% set end = min(pagination.pageCount, pagination.currentPageNumber + 2) %}
 
                         {% if start > 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: 1}) }}">1</a>
+                                <a class="page-link text-danger" href="{{ path('category_service_index', {page: 1}) }}">1</a>
                             </li>
                             {% if start > 2 %}
                                 <li class="page-item disabled">
@@ -179,7 +127,7 @@
                         {% for page in start..end %}
                             <li class="page-item {% if page == pagination.currentPageNumber %}active{% endif %}">
                                 <a class="page-link {% if page != pagination.currentPageNumber %}text-danger{% else %}text-white bg-danger border-danger{% endif %}"
-                                   href="{{ path('admin_list_mechanic', {page: page}) }}">
+                                   href="{{ path('category_service_index', {page: page}) }}">
                                     {{ page }}
                                 </a>
                             </li>
@@ -192,7 +140,7 @@
                                 </li>
                             {% endif %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.pageCount}) }}">
+                                <a class="page-link text-danger" href="{{ path('category_service_index', {page: pagination.pageCount}) }}">
                                     {{ pagination.pageCount }}
                                 </a>
                             </li>
@@ -200,15 +148,13 @@
 
                         {% if pagination.currentPageNumber != pagination.pageCount %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('admin_list_mechanic', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
+                                <a class="page-link text-danger" href="{{ path('category_service_index', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
                         {% endif %}
                     </ul>
                 </nav>
-
-
             </div>
         </div>
     </section>
