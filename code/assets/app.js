@@ -26,6 +26,8 @@ import './js/jquery-3.6.0.min.js'
 import './js/map.js'
 import './js/theme.js'
 import './js/pricetable-toggler.js'
+import './js/client'
+
 
 // font awesome
 import './fonts/bootstrap-icons.woff'

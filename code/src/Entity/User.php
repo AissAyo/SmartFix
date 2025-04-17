@@ -5,9 +5,11 @@ namespace App\Entity;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
 
 #[ORM\MappedSuperclass]
-abstract class User
+abstract class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -29,25 +31,18 @@ abstract class User
     // Getter et Setter pour email
     public function getEmail(): ?string
     {
-        return $this->Email;
+        return $this->email;
     }
 
     public function setEmail(string $email): self
     {
-        $this->Email = $email;
+        $this->email = $email;
 
         return $this;
     }
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $photoProfil = null;
-
-    #[Vich\UploadableField(mapping: 'seller_logo', fileNameProperty: 'logo')]
-    private ?File $photoProfilFile = null;
-
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Vich\UploadableField(mapping: 'user_upload', fileNameProperty: 'logo')]
-    private ?File $logoFile = null;
 
     #[ORM\Column(type: "string", nullable: true)]
     private string $roles;
@@ -154,16 +149,7 @@ abstract class User
         $this->photoProfil = $photoProfil;
     }
 
-    public function getphotoProfilFile(): ?File
-    {
-        return $this->photoProfilFile;
-    }
-
-    public function setphotoProfilFile(?File $photoProfilFile): void
-    {
-        $this->photoProfilFile = $photoProfilFile;
-    }
-
+    
     public function getPhone(): ?string
     {
         return $this->phone;

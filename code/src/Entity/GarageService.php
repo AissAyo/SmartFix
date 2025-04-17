@@ -18,15 +18,6 @@ class GarageService
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'id_garage')]
-    private ?Service $id_service = null;
-
-    #[ORM\ManyToOne(inversedBy: 'service')]
-    private ?garage $id_garage = null;
-
-    #[ORM\ManyToOne(inversedBy: 'garageServices')]
-    private ?vehicule $id_voiture = null;
-
 
 
     #[ORM\Column(type: 'float')]
@@ -50,11 +41,17 @@ class GarageService
     #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'garageServices')]
     #[ORM\JoinTable(name: 'garage_service_reservation')]
     private Collection $reservations;
+
+    /**
+     * @var Collection<int, Review>
+     */
+    #[ORM\OneToMany(targetEntity: Review::class, mappedBy: 'GarageService')]
+    private Collection $reviews;
  
     public function __construct()
     {
-        $this->carAPIs = new ArrayCollection();
         $this->reservations = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): int
@@ -68,40 +65,25 @@ class GarageService
         return $this;
     }
 
-    public function getIdService(): ?Service
+    public function getAverageRating(): float
     {
-        return $this->id_service;
+        $totalRating = 0;
+        $count = count($this->reviews);
+
+        // Si le service n'a pas d'avis, on retourne 0
+        if ($count === 0) {
+            return 0;
+        }
+
+        // Calculer la somme des notes des avis
+        foreach ($this->reviews as $review) {
+            $totalRating += $review->getRating(); // Appeler getRating() dans Review
+        }
+
+        // Retourner la moyenne des notes
+        return $totalRating / $count;
     }
 
-    public function setIdService(?Service $id_service): static
-    {
-        $this->id_service = $id_service;
-
-        return $this;
-    }
-
-    public function getIdGarage(): ?garage
-    {
-        return $this->id_garage;
-    }
-
-    public function setIdGarage(?garage $id_garage): static
-    {
-        $this->id_garage = $id_garage;
-
-        return $this;
-    }
-
-    public function getIdVoiture(): ?vehicule
-    {
-        return $this->id_voiture;
-    }
-
-    public function setIdVoiture(?vehicule $id_voiture): static
-    {
-        $this->id_voiture = $id_voiture;
-        return $this;
-    }
 
     public function getPrix(): float
     {
@@ -111,6 +93,68 @@ class GarageService
     public function setPrix(float $price): self
     {
         $this->price = $price;
+        return $this;
+    }
+    public function getGarage(): ?Garage
+    {
+        return $this->garage;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+
+    public function setGarage(?Garage $garage): self
+    {
+        $this->garage = $garage;
+        return $this;
+    }
+    /**
+     * @return Collection<int, Review>
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function getService(): ?Service
+    {
+        return $this->service;
+    }
+
+    public function setService(?Service $service): self
+    {
+        $this->service = $service;
+        return $this;
+    }
+
+    public function addReview(Review $review): static
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setGarageService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): static
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getGarageService() === $this) {
+                $review->setGarageService(null);
+            }
+        }
+
         return $this;
     }
 }

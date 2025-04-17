@@ -4,6 +4,7 @@ parameters:
 
 services:
 
+    App\Repository\VehiculeRepositoryInterface: '@App\Repository\VehiculeRepository'
 
 
     # Default configuration for services in this file

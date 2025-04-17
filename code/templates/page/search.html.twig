@@ -1,10 +1,22 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
-<div class="container">
-    <h1>Résultats:</h1>
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item active">Résultat de votre recherche</li>
-    </ol>
-</div>
+    <h2>Services disponibles</h2>
+
+    {% for service in garageServices %}
+        <div class="service-card">
+            <h3>{{ service.name }}</h3>
+            <p><strong>Garage :</strong> {{ service.garage.name }}</p>
+
+            <h4>Commentaires :</h4>
+            <ul>
+                {% for review in service.reviews %}
+                    <li>{{ review.comment }} (note : {{ review.rating }})</li>
+                {% else %}
+                    <li>Aucun commentaire pour ce service.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p>Aucun service trouvé.</p>
+    {% endfor %}
 {% endblock content %}

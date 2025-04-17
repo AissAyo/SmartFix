@@ -33,8 +33,11 @@ class Service
     #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
     #[ORM\JoinColumn(name: 'category_service_id', nullable: false)]
     private CategoryService $categoryService;
-    
 
+    public function getServiceName(): string
+    {
+        return $this->serviceName;
+    }
 
     /**
      * @var Collection<int, GarageService>
@@ -56,7 +59,7 @@ class Service
 
     public function getId(): int
     {
-        return $this->serviceId;
+        return $this->Id;
     }
 
     public function isAvailable(): bool

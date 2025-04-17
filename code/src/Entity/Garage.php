@@ -54,6 +54,9 @@ class Garage
     #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_garage')]
     private Collection $service;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logo = null;
+
 
 
     public function __construct()
@@ -209,6 +212,18 @@ class Garage
                 $service->setIdGarage(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLogo(): ?string
+    {
+        return $this->logo;
+    }
+
+    public function setLogo(?string $logo): static
+    {
+        $this->logo = $logo;
 
         return $this;
     }
