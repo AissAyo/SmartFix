@@ -3,6 +3,7 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Garage;
+use App\Entity\Mechanic;
 
 class GarageRepository 
 {
@@ -39,5 +40,14 @@ class GarageRepository
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+    public function getGaragesByMechanic(Mechanic $mechanic): array
+    {
+        return $this->entityManager->getRepository(Garage::class)
+            ->createQueryBuilder('g')
+            ->where('g.mechanic = :mechanic')
+            ->setParameter('mechanic', $mechanic)
+            ->getQuery()
+            ->getResult();
     }
 }

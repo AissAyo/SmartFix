@@ -18,4 +18,11 @@ class MainController extends AbstractController
     {
         return $this->render('mechanics/main.html.twig');
     }
+
+    #[Route('/mechanic/garage', name: 'garage')]
+    public function garage(): Response
+    {
+        return $this->render('mechanics/garage.html.twig');
+    }
+
 }

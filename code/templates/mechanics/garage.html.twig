@@ -1,17 +1,17 @@
-{{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.emailGarage) }}
-    <!-- Afficher d'autres champs ici -->
-    
-    {% if form.errors|length > 0 %}
-        <div class="errors">
-            <ul>
-                {% for error in form.errors %}
-                    <li>{{ error.message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
-    
-    {{ form_row(form.save) }}
-{{ form_end(form) }}
+{% extends 'base.html.twig' %}
+
+{% block container %}
+    <h2>Liste des Garages</h2>
+
+    <ul>
+        {% for garage in garages %}
+            <li>
+                <a href="{{ path('garage_show', {'id': garage.id}) }}">
+                    {{ garage.name }}
+                </a>
+            </li>
+        {% else %}
+            <li>Aucun garage trouvé.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

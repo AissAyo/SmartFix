@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
 class Garage
@@ -14,10 +15,8 @@ class Garage
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-
     #[ORM\Column(type: 'string', length: 255)]
     private string $emailGarage;
-
 
     #[ORM\Column(type: 'float')]
     private float $rating;
@@ -33,34 +32,33 @@ class Garage
 
     #[ORM\ManyToMany(targetEntity: CategoryService::class, mappedBy: 'garages')]
     private Collection $categoryServices;
+
     #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
     #[ORM\JoinColumn(nullable: false)]
     private Mechanic $mechanic;
 
-
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'garage')]
+    #[ORM\OneToMany(mappedBy: 'garage', targetEntity: Reservation::class)]
     private Collection $reservations;
+
     #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
-
-//    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
-//    private Collection $mechanicServices;
-
+    // #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
+    // private Collection $mechanicServices;
 
     public function __construct()
     {
         $this->mechanics = new ArrayCollection();
         $this->categoryServices = new ArrayCollection();
+        $this->reservations = new ArrayCollection(); // 🔥 ajouté ici
     }
 
-    // Getters and setters for the properties
-    // Getter and Setter for $id
     public function getId(): int
     {
         return $this->id;
     }
+
     public function setId(int $id): self
     {
          $this->id = $id;
@@ -87,7 +85,6 @@ class Garage
         $this->rating = $rating;
     }
 
-    // Getter and Setter for $status
     public function getStatus(): string
     {
         return $this->status;
@@ -98,7 +95,6 @@ class Garage
         $this->status = $status;
     }
 
-    // Getter and Setter for $name
     public function getName(): string
     {
         return $this->name;
@@ -148,6 +144,7 @@ class Garage
     {
         $this->location = $location;
     }
+
     public function getReservations(): Collection
     {
         return $this->reservations;
@@ -173,7 +170,4 @@ class Garage
 
         return $this;
     }
-
-
-
 }

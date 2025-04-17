@@ -45,7 +45,9 @@ class Reservation
     private Collection $repairParts;
 
     #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'reservations')]
-    private Garage $garage;  // Change $garages to $garage
+    #[ORM\JoinColumn(nullable: true)] // <= C'est ça qui manquait
+    private ?Garage $garage = null;
+    
 
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
@@ -194,15 +196,6 @@ class Reservation
         return $this;
     }
 
-    public function getServices(): Collection
-    {
-        return $this->services;
-    }
-
-    public function setServices(Collection $services): void
-    {
-        $this->services = $services;
-    }
 
 
 }
