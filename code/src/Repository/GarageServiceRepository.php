@@ -64,8 +64,8 @@ class GarageServiceRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('gs')
             ->where('gs.carAPI = :carAPI')
-            ->setParameter('carAPI', $vehicule->getCarApiId());
-        
+            ->setParameter('carAPI', $vehicule->getCarAPI()->getId());
+
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
            ->setMaxResults($itemsPerPage);
         
@@ -77,8 +77,8 @@ class GarageServiceRepository extends ServiceEntityRepository
         return (int) $this->createQueryBuilder('gs')
             ->select('COUNT(gs)')
             ->where('gs.carAPI = :carAPI')
-            ->setParameter('carAPI', $vehicule->getCarApiId())
-            ->getQuery()
+            ->setParameter('carAPI', $vehicule->getCarAPI()->getId())
+        ->getQuery()
             ->getSingleScalarResult();
     }
 

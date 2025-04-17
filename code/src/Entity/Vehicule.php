@@ -21,7 +21,31 @@ class Vehicule
     #[ORM\Column(type: "string", length: 255)]
     private string $brand;
 
-  
+
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Client", inversedBy: "vehicules")]
+    #[ORM\JoinColumn(nullable: false)]
+    private Client $client;
+
+    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'vehicles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?CarAPI $carAPI = null;
+
+
+    public function getCarAPI(): ?CarAPI
+    {
+        return $this->carAPI;
+    }
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(Client $client): self
+    {
+        $this->client = $client;
+        return $this;
+    }
+
     // Getters and setters
     public function getId(): int
     {

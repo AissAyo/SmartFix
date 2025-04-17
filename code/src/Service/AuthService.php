@@ -10,27 +10,34 @@ use App\Entity\Client;
 use App\Entity\Garagiste;
 use App\Entity\mechanic;
 use App\Entity\ServiceClient;
+use App\Repository\UserRepository;
+
 
 class AuthService
 {
     private ClientRepository $ClientRepository;
     private UserPasswordHasherInterface $passwordHasher;
     private RequestStack $requestStack;
+    private UserRepository $userRepository;
+
+
 
     public function __construct(
         ClientRepository $ClientRepository,
         UserPasswordHasherInterface $passwordHasher,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        UserRepository $userRepository
     ) {
 
         $this->ClientRepository = $ClientRepository;
         $this->passwordHasher = $passwordHasher;
         $this->requestStack = $requestStack;
+        $this->userRepository = $userRepository;
     }
 
     public function authenticate(string $email, string $password): ?User
     {
-        $user = $this->ClientRepository->findUserByEmail($email);
+        $user = $this->userRepository->findUserByEmail($email);
 
         if (!$user || !$this->passwordHasher->isPasswordValid($user, $password)) {
             return null; // Retourne null si l'authentification échoue
@@ -39,7 +46,7 @@ class AuthService
         return $user;
     }
 
-    public function loginUser(Client $user): void
+    public function loginUser(User $user): void
     {
         $session = $this->requestStack->getSession();
 
@@ -60,10 +67,17 @@ class AuthService
         return $session && $session->has('user');
     }
 
-    public function getUser(): ?array
+    public function getUser(): ?User
     {
         $session = $this->requestStack->getSession();
-        return $session ? $session->get('user') : null;
+        $userData = $session->get('user');  // Récupérer l'utilisateur de la session
+
+        if (!$userData || !isset($userData['id'])) {
+            return null;  // Retourne null si aucun utilisateur trouvé
+        }
+
+        // Ici on utilise le repository pour la classe Client ou Garagiste
+        return $this->ClientRepository->find($userData['id']);  // Recherche par ID dans la table 'client'
     }
 
     public function getUserType(): ?string

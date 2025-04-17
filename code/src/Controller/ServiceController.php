@@ -36,15 +36,22 @@ class ServiceController extends AbstractController
         Request $request,
         CategoryServiceRepository $categoryServiceRepository 
     ): Response {
-        $user = $authService->getUser();
-        $userId = $user ? $user->getId() : null;
-        if (!$userId) {
-            return $this->redirectToRoute('app_login');
-        }
+        //dump($session->all()); die;
 
-        if (!$userId) {
+
+
+
+
+
+
+
+        $user = $authService->getUser();
+        if (!$user) {
             return $this->redirectToRoute('app_login');
         }
+        $userId = $user?->getId();
+
+
     
         $vehicules = $vehiculeRepository->findBy(['client' => $userId]);
         $categories = $categoryServiceRepository->findAllWithServices();

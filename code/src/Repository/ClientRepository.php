@@ -3,14 +3,18 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Client;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class ClientRepository implements ClientRepositoryInterface
+
+class ClientRepository extends ServiceEntityRepository implements ClientRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager , ManagerRegistry $registry)
     {
         $this->entityManager = $entityManager;
+        parent::__construct($registry, Client::class);
     }
 
     public function getEntityById(int $id): ?Client
