@@ -4,6 +4,8 @@ FROM php:8.3-fpm
 ARG BUILD_ARGUMENT_ENV=dev
 
 ENV APP_HOME /var/www/html
+COPY app.py /app/
+
 
 # install all the dependencies and enable PHP modules
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \

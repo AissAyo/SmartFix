@@ -1,5 +1,3 @@
-{# {% extends 'base.html.twig' %} #}
-
 {% block title %}Ajouter un nouveau garage{% endblock %}
 
 {% block stylesheets %}
@@ -21,19 +19,24 @@
             text-align: center;
         }
 
-        /* Liste des garages */
+        /* Liste des garages avec Flexbox pour les afficher en ligne */
         .garage-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
             list-style-type: none;
             padding: 0;
         }
 
+        /* Chaque garage est un bloc de taille égale */
         .garage-item {
             background-color: #F5F5F5;
-            margin: 10px 0;
+            width: calc(33.333% - 20px); /* Chaque garage occupe un tiers de la largeur */
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #ddd;
             transition: background-color 0.3s ease;
+            box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
         }
 
         .garage-item:hover {
@@ -69,6 +72,13 @@
             background-color: #F8D7DA;
             padding: 15px;
             border-radius: 5px;
+        }
+
+        /* Responsivité : sur petits écrans, les garages prennent toute la largeur */
+        @media (max-width: 768px) {
+            .garage-item {
+                width: 100%; /* Un garage par ligne */
+            }
         }
     </style>
 {% endblock %}

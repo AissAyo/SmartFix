@@ -30,7 +30,7 @@ class GarageController extends AbstractController
         // Récupérer les garages associés à ce mécanicien
         $garages = $garageRepository->getGaragesByMechanic($mechanic);
     
-        return $this->render('mechanics/show_garage.html.twig', [
+        return $this->render('mechanics/main.html.twig', [
             'garages' => $garages,
             'mechanic' => $mechanic,
         ]);
@@ -126,5 +126,10 @@ class GarageController extends AbstractController
 
         return $this->redirectToRoute('garage_index');
     }
-    
+    #[Route('/main', name: 'main', methods: ['GET'])]
+public function main(): Response
+{
+    return $this->render('mechanics/main.html.twig');
+}
+
 }

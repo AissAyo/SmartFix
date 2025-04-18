@@ -1,45 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        {% block head %}
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
-            <link rel="stylesheet" href="./assets/main.css">
-            <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% endblock head %}
-        <!-- Favicon and touch Icons -->
+  <head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SmartFix{% endblock %}</title>
+    {% block stylesheets %}
+      {# <link rel="stylesheet" href="{{ asset('build/app.css') }}"> #}
+    {% endblock %}
+  </head>
+  <body>
+    <header>
+      {% block header %}
+        <h1>SmartFix Platform</h1>
+      {% endblock %}
+    </header>
 
+    <main>
+      {% block body %}
+        <p>Default content.</p>
+      {% endblock %}
+    </main>
 
-        {# Block for stylesheets #}
-        {% block stylesheets %}
-            <!-- Bootstrap Icons -->
-        {% endblock stylesheets%}
-    </head>
-    <body>
-        {% block body %}
-            {% block header %}
-            {% endblock header%}
-            {% block menu %}
-            {% endblock menu%}
+    <footer>
+      {% block footer %}
+        <p>&copy; 2025 SmartFix</p>
+      {% endblock %}
+    </footer>
 
-            {% block container %}
-            {% endblock container%}
-
-            {% block footer %}
-            {% endblock footer%}
-
-
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-                {# {{ encore_entry_script_tags('app') }} #}
-            {% block extra_javascripts %}
-    
-            {% endblock %}
-                {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock javascripts%}
-            {{ encore_entry_script_tags('app') }}
-
-        {% endblock body %}
-
-    </body>
+    {% block javascripts %}
+      {# <script src="{{ asset('build/app.js') }}"></script> #}
+    {% endblock %}
+  </body>
 </html>
