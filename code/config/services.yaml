@@ -1,6 +1,8 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
 parameters:
-    client_directory: '%kernel.project_dir%/public/uploads/client'  # Define the upload directory
-parameters:
+    client_directory: '%kernel.project_dir%/public/uploads/client'
     upload_directory: '%kernel.project_dir%/public/uploads'
     TWILIO_ACCOUNT_SID: '%env(TWILIO_ACCOUNT_SID)%'
     TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
@@ -8,23 +10,28 @@ parameters:
     TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
 
 services:
-    # Default configuration for services in this file
+    # default configuration for services in *this* file
     _defaults:
-        autowire: true
-        autoconfigure: true
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    # Services for controllers (automatically wired and configured)
-    App\Controller\:
-        resource: '../src/Controller/'
-        tags: ['controller.service_arguments']
-
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
 
     Twilio\Rest\Client:
         arguments:
@@ -32,30 +39,7 @@ services:
             - '%TWILIO_AUTH_TOKEN%'
 
     App\Service\AuthClient\WhatsAppVerificationCodeSender:
-    # Bind the ChartBuilderInterface to the TestController constructor
-    #    App\Controller\AdminController\TestController:
-    #        bind:
-    #            $chartBuilder: '@Symfony\UX\Chartjs\Builder\ChartBuilderInterface'
-
-    # FileUploader service, passing the client_directory parameter
-    App\Service\FileUploader:
         arguments:
-            $targetDirectory: '%kernel.project_dir%/public/uploads'
-
-    App\Service\CRUD\MechanicService:
-        autowire: true
-    App\Service\CRUD\SellerService:
-        autowire: true
-    App\Repository\:
-        resource: '../src/Repository/'
-        tags: [ 'doctrine.repository_service' ]
-        autowire: true
-        autoconfigure: true
-    App\Controller\MenuController:
-        tags: ['controller.service_arguments']
-    App\Service\AuthService:
-        autowire: true
-        autoconfigure: true
             $twilio: '@Twilio\Rest\Client'
             $cache: '@cache.app'
             $logger: '@logger'
@@ -65,3 +49,38 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    App\Service\CRUD\MechanicService:
+    App\Service\CRUD\SellerService:
+    App\Repository\:
+        resource: '../src/Repository/'
+        tags: ['doctrine.repository_service']
+
+    App\Controller\MenuController:
+        tags: ['controller.service_arguments']
+
+    App\Service\AuthClient\AuthClientService:
+    # Rely on autowiring for dependencies:
+    # - ClientService (autoregistered service)
+    # - WhatsAppVerificationCodeSender (configured above)
+    # - LoggerInterface (Symfony core service)
+    App\Service\CarApiService:
+        public: true
+        arguments:
+            $client: '@GuzzleHttp\Client'
+            $logger: '@logger'
+            $databaseService: '@App\Service\DatabaseConnectionService'
+            $em: '@doctrine.orm.entity_manager'
+            $apiKey: '%env(CARAPI_KEY)%'
+            $apiSecret: '%env(CARAPI_SECRET)%'
+            $baseUrl: '%env(CARAPI_BASE_URL)%'
+
+    # Register the DatabaseConnectionService
+    App\Service\DatabaseConnectionService:
+        public: true
+
+    GuzzleHttp\Client:
+        arguments:
+            - timeout: 30
+              connect_timeout: 10
+              http_errors: false
