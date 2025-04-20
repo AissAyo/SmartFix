@@ -2,61 +2,103 @@
 
 namespace App\Command;
 
+use App\Entity\CategoryService;
 use App\Entity\Service;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
+use Faker\Factory;
+use Symfony\Component\Console\Input\InputOption;
 
 #[AsCommand(
-    name: 'app:seed-services',  // Command name
-    description: 'Seed the database with fake service data'
+    name: 'app:seed-services',
+    description: 'Seeds the database with fake service data'
 )]
 class SeedServiceCommand extends Command
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {
         parent::__construct();
-        $this->em = $em;
     }
 
     protected function configure(): void
     {
         $this
-            ->setDescription('Seed the database with fake service data')
-            ->setHelp('This command allows you to populate the services table with fake data...');
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Number of services to create', 50)
+            ->addOption('skip-existing', 's', InputOption::VALUE_NONE, 'Skip if services already exist');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $faker = Factory::create();  
+        $io = new SymfonyStyle($input, $output);
+        $io->section('Seeding services...');
 
-        $output->writeln('Seeding services...');
-        $categoryServices = $this->em->getRepository(CategoryService::class)->findAll();
-
-        for ($i = 0; $i < 10; $i++) {
-            $service = new service();
-            $service->setServiceName($faker->servicename)  
-                ->setPrix($faker->Prix) 
-                ->setDescription($faker->Description)  
-                ->setStatus($faker->randomelement(['Open','closed'])); 
-                if (!empty($categoryServices)) {
-                    $randomCategory = $faker->randomElement($categoryServices);
-                    $service->setCategoryService($randomCategory);
+        try {
+            // Check if we should skip existing
+            if ($input->getOption('skip-existing')) {
+                $existingCount = $this->entityManager->getRepository(Service::class)->count([]);
+                if ($existingCount > 0) {
+                    $io->note('Services already exist. Skipping...');
+                    return Command::SUCCESS;
                 }
+            }
 
-            $this->em->persist($service);
+            // Get all category services
+            $categoryServices = $this->entityManager->getRepository(CategoryService::class)->findAll();
+            if (empty($categoryServices)) {
+                $io->error('No category services found. Please run app:seed-category-services first.');
+                return Command::FAILURE;
+            }
+
+            $faker = Factory::create();
+            $servicesToCreate = (int)$input->getOption('count');
+            $statuses = ['active', 'inactive'];
+            
+            $io->progressStart($servicesToCreate);
+
+            for ($i = 0; $i < $servicesToCreate; $i++) {
+                $service = new Service();
+                
+                // Set service name
+                $service->setName($faker->words(3, true));
+                
+                // Set description
+                $service->setDescription($faker->paragraph(2));
+                
+                // Set random price (between 20 and 500)
+                $price = $faker->randomFloat(2, 20, 500);
+                $service->setPrice($price);
+                
+                // Set status
+                $service->setStatus($faker->randomElement($statuses));
+                
+                // Assign random category service
+                $randomCategory = $categoryServices[array_rand($categoryServices)];
+                $service->setCategoryService($randomCategory);
+                
+                $this->entityManager->persist($service);
+                
+                if (($i + 1) % 10 === 0) {
+                    $this->entityManager->flush();
+                    $this->entityManager->clear(Service::class);
+                }
+                
+                $io->progressAdvance();
+            }
+
+            $this->entityManager->flush();
+            $io->progressFinish();
+
+            $io->success(sprintf('Successfully seeded %d services!', $servicesToCreate));
+            return Command::SUCCESS;
+
+        } catch (\Exception $e) {
+            $io->error('An error occurred while seeding services: ' . $e->getMessage());
+            return Command::FAILURE;
         }
-
-        // Flush to save all generated entities to the database
-        $this->em->flush();
-
-        $output->writeln('Seeding completed!');
-
-        return Command::SUCCESS;
     }
 }

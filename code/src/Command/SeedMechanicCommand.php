@@ -8,7 +8,9 @@ use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:seed-mechanics',
@@ -28,14 +30,30 @@ class SeedMechanicCommand extends Command
     {
         $this
             ->setDescription('Seed the database with fake mechanic data')
-            ->setHelp('This command allows you to populate the mechanics table with fake data...');
+            ->setHelp('This command allows you to populate the mechanics table with fake data...')
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Number of mechanics to create', 100)
+            ->addOption('skip-existing', 's', InputOption::VALUE_NONE, 'Skip if mechanics already exist');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
         $faker = Factory::create();
+        $count = $input->getOption('count');
+        $skipExisting = $input->getOption('skip-existing');
 
-        $output->writeln('Seeding mechanics...');
+        $io->title('Seeding mechanics...');
+
+        // Check if mechanics already exist
+        $existingCount = $this->em->getRepository(Mechanic::class)->count([]);
+        if ($existingCount > 0) {
+            if ($skipExisting) {
+                $io->note(sprintf('Found %d existing mechanics. Skipping as requested.', $existingCount));
+                return Command::SUCCESS;
+            } else {
+                $io->warning(sprintf('Found %d existing mechanics. They will be kept.', $existingCount));
+            }
+        }
 
         // Possible specializations and certifications
         $specializations = [
@@ -60,62 +78,85 @@ class SeedMechanicCommand extends Command
             'Diagnostic Specialist'
         ];
 
-        for ($i = 0; $i < 50; $i++) {
-            // Generate Fake Data
-            $name = $faker->name;
-            $email = $faker->unique()->safeEmail;
-            $roles = "MECHANIC"; // Default role
-            $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
-            $resetToken = null;
-            $tokenExpiration = null;
-            $phoneNumber = $faker->phoneNumber;
-            $logo = $faker->imageUrl(200, 200, 'business'); // Generates a fake logo URL
-            $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
-            $city = $faker->randomElement([
-                'Casablanca', 'Rabat', 'Fès', 'Marrakech', 'Tangier', 'Agadir', 'Meknès',
-                'Oujda', 'Tétouan', 'Safi', 'Mohammedia', 'El Jadida', 'Béni Mellal', 'Nador',
-                'Khouribga', 'Kénitra', 'Laâyoune', 'Errachidia', 'Taroudant', 'Taza',
-            ]);
-            // Mechanic-specific properties
-            $specialization = $faker->randomElement($specializations);
-            $experienceYears = $faker->numberBetween(1, 30);
+        $workingHoursOptions = [
+            '08:00-17:00',
+            '09:00-18:00',
+            '10:00-19:00',
+            '08:00-18:00',
+            '09:00-19:00'
+        ];
 
-            // Generate 1-3 random certifications
-            $certifications = [];
-            $numCerts = $faker->numberBetween(1, 3);
-            for ($j = 0; $j < $numCerts; $j++) {
-                $cert = $faker->randomElement($certificationOptions);
-                if (!in_array($cert, $certifications)) {
-                    $certifications[] = $cert;
+        $io->progressStart($count);
+
+        // Process in batches to avoid memory issues
+        $batchSize = 100;
+        $totalBatches = ceil($count / $batchSize);
+        
+        for ($batch = 0; $batch < $totalBatches; $batch++) {
+            $currentBatchSize = min($batchSize, $count - ($batch * $batchSize));
+            
+            for ($i = 0; $i < $currentBatchSize; $i++) {
+                // Generate Fake Data
+                $name = $faker->name;
+                $email = $faker->unique()->safeEmail;
+                $address = $faker->address;
+                $roles = 'MECHANIC'; // Default role
+                $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
+                $resetToken = null;
+                $tokenExpiration = null;
+                $phone = $faker->phoneNumber;
+                $photoProfil = "avatar5-67f2b22f9551d.png"; // Default avatar
+                
+                // Mechanic-specific properties
+                $specialization = $faker->randomElement($specializations);
+                $experienceYears = $faker->numberBetween(1, 30);
+
+                // Generate certifications as a comma-separated string
+                $numCerts = $faker->numberBetween(1, 3);
+                $selectedCerts = [];
+                for ($j = 0; $j < $numCerts; $j++) {
+                    $cert = $faker->randomElement($certificationOptions);
+                    if (!in_array($cert, $selectedCerts)) {
+                        $selectedCerts[] = $cert;
+                    }
                 }
+                $certifications = implode(', ', $selectedCerts);
+
+                // Create Mechanic object with updated constructor parameters
+                $mechanic = new Mechanic(
+                    $name,
+                    $email,
+                    $address,
+                    $roles,
+                    $password,
+                    $resetToken,
+                    $tokenExpiration,
+                    $phone,
+                    $photoProfil,
+                    $specialization,
+                    $experienceYears,
+                    $certifications
+                );
+
+                // Set additional properties that aren't in the constructor
+                $mechanic->setLogo($faker->imageUrl(200, 200, 'business'));
+
+                // Persist the mechanic entity
+                $this->em->persist($mechanic);
+                
+                $io->progressAdvance();
             }
-
-            // Create Mechanic object
-            $mechanic = new Mechanic(
-                $name,
-                $email,
-                $roles,
-                $password,
-                $resetToken,
-                $tokenExpiration,
-                $phoneNumber,
-                $logo,
-                $workingHours,
-                $city,
-                $specialization,
-                $experienceYears,
-                $certifications
-            );
-
-            // Persist the mechanic entity
-            $this->em->persist($mechanic);
+            
+            // Flush after each batch
+            $this->em->flush();
+            $this->em->clear(Mechanic::class);
+            
+            $io->note(sprintf('Processed batch %d/%d', $batch + 1, $totalBatches));
         }
 
-        // Flush to save all generated entities to the database
-        $this->em->flush();
+        $io->progressFinish();
 
-        $output->writeln('Seeding completed!');
-
+        $io->success(sprintf('Successfully seeded %d mechanics!', $count));
         return Command::SUCCESS;
     }
 }
