@@ -40,7 +40,6 @@ class SeedAllCommand extends Command
             $io->section('Clearing database...');
             $this->runCommand('doctrine:schema:drop --force', $io);
             $this->runCommand('doctrine:schema:create', $io);
-            sleep(2); // Add delay after schema operations
         }
 
         // Check if data exists
@@ -53,52 +52,45 @@ class SeedAllCommand extends Command
         $progressBar->start();
 
         try {
-            // Seed car data first using local predefined makes
+            // 1. Seed car data first using local predefined makes
             $io->section('Seeding car data...');
             $this->runCommand('app:car --fetch --use-local --count=' . (50), $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
 
+            // 2. Seed locations
             $io->section('Seeding locations...');
             $this->runCommand("app:seed-locations --count=" . ($count * 2), $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
             
-            // Generate clients and mechanics
+            // 3. Generate clients and mechanics
             $io->section('Generating clients and mechanics...');
             $this->runCommand("app:seed-clients --count={$count}", $io);
-            sleep(1); // Add delay between commands
             $this->runCommand("app:seed-mechanics --count={$count}", $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
 
-            // Seed vehicles
+            // 4. Seed vehicles
             $io->section('Seeding vehicles...');
             $this->runCommand("app:seed-vehicles --count=" . ($count * 2), $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
 
-            // Seed garages
+            // 5. Seed garages
             $io->section('Seeding garages...');
             $this->runCommand("app:seed-garages --count=" . ($count * 2), $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
 
-            // Seed category services
+            // 6. Seed category services
             $io->section('Seeding category services...');
             $this->runCommand('app:seed-category-services --count=20', $io);
-            sleep(1); // Add delay between commands
             $progressBar->advance();
 
-            // Seed services
+            // 7. Seed services
             $io->section('Seeding services...');
-            $this->runCommand('app:seed-services --count=75', $io);
-            sleep(1); // Add delay between commands
+            $this->runCommand('app:seed-services --count=50', $io);
             $progressBar->advance();
 
-            // Seed reservations
+            // 8. Finally, seed reservations
             $io->section('Seeding reservations...');
-            $this->runCommand("app:seed-reservations --count=" . ($count * 2), $io);
+            $this->runCommand('app:seed-reservations --count=100', $io);
             $progressBar->advance();
 
             $progressBar->finish();
@@ -114,13 +106,13 @@ class SeedAllCommand extends Command
 
     private function runCommand(string $command, SymfonyStyle $io): void
     {
-        $process = new Process(['php', 'bin/console', ...explode(' ', $command)]);
+        $process = Process::fromShellCommandline('php bin/console ' . $command);
         $process->setTimeout(null);
         $process->run(function ($type, $buffer) use ($io) {
             if (Process::ERR === $type) {
                 $io->error($buffer);
             } else {
-                $io->write($buffer);
+                $io->text($buffer);
             }
         });
 
@@ -131,8 +123,9 @@ class SeedAllCommand extends Command
 
     private function dataExists(): bool
     {
-        // Implement the logic to check if data already exists in the database
-        // This is a placeholder and should be replaced with the actual implementation
-        return false;
+        // Check if any data exists in the database
+        $process = Process::fromShellCommandline('php bin/console doctrine:query:sql "SELECT COUNT(*) FROM clients"');
+        $process->run();
+        return (int)$process->getOutput() > 0;
     }
 } 

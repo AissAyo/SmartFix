@@ -33,7 +33,7 @@ class SeedCategoryServiceCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Number of category services to create', 100)
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'Average number of services per garage', 5)
             ->addOption('skip-existing', 's', InputOption::VALUE_NONE, 'Skip if category services already exist');
     }
 
@@ -52,51 +52,103 @@ class SeedCategoryServiceCommand extends Command
                 }
             }
 
-            $faker = Factory::create();
-            $count = (int)$input->getOption('count');
-            $batchSize = 100;
+            // Get all available garages with eager loading of mechanics
+            $garages = $this->entityManager->createQueryBuilder()
+                ->select('g', 'm', 'l')
+                ->from(Garage::class, 'g')
+                ->leftJoin('g.mechanic', 'm')
+                ->leftJoin('g.location', 'l')
+                ->getQuery()
+                ->getResult();
 
-            $io->progressStart($count);
-
-            for ($i = 0; $i < $count; $i++) {
-                $categoryService = new CategoryService();
-                $categoryService->setCategoryname($faker->unique()->randomElement([
-                    'Oil Change',
-                    'Brake Service',
-                    'Tire Rotation',
-                    'Engine Tune-up',
-                    'Transmission Service',
-                    'Battery Service',
-                    'Air Conditioning',
-                    'Wheel Alignment',
-                    'Exhaust System',
-                    'Electrical System',
-                    'Suspension Service',
-                    'Fuel System',
-                    'Cooling System',
-                    'Steering Service',
-                    'Diagnostic Service',
-                    'Body Repair',
-                    'Paint Service',
-                    'Interior Repair',
-                    'Glass Repair',
-                    'Detailing Service'
-                ]));
-
-                $this->entityManager->persist($categoryService);
-
-                if (($i + 1) % $batchSize === 0) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear(CategoryService::class);
-                }
-
-                $io->progressAdvance();
+            if (empty($garages)) {
+                $io->error('No garages found in the database. Please seed garages first.');
+                return Command::FAILURE;
             }
 
+            // Ensure all garages are properly persisted and flushed
+            foreach ($garages as $garage) {
+                $this->entityManager->persist($garage);
+            }
             $this->entityManager->flush();
-            $io->progressFinish();
+            $this->entityManager->clear();
 
-            $io->success(sprintf('Successfully seeded %d category services!', $count));
+            // Refresh garages after flush
+            $garages = $this->entityManager->createQueryBuilder()
+                ->select('g', 'm', 'l')
+                ->from(Garage::class, 'g')
+                ->leftJoin('g.mechanic', 'm')
+                ->leftJoin('g.location', 'l')
+                ->getQuery()
+                ->getResult();
+
+            $faker = Factory::create();
+            $servicesPerGarage = (int)$input->getOption('count');
+            $totalGarages = count($garages);
+
+            // Define available service categories
+            $serviceCategories = [
+                'Oil Change Service',
+                'Brake Service',
+                'Tire Service',
+                'Engine Diagnostics',
+                'Transmission Service',
+                'Battery Service',
+                'Air Conditioning',
+                'Wheel Alignment',
+                'Exhaust System',
+                'Electrical System',
+                'Suspension Service',
+                'Fuel System',
+                'Cooling System',
+                'Steering Service',
+                'Body Repair',
+                'Paint Service',
+                'Interior Repair',
+                'Glass Repair',
+                'Detailing Service',
+                'General Maintenance'
+            ];
+
+            // Calculate total progress steps
+            $totalSteps = $totalGarages;
+            $io->progressStart($totalSteps);
+
+            // Process garages in smaller batches
+            $batchSize = 10;
+            foreach (array_chunk($garages, $batchSize) as $garageBatch) {
+                foreach ($garageBatch as $garage) {
+                    // Randomly select 3-7 services for each garage
+                    $numServices = $faker->numberBetween(
+                        max(3, $servicesPerGarage - 2),
+                        min(7, $servicesPerGarage + 2)
+                    );
+                    
+                    // Get random services without duplicates
+                    $selectedServices = $faker->randomElements(
+                        $serviceCategories,
+                        $numServices
+                    );
+
+                    foreach ($selectedServices as $serviceName) {
+                        $categoryService = new CategoryService();
+                        $categoryService->setCategoryname($serviceName);
+                        $categoryService->setGarage($garage);
+                        $this->entityManager->persist($categoryService);
+                    }
+
+                    $io->progressAdvance();
+                }
+
+                // Flush after each batch
+                $this->entityManager->flush();
+                
+                // Clear entity manager without detaching entities
+                $this->entityManager->clear(CategoryService::class);
+            }
+
+            $io->progressFinish();
+            $io->success('Successfully seeded category services for all garages!');
             return Command::SUCCESS;
 
         } catch (\Exception $e) {

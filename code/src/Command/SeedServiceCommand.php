@@ -47,12 +47,36 @@ class SeedServiceCommand extends Command
                 }
             }
 
-            // Get all category services
-            $categoryServices = $this->entityManager->getRepository(CategoryService::class)->findAll();
+            // Get all category services with eager loading of garages
+            $categoryServices = $this->entityManager->createQueryBuilder()
+                ->select('cs', 'g')
+                ->from(CategoryService::class, 'cs')
+                ->leftJoin('cs.garage', 'g')
+                ->getQuery()
+                ->getResult();
+
             if (empty($categoryServices)) {
                 $io->error('No category services found. Please run app:seed-category-services first.');
                 return Command::FAILURE;
             }
+
+            // Ensure all category services and their garages are properly persisted
+            foreach ($categoryServices as $categoryService) {
+                $this->entityManager->persist($categoryService);
+                if ($categoryService->getGarage()) {
+                    $this->entityManager->persist($categoryService->getGarage());
+                }
+            }
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+
+            // Refresh category services after flush
+            $categoryServices = $this->entityManager->createQueryBuilder()
+                ->select('cs', 'g')
+                ->from(CategoryService::class, 'cs')
+                ->leftJoin('cs.garage', 'g')
+                ->getQuery()
+                ->getResult();
 
             $faker = Factory::create();
             $servicesToCreate = (int)$input->getOption('count');
@@ -85,6 +109,14 @@ class SeedServiceCommand extends Command
                 if (($i + 1) % 10 === 0) {
                     $this->entityManager->flush();
                     $this->entityManager->clear(Service::class);
+                    
+                    // Refresh category services after each batch
+                    $categoryServices = $this->entityManager->createQueryBuilder()
+                        ->select('cs', 'g')
+                        ->from(CategoryService::class, 'cs')
+                        ->leftJoin('cs.garage', 'g')
+                        ->getQuery()
+                        ->getResult();
                 }
                 
                 $io->progressAdvance();
