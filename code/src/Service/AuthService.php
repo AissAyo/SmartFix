@@ -83,7 +83,7 @@ class AuthService
     public function getUserType(): ?string
     {
         $user = $this->getUser();
-        return $user['type'] ?? null;
+        return $user ? get_class($user) : null;
     }
 
     public function isAdmin(): bool

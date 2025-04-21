@@ -135,4 +135,9 @@ class ServiceController extends AbstractController
         ]);
     }
     
+    public function getUserType(): ?string
+    {
+        $user = $this->getUser();
+        return $user ? get_class($user) : null;
+    }
 }
