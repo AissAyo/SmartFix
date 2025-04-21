@@ -1,0 +1,167 @@
+{% block container %}
+    <div class="garage-container">
+        <!-- Garage Stat Card -->
+        <div class="garage-card garage-highlight-card">
+            <div class="garage-card-content">
+                <div class="garage-card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="garage-card-text">
+                    <p class="garage-card-label">Total Garages</p>
+                    <h4 class="garage-card-value" id="allgargas">{{ allgargas }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #3f37c9;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        .garage-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .garage-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            grid-column: 1 / span 1;
+        }
+
+        .garage-highlight-card {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05), rgba(67, 97, 238, 0.02));
+            border-left: 4px solid var(--primary);
+        }
+
+        .garage-card-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .garage-card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1), rgba(67, 97, 238, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .garage-card-text {
+            flex: 1;
+        }
+
+        .garage-card-label {
+            color: var(--gray);
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .garage-card-value {
+            color: var(--dark);
+            margin: 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .garage-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @media (max-width: 768px) {
+            .garage-container {
+                grid-template-columns: 1fr;
+            }
+
+            .garage-card {
+                grid-column: 1 / span 1;
+            }
+
+            .garage-card-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+
+            let hours = now.getHours();
+            const amPm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('amPm').textContent = amPm;
+
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = value.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            animateValue('allgargas', 0, {{ allgargas }}, 1000);
+        });
+    </script>
+{% endblock %}
