@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
 class Garage
@@ -17,6 +19,9 @@ class Garage
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $emailGarage;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $GarageAddress;
 
 
     #[ORM\Column(type: 'float')]
@@ -31,30 +36,33 @@ class Garage
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $workingHours = null;
 
-    #[ORM\ManyToMany(targetEntity: CategoryService::class, mappedBy: 'garages')]
+    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
+    private ?string $phoneNumber = null;
+
+
+    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'logo')]
+    private ?File $LogoFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $LogoProfil = null;
+
+    #[ORM\OneToMany(targetEntity: CategoryService::class, mappedBy: 'garage')]
     private Collection $categoryServices;
-    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic;
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Mechanic $mechanic = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $City;
 
-    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'garage')]
-    private Collection $reservations;
-    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
+   
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
-
-
-//    #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
-//    private Collection $mechanicServices;
-
 
     public function __construct()
     {
         $this->categoryServices = new ArrayCollection();
-        $this->reservations = new ArrayCollection();
     }
 
     // Getters and setters for the properties
@@ -77,6 +85,16 @@ class Garage
     public function setEmailGarage(string $emailGarage): void
     {
         $this->emailGarage = $emailGarage;
+    }
+
+    public function getGarageAddress(): string
+    {
+        return $this->GarageAddress;
+    }
+
+    public function setGarageAddress(string $GarageAddress): void
+    {
+        $this->GarageAddress = $GarageAddress;
     }
 
     public function getRating(): float
@@ -142,13 +160,22 @@ class Garage
         return $this->location;
     }
 
-    public function setLocation(?Location $location): void
+    public function setLocation(?Location $location): self
     {
+        // Handle the bidirectional relationship
+        if ($this->location !== null && $this->location !== $location) {
+            $oldLocation = $this->location;
+            $this->location = null;
+            $oldLocation->setGarage(null);
+        }
+        
         $this->location = $location;
-    }
-    public function getReservations(): Collection
-    {
-        return $this->reservations;
+        
+        if ($location !== null && $location->getGarage() !== $this) {
+            $location->setGarage($this);
+        }
+        
+        return $this;
     }
 
     public function getCity(): ?string
@@ -158,5 +185,55 @@ class Garage
     public function setCity(?string $City): void
     {
         $this->City = $City;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getLogoProfil(): ?string
+    {
+        return $this->LogoProfil;
+    }
+
+    public function setLogoProfil(?string $LogoProfil): void
+    {
+        $this->LogoProfil = $LogoProfil;
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->LogoFile;
+    }
+
+    public function setLogoFile(?File $LogoFile): void
+    {
+        $this->LogoFile = $LogoFile;
+    }
+
+    public function addCategoryService(CategoryService $categoryService): self
+    {
+        if (!$this->categoryServices->contains($categoryService)) {
+            $this->categoryServices->add($categoryService);
+            $categoryService->setGarage($this);
+        }
+        return $this;
+    }
+
+    public function removeCategoryService(CategoryService $categoryService): self
+    {
+        if ($this->categoryServices->removeElement($categoryService)) {
+            // set the owning side to null (unless already changed)
+            if ($categoryService->getGarage() === $this) {
+                $categoryService->setGarage(null);
+            }
+        }
+        return $this;
     }
 }

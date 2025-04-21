@@ -33,13 +33,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.phone, 'Phone Number') }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.phone) }}
-                                    </div>
-                                </div>
+
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
@@ -48,13 +42,7 @@
                                         {{ form_errors(form.address) }}
                                     </div>
                                 </div>
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.garageAddress, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.garageAddress, 'Garage Address') }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.garageAddress) }}
-                                    </div>
-                                </div>
+
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
                                     {{ form_label(form.city, 'City') }}
@@ -119,15 +107,6 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
-                                    <div class="file-upload-card p-3 border rounded">
-                                        {{ form_label(form.MechanicphotoProfilFile, 'Profile Photo', {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.MechanicphotoProfilFile, {'attr': {'class': 'form-control'}}) }}
-                                        <small class="text-muted">PNG/JPG, max 2MB</small>
-                                        <div class="invalid-feedback">
-                                            {{ form_errors(form.MechanicphotoProfilFile) }}
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

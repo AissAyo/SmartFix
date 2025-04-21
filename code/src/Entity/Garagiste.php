@@ -10,57 +10,31 @@ use Symfony\Component\HttpFoundation\File\File;
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
 {
-    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
-    private ?string $phoneNumber = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $workingHours = null;
-
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $garageAddress = null;
-
-
+    
     public function __construct(
         string             $name = '',
         string             $email = '',
         ?string            $address = '',
-        ?string            $city = '',
         string             $roles = '',
         ?string            $password = null,
         ?string            $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string            $phoneNumber = null,
+        ?string            $phone = null,
         ?string            $logo = null,
         ?string            $workingHours = null,
-        ?string            $garageAddress = null
     ) {
         parent::__construct(
             $name,
             $email,
-            $address,         // 👈 fix: was missing!
-            $city,
+            $address,        
             $roles,
             $password,
             $resetToken,
             $tokenExpiration,
-            $phoneNumber,    // goes to User::$phone
+            $phone,    // goes to User::$phone
         );
 
-        $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
-        $this->garageAddress = $garageAddress;
-    }
-
-
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?string $phoneNumber): void
-    {
-        $this->phoneNumber = $phoneNumber;
     }
 
     public function getWorkingHours(): ?string

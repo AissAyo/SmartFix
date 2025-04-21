@@ -64,16 +64,16 @@ services:
     # - ClientService (autoregistered service)
     # - WhatsAppVerificationCodeSender (configured above)
     # - LoggerInterface (Symfony core service)
-#    App\Service\CarApiService:
-#        public: true
-#        arguments:
-#            $client: '@GuzzleHttp\Client'
-#            $logger: '@logger'
-#            $databaseService: '@App\Service\DatabaseConnectionService'
-#            $em: '@doctrine.orm.entity_manager'
-#            $apiKey: '%env(CARAPI_KEY)%'
-#            $apiSecret: '%env(CARAPI_SECRET)%'
-#            $baseUrl: '%env(CARAPI_BASE_URL)%'
+    App\Service\CarApiService:
+        public: true
+        arguments:
+            $client: '@GuzzleHttp\Client'
+            $logger: '@logger'
+            $databaseService: '@App\Service\DatabaseConnectionService'
+            $em: '@doctrine.orm.entity_manager'
+            $apiKey: '%env(CARAPI_KEY)%'
+            $apiSecret: '%env(CARAPI_SECRET)%'
+            $baseUrl: '%env(CARAPI_BASE_URL)%'
 
     # Register the DatabaseConnectionService
     App\Service\DatabaseConnectionService:

@@ -9,73 +9,117 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Table(name: "vehicules")]
 class Vehicule
 {
+
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    #[ORM\Column(type: "integer")]
-    private int $id;
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $model;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $brand;
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $ownerName;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $licensePlate;
+    #[ORM\Column(type: 'string', length: 20, unique: true)]
+    private string $plateNumber;
 
-    #[ORM\ManyToOne(targetEntity: "App\Entity\Client", inversedBy: "vehicules")]
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $color;
+
+    #[ORM\Column(type: 'integer')]
+    private int $mileage;
+
+    #[ORM\Column(type: 'string', length: 100, unique: true)]
+    private string $vin;
+
+    #[ORM\Column(type: 'date')]
+    private \DateTimeInterface $registrationDate;
+
+
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "vehicules")]
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
+
+    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: "vehicles")]
+    #[ORM\JoinColumn(nullable: false)]
+    private CarAPI $carAPI;
 
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'vehicle')]
     private Collection $reservations;
 
-    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'vehicles')]
-#[ORM\JoinColumn(nullable: false)]
-private ?CarAPI $carAPI = null;
-
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
-        $this->carAPIs = new ArrayCollection();
     }
-
-    // Getters and setters
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getModel(): string
+
+
+    public function getOwnerName(): string
     {
-        return $this->model;
+        return $this->ownerName;
     }
 
-    public function setModel(string $model): self
+    public function setOwnerName(string $ownerName): self
     {
-        $this->model = $model;
+        $this->ownerName = $ownerName;
         return $this;
     }
 
-    public function getBrand(): string
+    public function getPlateNumber(): string
     {
-        return $this->brand;
+        return $this->plateNumber;
     }
 
-    public function setBrand(string $brand): self
+    public function setPlateNumber(string $plateNumber): self
     {
-        $this->brand = $brand;
+        $this->plateNumber = $plateNumber;
         return $this;
     }
 
-    public function getLicensePlate(): string
+    public function getColor(): string
     {
-        return $this->licensePlate;
+        return $this->color;
     }
 
-    public function setLicensePlate(string $licensePlate): self
+    public function setColor(string $color): self
     {
-        $this->licensePlate = $licensePlate;
+        $this->color = $color;
+        return $this;
+    }
+
+    public function getMileage(): int
+    {
+        return $this->mileage;
+    }
+
+    public function setMileage(int $mileage): self
+    {
+        $this->mileage = $mileage;
+        return $this;
+    }
+
+    public function getVin(): string
+    {
+        return $this->vin;
+    }
+
+    public function setVin(string $vin): self
+    {
+        $this->vin = $vin;
+        return $this;
+    }
+
+    public function getRegistrationDate(): \DateTimeInterface
+    {
+        return $this->registrationDate;
+    }
+
+    public function setRegistrationDate(\DateTimeInterface $registrationDate): self
+    {
+        $this->registrationDate = $registrationDate;
         return $this;
     }
 
@@ -90,6 +134,17 @@ private ?CarAPI $carAPI = null;
         return $this;
     }
 
+    public function getCarAPI(): CarAPI
+    {
+        return $this->carAPI;
+    }
+
+    public function setCarAPI(CarAPI $carAPI): self
+    {
+        $this->carAPI = $carAPI;
+        return $this;
+    }
+
     public function getReservations(): Collection
     {
         return $this->reservations;
@@ -98,49 +153,19 @@ private ?CarAPI $carAPI = null;
     public function addReservation(Reservation $reservation): self
     {
         if (!$this->reservations->contains($reservation)) {
-            $this->reservations[] = $reservation;
-            $reservation->setVehicule($this);
+            $this->reservations->add($reservation);
+            $reservation->setVehicle($this);
         }
-
         return $this;
     }
 
     public function removeReservation(Reservation $reservation): self
     {
         if ($this->reservations->removeElement($reservation)) {
-            // set the owning side to null (unless already changed)
-            if ($reservation->getVehicule() === $this) {
-                $reservation->setVehicule(null);
+            if ($reservation->getVehicle() === $this) {
+                $reservation->setVehicle(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCarAPIs(): Collection
-    {
-        return $this->carAPIs;
-    }
-
-    public function addCarAPI(CarAPI $carAPI): self
-    {
-        if (!$this->carAPIs->contains($carAPI)) {
-            $this->carAPIs[] = $carAPI;
-            $carAPI->setVehicle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCarAPI(CarAPI $carAPI): self
-    {
-        if ($this->carAPIs->removeElement($carAPI)) {
-            // set the owning side to null (unless already changed)
-            if ($carAPI->getVehicle() === $this) {
-                $carAPI->setVehicle(null);
-            }
-        }
-
         return $this;
     }
 }

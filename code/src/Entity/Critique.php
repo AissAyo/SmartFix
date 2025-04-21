@@ -29,6 +29,14 @@ class Critique
     #[ORM\Column(type: 'integer')]
     private int $rating;
 
+    #[ORM\ManyToOne(targetEntity: Garage::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Garage $garage;
+
+    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private Mechanic $mechanic;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();

@@ -2,8 +2,12 @@
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
+
+
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[ORM\MappedSuperclass]
 abstract class User implements  PasswordAuthenticatedUserInterface
@@ -22,8 +26,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $email;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $city;
+    
 
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $roles=null;
@@ -36,8 +39,8 @@ abstract class User implements  PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $tokenExpiration = null;
-
-
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private string $city;
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $address;
 
@@ -45,7 +48,6 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         string $name = '',
         string $email = '',
         ?string $address = null,
-        ?string $city = '',
         string $roles = '',
         ?string $password = null,
         ?string $resetToken = null,
@@ -59,8 +61,10 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
         $this->phone = $phone;
-        $this->city = $city;
+        $this->address = $address;
     }
+
+
 
 
     public function getId(): ?int
@@ -135,7 +139,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         return $this->phone;
     }
 
-    public function setPhone(string $phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
@@ -147,7 +151,7 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         return $this->city;
     }
 
-    public function setCity(string $city): void
+    public function setCity(?string $city): void
     {
         $this->city = $city;
     }

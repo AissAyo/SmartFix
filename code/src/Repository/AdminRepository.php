@@ -40,4 +40,18 @@ class AdminRepository implements RepositoryInterface
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
     }
+
+    public function getAdminByEmailAndPassword(string $email, string $password): ?Admin
+    {
+        $admin = $this->entityManager
+            ->getRepository(Admin::class)
+            ->findOneBy(['email' => $email]);
+
+        if ($admin && password_verify($password, $admin->getPassword())) {
+            return $admin;
+        }
+
+        return null;
+    }
+
 }

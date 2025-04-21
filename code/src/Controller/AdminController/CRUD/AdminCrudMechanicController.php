@@ -55,7 +55,7 @@ class AdminCrudMechanicController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $logoFile = $form->get('logoFile')->getData();
-            $photoProfilFile = $form->get('MechanicphotoProfilFile')->getData();
+//            $photoProfilFile = $form->get('MechanicphotoProfilFile')->getData();
 
             // Handle logo file upload
             if ($logoFile) {
@@ -67,13 +67,13 @@ class AdminCrudMechanicController extends AbstractController
             }
 
             // Handle profile photo upload
-            if ($photoProfilFile) {
-                $photoPath = $this->fileUploader->upload($photoProfilFile);
-                // Set the path to the photoProfil property
-                $mechanic->setPhotoProfil($photoPath);
-                // Set the actual File object for VichUploader
-              //   $mechanic->setMechanicphotoProfilFile($photoProfilFile);
-            }
+//            if ($photoProfilFile) {
+//                $photoPath = $this->fileUploader->upload($photoProfilFile);
+//                // Set the path to the photoProfil property
+//                $mechanic->setPhotoProfil($photoPath);
+//                // Set the actual File object for VichUploader
+//              //   $mechanic->setMechanicphotoProfilFile($photoProfilFile);
+//            }
 
             $this->mechanicService->createMechanic($mechanic);
             $this->addFlash('success', 'Mechanic created successfully!');

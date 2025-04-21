@@ -43,16 +43,7 @@ new Assert\NotBlank(),
 new Assert\Length(['min' => 6]),
 ],
 ])
-->add('phone_number', TextType::class, [
-'label' => 'Phone Number',
-'required' => false,
-'constraints' => [
-new Assert\Regex([
-'pattern' => '/^\+?[0-9]{10,15}$/',
-'message' => 'Please enter a valid phone number.',
-]),
-],
-])
+
 ->add('city', ChoiceType::class, [
 'label' => 'City',
 'required' => true,
@@ -64,11 +55,7 @@ new Assert\Regex([
 'required' => true,
 'constraints' => [new Assert\NotBlank()],
 ])
-->add('garageAddress', TextareaType::class, [
-'label' => 'Garage Address',
-'required' => true,
-'constraints' => [new Assert\NotBlank()],
-])
+
 ->add('specialization', ChoiceType::class, [
 'label' => 'Specialization',
 'required' => false,
@@ -99,12 +86,12 @@ new Assert\Range(['min' => 0, 'max' => 50]),
 'allow_delete' => true,
 'download_uri' => false,
 ])
-->add('photoProfilFile', VichImageType::class, [
-'label' => 'Profile Photo',
-'required' => false,
-'allow_delete' => true,
-'download_uri' => false,
-])
+//->add('photoProfilFile', VichImageType::class, [
+//'label' => 'Profile Photo',
+//'required' => false,
+//'allow_delete' => true,
+//'download_uri' => false,
+//])
 ->add('workingHours', ChoiceType::class, [
 'label' => 'Working Hours',
 'required' => false,

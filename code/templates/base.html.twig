@@ -12,9 +12,8 @@
         </svg>">
         {% endblock %}
 
-        {# STYLESHEETS - Load from Webpack #}
         {% block stylesheets %}
-{#                {{ encore_entry_link_tags('app') }}#}
+                {{ encore_entry_link_tags('app') }}
         {% endblock %}
 </head>
 
@@ -25,10 +24,10 @@
         {% block container %}{% endblock %}
         {% block footer %}{% endblock %}
 
-        {# JAVASCRIPTS - Load from Webpack #}
+
         {% block javascripts %}
-{#                {{ encore_entry_script_tags('app') }}#}
-{#                {% block extra_javascripts %}{% endblock %}#}
+                {{ encore_entry_script_tags('app') }}
+                {% block extra_javascripts %}{% endblock %}
         {% endblock %}
 {% endblock %}
 </body>

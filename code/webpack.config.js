@@ -1,6 +1,7 @@
 const Encore = require('@symfony/webpack-encore');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 Encore
     // Output and public paths
@@ -27,29 +28,16 @@ Encore
     // Enable PostCSS
     .enablePostCssLoader()
 
-    // Configure filenames for JavaScript and CSS
-    .configureFilenames({
-        js: '[name].[contenthash].js',
-        css: '[name].[contenthash].css'
-    })
+    // Configure jQuery
+    .addPlugin(new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery',
+    }))
 
-    // Configure image filenames
-    .configureImageRule({
-        test: /\.(png|jpg|jpeg|gif|svg)$/,
-        loader: 'file-loader',
-        options: {
-            name: 'images/[name].[hash:8].[ext]',
-        },
-    })
+    // Asset handling for images and fonts (no hashing)
 
-    // Configure font filenames
-    .configureFontRule({
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        loader: 'file-loader',
-        options: {
-            name: 'fonts/[name].[hash:8].[ext]',
-        },
-    })
 
     // Copy static assets (including Bootstrap Icons fonts)
     .addPlugin(new CopyWebpackPlugin({
@@ -122,12 +110,13 @@ Encore
                 from: './assets/img',
                 to: 'img/[name][ext]',
                 noErrorOnMissing: true
-            },
-            {
-                from: './assets/images/',
-                to: 'images/[name][ext]',
-                noErrorOnMissing: true
             }
+
+            // {
+            //     from: './assets/images/',
+            //     to: 'images/[name][ext]',
+            //     noErrorOnMissing: true
+            // }
         ]
     }));
 
@@ -137,21 +126,7 @@ const config = Encore.getWebpackConfig();
 config.resolve.alias = {
     'jquery-ui': 'jquery-ui-dist/jquery-ui.js',
     '../img': path.resolve(__dirname, 'assets/img'),
-    '../images': path.resolve(__dirname, 'assets/img')
+    '../images': path.resolve(__dirname, 'assets/images')
 };
-
-// Explicitly handle .map files if needed
-config.module.rules.push({
-    test: /\.map$/,
-    use: [
-        {
-            loader: 'file-loader',
-            options: {
-                outputPath: 'maps/',
-                name: '[name].[hash:8].[ext]',
-            },
-        },
-    ],
-});
 
 module.exports = config;

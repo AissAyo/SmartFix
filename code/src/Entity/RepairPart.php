@@ -48,4 +48,20 @@ class RepairPart {
 
         return $this;
     }
+
+    public function getReservation(): Reservation
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(Reservation $reservation): self
+    {
+        $this->reservation = $reservation;
+        return $this;
+    }
+
+    public function setId(int $Id): void
+    {
+        $this->Id = $Id;
+    }
 }
