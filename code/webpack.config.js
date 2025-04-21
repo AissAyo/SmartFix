@@ -1,108 +1,132 @@
-// Assure-toi d'importer Encore correctement
 const Encore = require('@symfony/webpack-encore');
-
-// Manually configure the runtime environment if not already configured yet by the "encore" command.
-// It's useful when you use tools that rely on webpack.config.js file.
-if (!Encore.isRuntimeEnvironmentConfigured()) {
-    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
-}
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
 
 Encore
-    // directory where compiled assets will be stored
+    // Output and public paths
     .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
     .setPublicPath('/build')
-    // only needed for CDN's or subdirectory deploy
-    //.setManifestKeyPrefix('build/')
 
-    /*
-     * ENTRY CONFIG
-     *
-     * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
-     */
-    .addEntry('app', './assets/app.js')
-
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
-
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
-    .enableSingleRuntimeChunk()
-  // Exclude .css.map files from being processed
-  .addRule({
-    test: /\.css\.map$/,
-    use: 'ignore-loader'
-})
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
+    // Enable source maps in dev
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
+
+    // Clean before build
+    .cleanupOutputBeforeBuild()
+
+    // Enable versioning in production (you can disable this if you don't need versioning)
     .enableVersioning(Encore.isProduction())
 
-    // configure Babel
-    // .configureBabel((config) => {
-    //     config.plugins.push('@babel/a-babel-plugin');
-    // })
+    // Runtime chunk
+    .enableSingleRuntimeChunk()
 
-    // enables and configure @babel/preset-env polyfills
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = '3.38';
-    })
+    // Entry points
+    .addEntry('app', './assets/app.js')
+    .addStyleEntry('main-css', './assets/css/main.css')
+    .addStyleEntry('app-css', './assets/app.css')
 
-    // Ignorer les erreurs causées par les fichiers CSS manquants (comme les images)
-    .configureCssLoader((config) => {
-        config.url = {
-            filter: (url) => {
-                // Ignore les erreurs pour les fichiers spécifiques
-                return !url.includes('ui-icons') && !url.includes('16.png');
-            },
-        };
-    })
+    // Enable PostCSS
+    .enablePostCssLoader()
 
-    // Exclure les fichiers source maps pour éviter l'erreur liée à bootstrap-icons.css.map
-    .configureDevServerOptions((options) => {
-        options.watchOptions = {
-            ignored: /bootstrap-icons\.css\.map/, // Ignore ce fichier spécifique
-        };
-    })
+    // Configure jQuery
+    .addPlugin(new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery',
+    }))
 
-    // enables Sass/SCSS support
-    .enableSassLoader()
+    // Asset handling for images and fonts (no hashing)
 
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
 
-    // uncomment if you use React
-    //.enableReactPreset()
-
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
-
-    // Enable image handling
-    .addRule({
-        test: /\.(png|jpg|jpeg|gif|ico|svg|webp)$/,
-        use: [
+    // Copy static assets (including Bootstrap Icons fonts)
+    .addPlugin(new CopyWebpackPlugin({
+        patterns: [
             {
-                loader: 'file-loader',
-                options: {
-                    name: 'img/[name].[hash:8].[ext]',
-                },
+                from: './node_modules/jquery-ui-dist/images',
+                to: 'images/[name][ext]'
             },
-        ],
-    })
-;
+            {
+                from: './node_modules/bootstrap-icons/font/fonts',
+                to: 'fonts/[name][ext]', // No hash in font filenames
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/services',
+                to: 'img/services/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/background',
+                to: 'img/background/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/blog',
+                to: 'img/blog/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/client',
+                to: 'img/client/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/landing',
+                to: 'img/landing/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/more',
+                to: 'img/more/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/shop',
+                to: 'img/shop/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/slider',
+                to: 'img/slider/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/team',
+                to: 'img/team/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/testimonial',
+                to: 'img/testimonial/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img/clients',
+                to: 'img/clients/[name][ext]',
+                noErrorOnMissing: true
+            },
+            {
+                from: './assets/img',
+                to: 'img/[name][ext]',
+                noErrorOnMissing: true
+            }
 
-module.exports = Encore.getWebpackConfig();
+            // {
+            //     from: './assets/images/',
+            //     to: 'images/[name][ext]',
+            //     noErrorOnMissing: true
+            // }
+        ]
+    }));
+
+const config = Encore.getWebpackConfig();
+
+// Aliases for easier import handling
+config.resolve.alias = {
+    'jquery-ui': 'jquery-ui-dist/jquery-ui.js',
+    '../img': path.resolve(__dirname, 'assets/img'),
+    '../images': path.resolve(__dirname, 'assets/images')
+};
+
+module.exports = config;

@@ -63,7 +63,17 @@ services:
       - symfony
     volumes:
       - db_admin_data:/var/www/html
-
+  python:
+    image: fastapi-service:latest
+    build:
+      context: ./infra/
+      dockerfile: ./python/Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./python_service:/app
+    networks:
+     - symfony
 volumes:
   db_admin_data:
   mysql:

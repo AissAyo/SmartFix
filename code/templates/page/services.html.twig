@@ -43,8 +43,8 @@
   </div>
   <input type="text" id="citySearch" class="basic_select mb-2 mt-2" placeholder="Search for a city..." style="width: 100%; padding: 8px; display: none;">
 </div>
-                               
-                                   
+
+
                                     <div class="sorting_select">
     <form method="get" action="{{ path('mecanics') }}" id="vehicleForm">
         <select class="basic_select" id="vehicleSelect" name="vehicleId" onchange="document.getElementById('vehicleForm').submit()">
@@ -152,7 +152,7 @@
                             <!-- Sidebar  -->
                         <div class="col-lg-3 col-md-4 p-0 mt-5 mt-md-0">
                             <div class="shop_sidebar">
-								
+
 
     <div class="widget">
         <h2 class="widget-title">Services</h2>
@@ -179,7 +179,7 @@
                                 </li>
                             {% else %}
                                 <li class="no-services">Aucun service dans cette catégorie.</li>
-                            {% endfor %}    
+                            {% endfor %}
                         </ul>
                     </li>
                 {% endfor %}

@@ -28,6 +28,8 @@
 @import url("../plugins/jquery_ui/style.css");
 @import url("animation.css");
 @import url("../plugins/wow/animate.css");
+
+/*@import url("./plugins/wow/animate.css");*/
 @import url("../plugins/swiper/swiper-bundle.min.css");
 @import url("../plugins/odometer/odometer-theme-default.css");
 @import url("../plugins/fancybox/jquery.fancybox.css");

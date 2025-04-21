@@ -4,45 +4,37 @@ namespace App\Entity;
 
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\String_;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\MappedSuperclass]
 abstract class Garagiste extends User
 {
-    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
-    private ?string $phoneNumber = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $workingHours = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $logo = null;
-
+    
     public function __construct(
-        string             $name,
-        string             $email,
-        string             $roles,
+        string             $name = '',
+        string             $email = '',
+        ?string            $address = '',
+        string             $roles = '',
         ?string            $password = null,
         ?string            $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string            $phoneNumber = null,
+        ?string            $phone = null,
         ?string            $logo = null,
-        ?string            $workingHours = null
+        ?string            $workingHours = null,
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $logo);
+        parent::__construct(
+            $name,
+            $email,
+            $address,        
+            $roles,
+            $password,
+            $resetToken,
+            $tokenExpiration,
+            $phone,    // goes to User::$phone
+        );
 
-        $this->phoneNumber = $phoneNumber;
         $this->workingHours = $workingHours;
-        $this->logo = $logo;
-    }
-
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?string $phoneNumber): void
-    {
-        $this->phoneNumber = $phoneNumber;
     }
 
     public function getWorkingHours(): ?string
@@ -55,13 +47,17 @@ abstract class Garagiste extends User
         $this->workingHours = $workingHours;
     }
 
-    public function getLogo(): ?string
+
+
+    public function getGarageAddress(): ?string
     {
-        return $this->logo;
+        return $this->garageAddress;
     }
 
-    public function setLogo(?string $logo): void
+    public function setGarageAddress(?string $garageAddress): void
     {
-        $this->logo = $logo;
+        $this->garageAddress = $garageAddress;
     }
+
+
 }

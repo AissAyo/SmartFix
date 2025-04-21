@@ -20,7 +20,11 @@ class ReservationRepository implements ReservationRepositoryInterface
 
     public function getAllEntities(): array
     {
-        return $this->entityManager->getRepository(Reservation::class)->findAll();
+        return $this->entityManager->getRepository(Reservation::class)
+            ->createQueryBuilder('r')
+            ->orderBy('r.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function addEntity($entity): void

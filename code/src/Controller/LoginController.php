@@ -13,10 +13,8 @@ use App\Entity\Client;
 use App\Entity\Garagiste;
 use App\Entity\mechanic;
 use App\Entity\ServiceClient;
-use App\Repository\UserRepository;
 
 use App\Service\UserSessionManager;
-use App\Service\AuthService;
 use App\DTO\LoginDTO;
 use App\Form\LoginType;
 use Psr\Log\LoggerInterface;

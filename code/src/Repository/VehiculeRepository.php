@@ -23,8 +23,9 @@ class VehiculeRepository extends ServiceEntityRepository
 
     public function getAllEntities(): array
     {
-        return $this->findAll();
+        return $this->entityManager->getRepository(vehicule::class)->findAll();
     }
+
 
     public function addEntity(Vehicule $entity): void
     {

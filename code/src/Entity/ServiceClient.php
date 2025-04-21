@@ -17,22 +17,19 @@ class ServiceClient extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
     private Collection $complaints;
 
-
     public function __construct(
         string $name,
         string $email,
         string $roles,
-        string $serviceDetails,
         ?string $password = null,
         ?string $resetToken = null,
         ?\DateTimeInterface $tokenExpiration = null,
-        ?string $phoneNumber = null,
-        ?string $logo = null
+        ?string $phone = null,
+        ?string $photoProfil = null
     ) {
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phoneNumber, $logo);
+        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phone, $photoProfil);
 
         $this->complaints = new ArrayCollection();
-        $this->serviceDetails = $serviceDetails;
     }
 
     public function getServiceDetails(): string
@@ -54,6 +51,4 @@ class ServiceClient extends User
     {
         $this->complaints = $complaints;
     }
-
-
 }

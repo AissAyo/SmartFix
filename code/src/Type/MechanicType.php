@@ -1,138 +1,171 @@
 <?php
-
 namespace App\Type;
 
 use App\Entity\Mechanic;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class MechanicType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('name', TextType::class, [
-                'label' => 'Full Name',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Please enter a name.']),
-                    new Assert\Length([
-                        'min' => 2,
-                        'max' => 50,
-                        'minMessage' => 'Name must be at least {{ limit }} characters long.',
-                        'maxMessage' => 'Name cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'Email Address',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(['message' => 'Please enter an email address.']),
-                    new Assert\Email(['message' => 'Please enter a valid email address.']),
-                ],
-            ])
-            ->add('specialization', ChoiceType::class, [
-                'label' => 'Specialization',
-                'required' => false,
-                'choices' => [
-                    'General Mechanic' => 'general',
-                    'Engine Specialist' => 'engine',
-                    'Electrical Systems' => 'electrical',
-                    'Transmission' => 'transmission',
-                    'Brakes' => 'brakes',
-                    'Suspension' => 'suspension',
-                ],
-                'placeholder' => 'Select a specialization',
-            ])
-            ->add('experienceYears', IntegerType::class, [
-                'label' => 'Years of Experience',
-                'required' => false,
-                'constraints' => [
-                    new Assert\Range([
-                        'min' => 0,
-                        'max' => 50,
-                        'notInRangeMessage' => 'Experience should be between {{ min }} and {{ max }} years.'
-                    ]),
-                ],
-            ])
-            // Replace the certifications field with this:
-            ->add('certifications', TextareaType::class, [
-                'label' => 'Certifications',
-                'required' => false,
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'Enter one certification per line',
-                    'rows' => 3
-                ],
-                'help' => 'Enter one certification per line',
-                'getter' => function (Mechanic $mechanic) {
-                    return implode("\n", $mechanic->getCertifications());
-                },
-                'setter' => function (Mechanic $mechanic, string $certifications) {
-                    $mechanic->setCertifications(
-                        array_filter(
-                            array_map('trim', explode("\n", $certifications)),
-                            function($item) { return !empty($item); }
-                        )
-                    );
-                },
-            ])
-            ->add('phoneNumber', TextType::class, [
-                'label' => 'Phone Number',
-                'required' => false,
-                'constraints' => [
-                    new Assert\Regex([
-                        'pattern' => '/^\+?[0-9]{10,15}$/',
-                        'message' => 'Please enter a valid phone number (e.g., +1234567890).',
-                    ]),
-                ],
-            ])
-            ->add('logoFile', VichFileType::class, [
-                'label' => 'Profile Photo',
-                'required' => false,
-                'allow_delete' => true,
-                'download_uri' => true,
-                'delete_label' => 'Remove current photo',
-                'constraints' => [
-                    new Assert\Image([
-                        'maxSize' => '2M',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif'],
-                        'mimeTypesMessage' => 'Please upload a valid image (JPEG, PNG, or GIF).',
-                    ]),
-                ],
-            ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'required' => !$options['is_edit'],
-                'help' => $options['is_edit'] ? 'Leave blank to keep current password' : null,
-                'constraints' => $options['is_edit'] ? [] : [
-                    new Assert\NotBlank(['message' => 'Please enter a password.']),
-                    new Assert\Length([
-                        'min' => 6,
-                        'minMessage' => 'Password should be at least {{ limit }} characters.',
-                    ]),
-                ],
-            ]);
-    }
+public function buildForm(FormBuilderInterface $builder, array $options): void
+{
+$builder
+->add('name', TextType::class, [
+'label' => 'Full Name',
+'required' => true,
+'constraints' => [
+new Assert\NotBlank(),
+new Assert\Length(['min' => 2, 'max' => 50]),
+],
+])
+->add('email', EmailType::class, [
+'label' => 'Email Address',
+'required' => true,
+'constraints' => [
+new Assert\NotBlank(),
+new Assert\Email(),
+],
+])
+->add('password', PasswordType::class, [
+'label' => 'Password',
+'required' => true,
+'constraints' => [
+new Assert\NotBlank(),
+new Assert\Length(['min' => 6]),
+],
+])
+->add('phone_number', TextType::class, [
+'label' => 'Phone Number',
+'required' => false,
+'constraints' => [
+new Assert\Regex([
+'pattern' => '/^\+?[0-9]{10,15}$/',
+'message' => 'Please enter a valid phone number.',
+]),
+],
+])
+->add('city', ChoiceType::class, [
+'label' => 'City',
+'required' => true,
+'choices' => $this->getCityChoices(),
+'placeholder' => 'Choose a city',
+])
+->add('address', TextareaType::class, [
+'label' => 'Address',
+'required' => true,
+'constraints' => [new Assert\NotBlank()],
+])
+->add('garageAddress', TextareaType::class, [
+'label' => 'Garage Address',
+'required' => true,
+'constraints' => [new Assert\NotBlank()],
+])
+->add('specialization', ChoiceType::class, [
+'label' => 'Specialization',
+'required' => false,
+'choices' => [
+'General Mechanic' => 'general',
+'Engine Specialist' => 'engine',
+'Electrical Systems' => 'electrical',
+'Transmission' => 'transmission',
+'Brakes' => 'brakes',
+'Suspension' => 'suspension',
+],
+'placeholder' => 'Select a specialization',
+])
+->add('experienceYears', IntegerType::class, [
+'label' => 'Years of Experience',
+'required' => false,
+'constraints' => [
+new Assert\Range(['min' => 0, 'max' => 50]),
+],
+])
+->add('certifications', TextType::class, [
+'label' => 'Certifications',
+'required' => false,
+])
+->add('logoFile', VichImageType::class, [
+'label' => 'Logo',
+'required' => false,
+'allow_delete' => true,
+'download_uri' => false,
+])
+->add('photoProfilFile', VichImageType::class, [
+'label' => 'Profile Photo',
+'required' => false,
+'allow_delete' => true,
+'download_uri' => false,
+])
+->add('workingHours', ChoiceType::class, [
+'label' => 'Working Hours',
+'required' => false,
+'placeholder' => 'Select working hours',
+'choices' => [
+'8 AM - 4 PM' => '8-16',
+'9 AM - 5 PM' => '9-17',
+'10 AM - 6 PM' => '10-18',
+],
+]);
+}
 
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Mechanic::class,
-            'is_edit' => false,
-        ]);
+public function configureOptions(OptionsResolver $resolver): void
+{
+$resolver->setDefaults([
+'data_class' => Mechanic::class,
+]);
+}
 
-        $resolver->setAllowedTypes('is_edit', 'bool');
-    }
+private function getCityChoices(): array
+{
+return [
+'Casablanca' => 'casablanca',
+'Rabat' => 'rabat',
+'Fès' => 'fes',
+'Marrakech' => 'marrakech',
+'Tangier' => 'tangier',
+'Agadir' => 'agadir',
+'Meknès' => 'meknes',
+'Oujda' => 'oujda',
+'Tétouan' => 'tetouan',
+'Safi' => 'safi',
+'Mohammedia' => 'mohammedia',
+'El Jadida' => 'el_jadida',
+'Béni Mellal' => 'beni_mellal',
+'Nador' => 'nador',
+'Khouribga' => 'khouribga',
+'Kénitra' => 'kenitra',
+'Laâyoune' => 'laayoune',
+'Errachidia' => 'errachidia',
+'Taroudant' => 'taroudant',
+'Taza' => 'taza',
+'Tinghir' => 'tinghir',
+'Settat' => 'settat',
+'Sidi Kacem' => 'sidi_kacem',
+'El Hoceima' => 'el_hoceima',
+'Berkane' => 'berkane',
+'Khemisset' => 'khemisset',
+'Fkih Ben Salah' => 'fkih_ben_salah',
+'Ouarzazate' => 'ouarzazate',
+'Midelt' => 'midelt',
+'Ifrane' => 'ifrane',
+'Ksar el-Kébir' => 'ksar_el_kebir',
+'Azrou' => 'azrou',
+'Guelmim' => 'guelmim',
+'Al Hoceima' => 'al_hoceima',
+'Sidi Ifni' => 'sidi_ifni',
+'Dakhla' => 'dakhla',
+'M’diq' => 'mdiq',
+'Chefchaouen' => 'chefchaouen',
+'Imzouren' => 'imzouren',
+];
+}
 }

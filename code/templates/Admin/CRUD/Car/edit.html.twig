@@ -1,0 +1,7 @@
+<h1>{{ car is defined ? 'Edit Car' : 'Add New Car' }}</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.brand) }}
+    {{ form_row(form.model) }}
+<button class="btn">{{ car is defined ? 'Update' : 'Create' }}</button>
+{{ form_end(form) }}

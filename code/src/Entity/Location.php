@@ -21,24 +21,24 @@ class Location
     #[ORM\Column(type: 'float')]
     private float $latitude;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $city;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $country;
+
+    #[ORM\Column(type: 'string', length: 20)]
+    private string $postalCode;
+
     #[ORM\OneToOne(targetEntity: Garage::class, mappedBy: 'location')]
     private ?Garage $garage = null;
 
-    #[ORM\OneToOne(targetEntity: CarRental::class, mappedBy: 'location')]
-    private ?CarRental $carRental = null;
+    #[ORM\OneToOne(targetEntity: Client::class, mappedBy: 'location', cascade: ['persist'])]
+    private ?Client $client = null;
 
-    #[ORM\OneToOne(targetEntity: Shop::class, mappedBy: 'location')]
-    private ?Shop $shop = null;
-
-    public function getId(): int
+    public function __construct()
     {
-
-        return $this->Id;
-    }
-
-    public function getAddress(): string
-    {
-        return $this->address;
+        // ... existing code ...
     }
 
     public function setAddress(string $address): self
@@ -76,29 +76,78 @@ class Location
 
     public function setGarage(?Garage $garage): self
     {
+        // Handle the bidirectional relationship
+        if ($this->garage !== null && $this->garage !== $garage) {
+            $oldGarage = $this->garage;
+            $this->garage = null;
+            $oldGarage->setLocation(null);
+        }
+
         $this->garage = $garage;
+
+        if ($garage !== null && $garage->getLocation() !== $this) {
+            $garage->setLocation($this);
+        }
+
         return $this;
     }
 
-    public function getCarRental(): ?CarRental
+    public function getId(): int
     {
-        return $this->carRental;
+        return $this->id;
     }
 
-    public function setCarRental(?CarRental $carRental): self
+    public function getAddress(): string
     {
-        $this->carRental = $carRental;
+        return $this->address;
+    }
+
+    public function getCity(): string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
         return $this;
     }
 
-    public function getShop(): ?Shop
+    public function getCountry(): string
     {
-        return $this->shop;
+        return $this->country;
     }
 
-    public function setShop(?Shop $shop): self
+    public function setCountry(string $country): self
     {
-        $this->shop = $shop;
+        $this->country = $country;
         return $this;
+    }
+
+    public function getPostalCode(): string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
+        return $this;
+    }
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }

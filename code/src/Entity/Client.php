@@ -3,20 +3,17 @@
 namespace App\Entity;
 
 use DateTimeInterface;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use phpDocumentor\Reflection\Types\Boolean;
-
+use DateTimeImmutable;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 #[ORM\Entity]
-#[ORM\Table(name: "clients")]
-#[ORM\InheritanceType("JOINED")]
-#[ORM\DiscriminatorColumn(name: "discr", type: "string")]
-#[ORM\DiscriminatorMap(["client" => Client::class, "verifiedClient" => VerifiedClient::class])]
 class Client extends User
 {
-
     #[ORM\Column(type: "boolean")]
     private bool $verificationStatus = false;
 
@@ -26,7 +23,9 @@ class Client extends User
     #[ORM\Column(type: "integer")]
     private int $loyaltyPoints = 0;
 
-
+    #[ORM\OneToOne(targetEntity: Location::class, cascade: ['persist', 'remove'], inversedBy: 'client')]
+    #[ORM\JoinColumn(nullable: true, unique: false)]
+    private ?Location $location = null;
 
     #[ORM\OneToMany(targetEntity: Review::class, mappedBy: "client")]
     private Collection $reviews;
@@ -43,32 +42,57 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
+    #[Vich\UploadableField(mapping: 'client_photoProfil', fileNameProperty: 'photoProfil')]
+    private ?File $photoProfilFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $photoProfil = null;
 
     public function __construct(
-        string $name,
-        string $email,
-        ?string $roles  = "client",
-        ?string $password = null,
+        string $name = '',
+        string $email = '',
+        ?string $adress = null,
+        string $roles = "CLIENT",
+        string $password = '',
+        string $city = '',
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         bool $verificationStatus = false,
-        ?string $photoProfil = null,
-        ?string $phone=null
+        ?string $phone = null,
+        ?string $photoProfil = null
     ) {
-        // Call the parent constructor (User) to initialize common properties
-        parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration);
+        parent::__construct($name, $email, $roles, $password, $city, $resetToken, $tokenExpiration, $phone, $photoProfil);
 
-        // Initialize the Client-specific properties
-        $this->username = $name; // or adjust if you have a separate username logic.
+        $this->username = $name;
+        $this->setRoles($roles);
         $this->dateInscription = new DateTimeImmutable();
         $this->verificationStatus = $verificationStatus;
-        $this->photoProfil = $photoProfil;
 
-        // Initialize collections
+        // Initialize all collections
         $this->reviews = new ArrayCollection();
         $this->vehicules = new ArrayCollection();
         $this->critiques = new ArrayCollection();
         $this->complaints = new ArrayCollection();
+    }
+
+    public function setRoles(string $roles): User
+    {
+        return parent::setRoles("CLIENT");
+    }
+
+    // Getter and setter for the uploaded file
+    public function getClientphotoProfilFile(): ?File
+    {
+        return $this->ClientphotoProfilFile;
+    }
+
+    public function setClientphotoProfilFile(?File $ClientphotoProfilFile): void
+    {
+        $this->ClientphotoProfilFile = $ClientphotoProfilFile;
+        if ($ClientphotoProfilFile) {
+            // Trigger file upload immediately
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
     public function isVerificationStatus(): bool
@@ -151,6 +175,37 @@ class Client extends User
         $this->username = $username;
     }
 
+    public function getPhotoProfilFile(): ?File
+    {
+        return $this->photoProfilFile;
+    }
 
+    public function setPhotoProfilFile(?File $photoProfilFile): void
+    {
+        $this->photoProfilFile = $photoProfilFile;
+        if ($photoProfilFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getPhotoProfil(): ?string
+    {
+        return $this->photoProfil;
+    }
+
+    public function setPhotoProfil(?string $photoProfil): void
+    {
+        $this->photoProfil = $photoProfil;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
+        return $this;
+    }
 }
-

@@ -391,18 +391,20 @@
 
 
 /* Work Process */
+
 .wptb-work-process-one--inner {
     position: relative;
 }
 @media screen and (min-width: 992px) {
     .wptb-work-process-one--inner::before {
-        content: url('../../public/build/img/blog/1.jpg');
+        content: url('../img/more/indicator-line.png');
         position: absolute;
         top: 25%;
         left: 50%;
         transform: translateX(-50%);
     }
 }
+
 
 /* Awards */
 .wptb-awards-one--inner .wptb-counter1.style1 .wptb-item--inner {
@@ -1220,7 +1222,7 @@
     letter-spacing: -0.24px;
 }
 .wptb-product-list .widget-title::before {
-    content: url(../../public/build/img/more/divider.svg);
+    content: url(../img/more/divider.svg);
 }
 .wptb-product-list .widget-title::after {
     display: none;

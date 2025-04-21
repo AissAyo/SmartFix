@@ -24,44 +24,45 @@ class SeedSellerCommand extends Command
         $this->em = $em;
     }
 
-    protected function configure(): void
-    {
-        $this
-            ->setDescription('Seed the database with fake seller data')
-            ->setHelp('This command allows you to populate the sellers table with fake data...');
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $faker = Factory::create();
 
         $output->writeln('Seeding sellers...');
 
+        $cities = [
+            'Casablanca', 'Rabat', 'Fès', 'Marrakech', 'Tangier', 'Agadir', 'Meknès',
+            'Oujda', 'Tétouan', 'Safi', 'Mohammedia', 'El Jadida', 'Béni Mellal', 'Nador',
+            'Khouribga', 'Kénitra', 'Laâyoune', 'Errachidia', 'Taroudant', 'Taza',
+        ];
+
         for ($i = 0; $i < 100; $i++) {
             // Generate Fake Data
             $name = $faker->name;
             $email = $faker->unique()->safeEmail;
             $contactInfo = $faker->address;
-            $roles = "Seller"; // Default role
+            $roles = ["Seller"]; // Default role
             $password = password_hash('password123', PASSWORD_BCRYPT); // Default password
             $resetToken = null;
             $tokenExpiration = null;
             $phoneNumber = $faker->phoneNumber;
             $logo = $faker->imageUrl(200, 200, 'business'); // Generates a fake logo URL
             $workingHours = $faker->randomElement(['08:00-17:00', '09:00-18:00', '10:00-19:00']);
+            $city = $faker->randomElement($cities);
 
-            // Create Seller object with updated constructor arguments
+            // Create Seller object (inherits from User)
             $seller = new Seller(
                 $name,
                 $email,
-                $contactInfo,
-                $roles,
+                $city,
+                'Seller', // Role set as 'Seller'
                 $password,
                 $resetToken,
                 $tokenExpiration,
                 $phoneNumber,
                 $logo,
-                $workingHours
+                $workingHours,
+                $city
             );
 
             // Persist the seller entity

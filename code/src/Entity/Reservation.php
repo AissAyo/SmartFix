@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\Types\Integer;
 
 #[ORM\Entity]
 #[ORM\Table(name: "reservations")]
@@ -18,36 +19,30 @@ class Reservation
     #[ORM\Column(type: "datetime")]
     private \DateTimeInterface $reservationDate;
 
-    #[ORM\Column(type: "integer")]
-    private int $clientId;
-
     #[ORM\Column(type: "string", length: 20)]
     private string $status;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private string $estimatedPrice;
 
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations", cascade: ['persist'])]
+    private Vehicule $vehicle;
+
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToMany(targetEntity: GarageService::class, mappedBy: 'reservations')]
-    private Collection $garageServices;
-
-    #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')] 
-    private Collection $repairParts;
-
-    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: 'reservations')]
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private Vehicule $vehicle;
+    private Service $service;
+
+    #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')]
+    private Collection $repairParts;
 
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
 
-    
-
-    public function __construct() 
+    public function __construct()
     {
-        $this->garageServices = new ArrayCollection();
         $this->repairParts = new ArrayCollection();
     }
 
@@ -64,17 +59,6 @@ class Reservation
     public function setReservationDate(\DateTimeInterface $reservationDate): self
     {
         $this->reservationDate = $reservationDate;
-        return $this;
-    }
-
-    public function getClientId(): int
-    {
-        return $this->clientId;
-    }
-
-    public function setClientId(int $clientId): self
-    {
-        $this->clientId = $clientId;
         return $this;
     }
 
@@ -111,26 +95,6 @@ class Reservation
         return $this;
     }
 
-    public function getGarageServices(): Collection
-    {
-        return $this->garageServices;
-    }
-
-    public function addGarageService(GarageService $garageService): self
-    {
-        if (!$this->garageServices->contains($garageService)) {
-            $this->garageServices[] = $garageService;
-        }
-
-        return $this;
-    }
-
-    public function removeGarageService(GarageService $garageService): self
-    {
-        $this->garageServices->removeElement($garageService);
-        return $this;
-    }
-
     public function getRepairParts(): Collection
     {
         return $this->repairParts;
@@ -139,7 +103,7 @@ class Reservation
     public function addRepairPart(RepairPart $repairPart): self
     {
         if (!$this->repairParts->contains($repairPart)) {
-            $this->repairParts[] = $repairPart;
+            $this->repairParts->add($repairPart);
             $repairPart->setReservation($this);
         }
 
@@ -158,12 +122,12 @@ class Reservation
         return $this;
     }
 
-    public function getVehicle(): Vehicle
+    public function getVehicle(): Vehicule
     {
         return $this->vehicle;
     }
 
-    public function setVehicle(Vehicle $vehicle): self
+    public function setVehicle(Vehicule $vehicle): self
     {
         $this->vehicle = $vehicle;
         return $this;
@@ -180,14 +144,14 @@ class Reservation
         return $this;
     }
 
-    public function getClient(): Client
+    public function getService(): Service
     {
-        return $this->client;
+        return $this->service;
     }
 
-    public function setClient(Client $client): self
+    public function setService(Service $service): self
     {
-        $this->client = $client;
+        $this->service = $service;
         return $this;
     }
 }

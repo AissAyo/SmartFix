@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Entity;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -21,31 +22,22 @@ abstract class User implements PasswordAuthenticatedUserInterface
     private ?string $name = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $password = null;
+    private ?string $password;
 
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private string $email;
 
 
-    // Getter et Setter pour email
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
 
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $photoProfil = null;
+    private ?string $city;
+
 
     #[ORM\Column(type: "string", nullable: true)]
-    private string $roles;
+    private ?string $roles=null;
+
     #[ORM\Column(type: "string", length: 20, nullable: true)]
     private ?string $phone = null;
 
@@ -55,24 +47,32 @@ abstract class User implements PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $tokenExpiration = null;
 
+
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $address;
+
     public function __construct(
         string $name = '',
         string $email = '',
-        string $roles = 'ROLE_USER',
+        ?string $address = null,
+        string $roles = '',
         ?string $password = null,
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
-        ?string $photoProfil = null,
-        ?String $phone=null
+        ?string $phone = null,
     ) {
         $this->name = $name;
-        $this->email = $email;
+        $this->email = $email;  // Ensure email is initialized
         $this->roles = $roles;
         $this->password = $password;
         $this->resetToken = $resetToken;
         $this->tokenExpiration = $tokenExpiration;
-        $this->photoProfil=$photoProfil;
+        $this->phone = $phone;
+        $this->address = $address;
     }
+
+
+
 
     public function getId(): ?int
     {
@@ -102,6 +102,10 @@ abstract class User implements PasswordAuthenticatedUserInterface
     }
 
 
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
 
     public function getResetToken(): ?string
     {
@@ -114,10 +118,8 @@ abstract class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles(): string
-    {
-        return $this->roles;
-    }
+
+
     public function setRoles(string $roles): self
     {
         $this->roles = $roles;
@@ -135,29 +137,43 @@ abstract class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-
-
-
-    public function getphotoProfil(): ?string
-    {
-        return $this->photoProfil;
-    }
-
-    public function setphotoProfil(?string $photoProfil): void
-    {
-        $this->photoProfil = $photoProfil;
-    }
-
-    
     public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    public function setPhone(string $phone): void
+    public function setPhone(?string $phone): void
     {
         $this->phone = $phone;
     }
+
+
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): void
+    {
+        $this->city = $city;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?string $address): void
+    {
+        $this->address = $address;
+    }
+
+    public function getRoles(): ?string
+    {
+        return $this->roles;
+    }
+
+
 
 }

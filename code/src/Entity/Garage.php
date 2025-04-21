@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
 class Garage
@@ -17,6 +19,9 @@ class Garage
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $emailGarage;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $GarageAddress;
 
 
     #[ORM\Column(type: 'float')]
@@ -31,16 +36,28 @@ class Garage
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $workingHours = null;
 
-    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic;
-
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'garage')]
-    private Collection $garageServices;
+    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
+    private ?string $phoneNumber = null;
 
 
-    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'logo')]
+    private ?File $LogoFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $LogoProfil = null;
+
+    #[ORM\OneToMany(targetEntity: CategoryService::class, mappedBy: 'garage')]
+    private Collection $categoryServices;
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Mechanic $mechanic = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $City;
+
+
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
 
@@ -61,7 +78,6 @@ class Garage
 
     public function __construct()
     {
-        $this->mechanics = new ArrayCollection();
         $this->categoryServices = new ArrayCollection();
         $this->garageServices = new ArrayCollection();
         $this->service = new ArrayCollection();
@@ -89,6 +105,16 @@ class Garage
         $this->emailGarage = $emailGarage;
     }
 
+    public function getGarageAddress(): string
+    {
+        return $this->GarageAddress;
+    }
+
+    public function setGarageAddress(string $GarageAddress): void
+    {
+        $this->GarageAddress = $GarageAddress;
+    }
+
     public function getRating(): float
     {
         return $this->rating;
@@ -99,6 +125,7 @@ class Garage
         $this->rating = $rating;
     }
 
+    // Getter and Setter for $status
     public function getStatus(): string
     {
         return $this->status;
@@ -109,6 +136,7 @@ class Garage
         $this->status = $status;
     }
 
+    // Getter and Setter for $name
     public function getName(): string
     {
         return $this->name;
@@ -139,93 +167,91 @@ class Garage
         $this->mechanic = $mechanic;
     }
 
-    public function getGarageServices(): Collection
+    public function getCategoryServices(): Collection
     {
-        return $this->garageServices;
+        return $this->categoryServices;
     }
 
-    public function setGarageServices(Collection $garageServices): void
-    {
-        $this->garageServices = $garageServices;
-    }
 
     public function getLocation(): ?Location
     {
         return $this->location;
     }
 
-    public function setLocation(?Location $location): void
+    public function setLocation(?Location $location): self
     {
+        // Handle the bidirectional relationship
+        if ($this->location !== null && $this->location !== $location) {
+            $oldLocation = $this->location;
+            $this->location = null;
+            $oldLocation->setGarage(null);
+        }
+
         $this->location = $location;
-    }
 
-    /**
-     * @return Collection<int, GarageService>
-     */
-
-
-    public function addGarageService(GarageService $garageService): static
-    {
-        if (!$this->garageServices->contains($garageService)) {
-            $this->garageServices->add($garageService);
-            $garageService->setIdGarage($this);
+        if ($location !== null && $location->getGarage() !== $this) {
+            $location->setGarage($this);
         }
 
         return $this;
     }
 
-    public function removeGarageService(GarageService $garageService): static
+    public function getCity(): ?string
     {
-        if ($this->garageServices->removeElement($garageService)) {
+        return $this->City;
+    }
+    public function setCity(?string $City): void
+    {
+        $this->City = $City;
+    }
+
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getLogoProfil(): ?string
+    {
+        return $this->LogoProfil;
+    }
+
+    public function setLogoProfil(?string $LogoProfil): void
+    {
+        $this->LogoProfil = $LogoProfil;
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->LogoFile;
+    }
+
+    public function setLogoFile(?File $LogoFile): void
+    {
+        $this->LogoFile = $LogoFile;
+    }
+
+    public function addCategoryService(CategoryService $categoryService): self
+    {
+        if (!$this->categoryServices->contains($categoryService)) {
+            $this->categoryServices->add($categoryService);
+            $categoryService->setGarage($this);
+        }
+        return $this;
+    }
+
+    public function removeCategoryService(CategoryService $categoryService): self
+    {
+        if ($this->categoryServices->removeElement($categoryService)) {
             // set the owning side to null (unless already changed)
-            if ($garageService->getIdGarage() === $this) {
-                $garageService->setIdGarage(null);
+            if ($categoryService->getGarage() === $this) {
+                $categoryService->setGarage(null);
             }
         }
-
         return $this;
     }
-
-    /**
-     * @return Collection<int, GarageService>
-     */
-    public function getService(): Collection
-    {
-        return $this->service;
-    }
-
-    public function addService(GarageService $service): static
-    {
-        if (!$this->service->contains($service)) {
-            $this->service->add($service);
-            $service->setIdGarage($this);
-        }
-
-        return $this;
-    }
-
-    public function removeService(GarageService $service): static
-    {
-        if ($this->service->removeElement($service)) {
-            // set the owning side to null (unless already changed)
-            if ($service->getIdGarage() === $this) {
-                $service->setIdGarage(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(?string $logo): static
-    {
-        $this->logo = $logo;
-
-        return $this;
-    }
-
 }
