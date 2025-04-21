@@ -24,7 +24,7 @@ class ReservationController extends AbstractController
             $page,
             10
         );
-        return $this->render('Admin/CRUD/reservation/index.html.twig', [
+        return $this->render('Admin/CRUD/reservation/MechanicIndexGarage.html.twig', [
             'pagination' => $pagination
         ]);
     }
@@ -44,7 +44,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('Admin/CRUD/reservation/new.html.twig', [
+        return $this->render('Admin/CRUD/reservation/MechanicAddGarage.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
         ]);
@@ -69,7 +69,7 @@ class ReservationController extends AbstractController
             return $this->redirectToRoute('reservation_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('Admin/CRUD/reservation/edit.html.twig', [
+        return $this->render('Admin/CRUD/reservation/MechanicEditGarage.html.twig', [
             'reservation' => $reservation,
             'form' => $form,
         ]);

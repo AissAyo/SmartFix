@@ -18,7 +18,7 @@ class ServiceController extends AbstractController
     #[Route('/', name: 'service_index', methods: ['GET'])]
     public function index(ServiceRepository $serviceRepository): Response
     {
-        return $this->render('Admin/CRUD/service/index.html.twig', [
+        return $this->render('Admin/CRUD/service/MechanicIndexGarage.html.twig', [
             'services' => $serviceRepository->getAllEntities(),
         ]);
     }
@@ -38,7 +38,7 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('service_index');
         }
 
-        return $this->render('Admin/CRUD/service/new.html.twig', [
+        return $this->render('Admin/CRUD/service/MechanicAddGarage.html.twig', [
             'form' => $form->createView(),
             'service' => $service,
         ]);
@@ -64,7 +64,7 @@ class ServiceController extends AbstractController
             return $this->redirectToRoute('service_index');
         }
 
-        return $this->render('Admin/CRUD/service/edit.html.twig', [
+        return $this->render('Admin/CRUD/service/MechanicEditGarage.html.twig', [
             'form' => $form->createView(),
             'service' => $service,
         ]);

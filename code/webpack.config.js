@@ -1,6 +1,7 @@
 const Encore = require('@symfony/webpack-encore');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const webpack = require('webpack');
 
 Encore
     // Output and public paths
@@ -26,6 +27,14 @@ Encore
 
     // Enable PostCSS
     .enablePostCssLoader()
+
+    // Configure jQuery
+    .addPlugin(new webpack.ProvidePlugin({
+        $: 'jquery',
+        jQuery: 'jquery',
+        'window.jQuery': 'jquery',
+        'window.$': 'jquery',
+    }))
 
     // Asset handling for images and fonts (no hashing)
 

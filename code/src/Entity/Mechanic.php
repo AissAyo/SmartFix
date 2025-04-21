@@ -32,7 +32,6 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photoProfil = null;
 
-
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $certifications ;
 
@@ -41,12 +40,6 @@ class Mechanic extends Garagiste
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'mechanicSender')]
-    private Collection $sentMessages;
-
-    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'mechanic')]
-    private Collection $conversations;
 
     public function __construct(
         string $name = '',
@@ -77,8 +70,6 @@ class Mechanic extends Garagiste
         $this->experienceYears = $experienceYears;
         $this->certifications = $certifications;
         $this->photoProfil = $photoProfil ?? "avatar5-67f2b22f9551d.png";
-        $this->sentMessages = new ArrayCollection();
-        $this->conversations = new ArrayCollection();
     }
 
     public function getGarages(): Collection
@@ -116,13 +107,10 @@ class Mechanic extends Garagiste
         return $this->certifications ; // Return empty string if null
     }
 
-
-
     public function setCertifications(string $certifications): void
     {
         $this->certifications = $certifications;
     }
-
 
     public function getMechanicphotoProfilFile(): ?File
     {
@@ -182,53 +170,5 @@ class Mechanic extends Garagiste
     public function setLogo(?string $logo): void
     {
         $this->logo = $logo;
-    }
-
-    public function getSentMessages(): Collection
-    {
-        return $this->sentMessages;
-    }
-
-    public function addSentMessage(Message $message): self
-    {
-        if (!$this->sentMessages->contains($message)) {
-            $this->sentMessages->add($message);
-            $message->setMechanicSender($this);
-        }
-        return $this;
-    }
-
-    public function removeSentMessage(Message $message): self
-    {
-        if ($this->sentMessages->removeElement($message)) {
-            if ($message->getMechanicSender() === $this) {
-                $message->setMechanicSender(null);
-            }
-        }
-        return $this;
-    }
-
-    public function getConversations(): Collection
-    {
-        return $this->conversations;
-    }
-
-    public function addConversation(Conversation $conversation): self
-    {
-        if (!$this->conversations->contains($conversation)) {
-            $this->conversations->add($conversation);
-            $conversation->setMechanic($this);
-        }
-        return $this;
-    }
-
-    public function removeConversation(Conversation $conversation): self
-    {
-        if ($this->conversations->removeElement($conversation)) {
-            if ($conversation->getMechanic() === $this) {
-                $conversation->setMechanic(null);
-            }
-        }
-        return $this;
     }
 }

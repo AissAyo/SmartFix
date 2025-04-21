@@ -29,7 +29,7 @@ class CarController extends AbstractController
 
 
 
-        return $this->render('Admin/CRUD/Car/index.html.twig', [
+        return $this->render('Admin/CRUD/Car/MechanicIndexGarage.html.twig', [
             'pagination' => $pagination,
         ]);
     }
@@ -47,7 +47,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('admin_cars_index');
         }
 
-        return $this->render('Admin/CRUD/Car/new.html.twig', [
+        return $this->render('Admin/CRUD/Car/MechanicAddGarage.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -64,7 +64,7 @@ class CarController extends AbstractController
             return $this->redirectToRoute('admin_cars_index');
         }
 
-        return $this->render('Admin/CRUD/Car/edit.html.twig', [
+        return $this->render('Admin/CRUD/Car/MechanicEditGarage.html.twig', [
             'form' => $form->createView(),
             'car' => $car,
         ]);

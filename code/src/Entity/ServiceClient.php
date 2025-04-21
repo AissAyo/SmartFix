@@ -17,10 +17,6 @@ class ServiceClient extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "serviceClient")]
     private Collection $complaints;
 
-    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'serviceClient')]
-    private Collection $conversations;
-
-
     public function __construct(
         string $name,
         string $email,
@@ -34,7 +30,6 @@ class ServiceClient extends User
         parent::__construct($name, $email, $roles, $password, $resetToken, $tokenExpiration, $phone, $photoProfil);
 
         $this->complaints = new ArrayCollection();
-        $this->conversations = new ArrayCollection();
     }
 
     public function getServiceDetails(): string
@@ -55,29 +50,5 @@ class ServiceClient extends User
     public function setComplaints(Collection $complaints): void
     {
         $this->complaints = $complaints;
-    }
-
-    public function getConversations(): Collection
-    {
-        return $this->conversations;
-    }
-
-    public function addConversation(Conversation $conversation): self
-    {
-        if (!$this->conversations->contains($conversation)) {
-            $this->conversations->add($conversation);
-            $conversation->setServiceClient($this);
-        }
-        return $this;
-    }
-
-    public function removeConversation(Conversation $conversation): self
-    {
-        if ($this->conversations->removeElement($conversation)) {
-            if ($conversation->getServiceClient() === $this) {
-                $conversation->setServiceClient(null);
-            }
-        }
-        return $this;
     }
 }

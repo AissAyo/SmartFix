@@ -137,7 +137,7 @@
             ]);
 
             // Render the chart in the view
-            return $this->render('index.html.twig', [
+            return $this->render('MechanicIndexGarage.html.twig', [
                 'chartc' => $chartc,
             ]);
         }
@@ -181,7 +181,7 @@
             ]);
 
             // Render the chart in the view
-            return $this->render('index.html.twig', [
+            return $this->render('MechanicIndexGarage.html.twig', [
                 'chart' => $chart,
             ]);
         }

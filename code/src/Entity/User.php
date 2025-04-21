@@ -26,6 +26,8 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $email;
 
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $city;
     
 
     #[ORM\Column(type: "string", nullable: true)]

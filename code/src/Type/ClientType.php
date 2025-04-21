@@ -83,7 +83,7 @@ class ClientType extends AbstractType
                     'placeholder' => 'Casablanca'
                 ]
             ])
-            ->add('profileImage', FileType::class, [
+            ->add('photoProfilFile', FileType::class, [
                 'label' => 'Profile Picture (optional)',
                 'mapped' => false,
                 'required' => false,
