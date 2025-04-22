@@ -48,14 +48,14 @@
             margin-bottom: 5px;
         }
 
-        .message.client {
+        .message.sent {
             background-color: #007bff;
             color: white;
             align-self: flex-end;
             border-bottom-right-radius: 5px;
         }
 
-        .message.mechanic {
+        .message.received {
             background-color: #e9ecef;
             color: #212529;
             align-self: flex-start;
@@ -67,6 +67,14 @@
             opacity: 0.7;
             margin-top: 4px;
             text-align: right;
+        }
+
+        .message.sent .message-time {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .message.received .message-time {
+            color: rgba(0, 0, 0, 0.7);
         }
 
         .chat-form {
@@ -121,7 +129,7 @@
         </div>
         <div id="chatContainer" class="chat-container">
             {% for message in messages %}
-                <div class="message {% if message.senderType == 'client' %}client{% else %}mechanic{% endif %}">
+                <div class="message {% if message.senderType == 'mechanic' %}received{% else %}sent{% endif %}">
                     {{ message.content }}
                     <div class="message-time">{{ message.sentAt|date('H:i') }}</div>
                 </div>
@@ -150,13 +158,27 @@
             }
 
             function appendMessage(message) {
-                console.log('Appending message:', message);
+                console.log('Raw message data:', message);
+                console.log('Sender type:', message.senderType);
+                console.log('Current user is client:', true);
+                
                 const messageElement = document.createElement('div');
-                messageElement.className = `message ${message.senderType}`;
-                messageElement.innerHTML = `
-                    ${message.content}
-                    <div class="message-time">${new Date(message.sentAt).toLocaleTimeString()}</div>
-                `;
+                // For client view, messages from client are sent (blue), from mechanic are received (gray)
+                const isSentMessage = message.senderType === 'client';
+                console.log('Is sent message (client view):', isSentMessage);
+                
+                messageElement.className = `message ${isSentMessage ? 'sent' : 'received'}`;
+                console.log('Applied class:', messageElement.className);
+                
+                const contentElement = document.createElement('div');
+                contentElement.textContent = message.content;
+                messageElement.appendChild(contentElement);
+                
+                const timeElement = document.createElement('div');
+                timeElement.className = 'message-time';
+                timeElement.textContent = new Date(message.sentAt).toLocaleTimeString();
+                messageElement.appendChild(timeElement);
+                
                 chatContainer.appendChild(messageElement);
                 scrollToBottom();
             }
@@ -188,8 +210,10 @@
                         const data = JSON.parse(event.data);
                         console.log('Parsed Mercure update:', data);
                         
-                        if (data.type === 'new_message' && data.message) {
+                        if (data.type === 'message' && data.message) {
                             console.log('Processing new message:', data.message);
+                            console.log('Message sender type:', data.message.senderType);
+                            console.log('Message sender:', data.message.sender);
                             appendMessage(data.message);
                         } else if (data.type === 'mechanic_joined') {
                             console.log('Mechanic joined event received');
@@ -220,37 +244,27 @@
             chatForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const content = messageInput.value.trim();
-                
                 if (!content) return;
 
                 try {
-                    console.log('Sending message:', content);
-                    const response = await fetch(`/chat/send/${mechanicId}`, {
+                    const response = await fetch('/chat/client/send/' + mechanicId, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ content: content })
+                        body: JSON.stringify({ content })
                     });
-                    
+
+                    if (!response.ok) {
+                        throw new Error('Failed to send message');
+                    }
+
                     const data = await response.json();
                     console.log('Send message response:', data);
-                    
-                    if (response.ok) {
-                        messageInput.value = '';
-                    } else {
-                        console.error('Error sending message:', data.error);
-                        chatStatus.textContent = 'Failed to send message';
-                        setTimeout(() => {
-                            chatStatus.textContent = '';
-                        }, 3000);
-                    }
+                    messageInput.value = '';
                 } catch (error) {
                     console.error('Error sending message:', error);
-                    chatStatus.textContent = 'Failed to send message';
-                    setTimeout(() => {
-                        chatStatus.textContent = '';
-                    }, 3000);
+                    alert('Failed to send message. Please try again.');
                 }
             });
 

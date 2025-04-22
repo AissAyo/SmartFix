@@ -36,7 +36,7 @@ class TestController extends AbstractController
             ],
         ]);
     $var='ayoub';
-        return $this->render('index.html.twig', [
+        return $this->render('MechanicIndexGarage.html.twig', [
             'chart' => $chart,
             'var' => $var,
         ]);

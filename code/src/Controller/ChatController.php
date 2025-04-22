@@ -162,7 +162,15 @@ class ChatController extends AbstractController
     public function send(Request $request, Mechanic $mechanic): Response
     {
         try {
-            $data = json_decode($request->getContent(), true);
+            $content = $request->getContent();
+            error_log('Raw request content: ' . $content);
+            
+            $data = json_decode($content, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                error_log('JSON decode error: ' . json_last_error_msg());
+                return $this->json(['error' => 'Invalid JSON: ' . json_last_error_msg()], 400);
+            }
+            
             if (empty($data['content'])) {
                 return $this->json(['error' => 'Message content cannot be empty'], 400);
             }
@@ -185,6 +193,7 @@ class ChatController extends AbstractController
             $message->setChat($chat);
             $message->setClientSender($client);
             $message->setSentAt(new \DateTimeImmutable());
+            $message->setSenderType('client'); // Explicitly set sender type
 
             $this->entityManager->persist($message);
             $this->entityManager->flush();
@@ -210,8 +219,9 @@ class ChatController extends AbstractController
             try {
                 $this->hub->publish($update);
             } catch (\Exception $e) {
-                // Log the error but don't fail the request
                 error_log('Mercure publish error: ' . $e->getMessage());
+                error_log('Stack trace: ' . $e->getTraceAsString());
+                // Don't fail the request if Mercure publishing fails
             }
 
             return $this->json([
@@ -336,7 +346,8 @@ class ChatController extends AbstractController
             $message = new Message();
             $message->setContent($data['content']);
             $message->setChat($chat);
-            $message->setMechanicSender($mechanic);
+            $message->setMechanicSender($mechanic); // This will set senderType to 'mechanic'
+            $message->setClientSender(null); // Ensure clientSender is null
             $message->setSentAt(new \DateTimeImmutable());
 
             $this->entityManager->persist($message);
@@ -355,6 +366,84 @@ class ChatController extends AbstractController
                         'sender' => [
                             'id' => $mechanic->getId(),
                             'name' => $mechanic->getName()
+                        ]
+                    ]
+                ])
+            );
+
+            $this->hub->publish($update);
+
+            return $this->json([
+                'status' => 'success',
+                'message' => [
+                    'id' => $message->getId(),
+                    'content' => $message->getContent(),
+                    'sentAt' => $message->getSentAt()->format('Y-m-d H:i:s'),
+                    'senderType' => $message->getSenderType()
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Failed to send message: ' . $e->getMessage()], 500);
+        }
+    }
+
+    #[Route('/client/send/{mechanic}', name: 'app_chat_client_send', methods: ['POST'])]
+    public function clientSend(Request $request, Mechanic $mechanic): JsonResponse
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+            if (empty($data['content'])) {
+                return $this->json(['error' => 'Message content cannot be empty'], 400);
+            }
+
+            // For testing, get or create a client
+            /** @var Client $client */
+            $client = $this->getUser();
+            if (!$client) {
+                $client = $this->entityManager->getRepository(Client::class)->find(5);
+                if (!$client) {
+                    $client = new Client();
+                    $client->setName('Test Client');
+                    $client->setEmail('test.client@example.com');
+                    $client->setPassword('test123');
+                    $this->entityManager->persist($client);
+                    $this->entityManager->flush();
+                }
+            }
+
+            // Get or create chat
+            $chat = $this->chatRepository->findOneBy(['client' => $client, 'mechanic' => $mechanic]);
+            if (!$chat) {
+                $chat = new Chat();
+                $chat->setClient($client);
+                $chat->setMechanic($mechanic);
+                $this->entityManager->persist($chat);
+            }
+
+            // Create message
+            $message = new Message();
+            $message->setContent($data['content']);
+            $message->setChat($chat);
+            $message->setClientSender($client); // This will set senderType to 'client'
+            $message->setMechanicSender(null); // Ensure mechanicSender is null
+            $message->setSentAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($message);
+            $this->entityManager->flush();
+
+            // Publish to Mercure
+            $update = new Update(
+                'chat/' . $client->getId() . '/' . $mechanic->getId(),
+                json_encode([
+                    'type' => 'message',
+                    'message' => [
+                        'id' => $message->getId(),
+                        'content' => $message->getContent(),
+                        'sentAt' => $message->getSentAt()->format('Y-m-d H:i:s'),
+                        'senderType' => $message->getSenderType(),
+                        'sender' => [
+                            'id' => $client->getId(),
+                            'name' => $client->getName()
                         ]
                     ]
                 ])

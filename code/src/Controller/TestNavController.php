@@ -11,7 +11,7 @@ final class TestNavController extends AbstractController
     #[Route('/testnav', name: 'app_test_nav')]
     public function index(): Response
     {
-        return $this->render('test_nav/index.html.twig', [
+        return $this->render('test_nav/MechanicIndexGarage.html.twig', [
             'controller_name' => 'TestNavController',
         ]);
     }
