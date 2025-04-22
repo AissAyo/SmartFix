@@ -102,6 +102,7 @@ class ServiceController extends AbstractController
     
         // Cas 1 : Seulement véhicule sélectionné → code existant à NE PAS TOUCHER
         if ($vehicleId) {
+
             $vehicule = $vehiculeRepository->find($vehicleId);
             if ($vehicule) {
                 $garageServices = $garageServiceRepository->findByVehicleWithPagination($page, $itemsPerPage, $vehicule);

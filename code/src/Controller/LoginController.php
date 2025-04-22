@@ -22,6 +22,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtilsInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use App\Repository\UserRepository;
+use App\Service\AuthService;
 
 class LoginController extends AbstractController
 {

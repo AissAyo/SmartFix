@@ -27,9 +27,6 @@ services:
       - ./code:/var/www/html:cached
       - ./infra/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./infra/php/config/php.ini:/usr/local/etc/php/php.ini
-    ports:
-      - "8000:8000"
-    command: bash -c "npm install && npm run dev && php-fpm"
     depends_on:
       - mysql
     networks:
@@ -62,22 +59,9 @@ services:
     volumes:
       - db_admin_data:/var/www/html
 
-  python:
-    image: fastapi-service:latest
-    build:
-      context: ./infra/
-      dockerfile: ./python/Dockerfile
-    ports:
-      - "8001:8000"
-    volumes:
-      - ./python_service:/app
-    networks:
-      - symfony
-
 volumes:
   db_admin_data:
   mysql:
-
 networks:
   symfony:
     name: symfony
