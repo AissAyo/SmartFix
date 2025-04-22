@@ -54,10 +54,11 @@ class Mechanic extends Garagiste
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string $phone = null,
-        ?string $photoProfil = "avatar5-67f2b22f9551d.png",
+        ?string $photoProfil = "avatar5.png",
         ?string $specialization = null,
         ?int $experienceYears = null,
-        ?string $certifications = ''
+        ?string $certifications = '',
+        ?string $city = null,
     ) {
         parent::__construct(
             $name, 
@@ -67,15 +68,17 @@ class Mechanic extends Garagiste
             $password, 
             $resetToken, 
             $tokenExpiration, 
-            $phone
+            $phone,
+            $city
         );
         $this->garages = new ArrayCollection();
         $this->specialization = $specialization;
         $this->experienceYears = $experienceYears;
         $this->certifications = $certifications;
-        $this->photoProfil = $photoProfil ?? "avatar5-67f2b22f9551d.png";
+        $this->photoProfil = $photoProfil ?? "avatar5.png";
         $this->sentMessages = new ArrayCollection();
         $this->conversations = new ArrayCollection();
+        $this->city = $city;
     }
 
     public function getGarages(): Collection

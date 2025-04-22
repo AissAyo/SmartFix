@@ -22,6 +22,7 @@ abstract class Garagiste extends User
         ?string            $phone = null,
         ?string            $logo = null,
         ?string            $workingHours = null,
+        ?string            $city = null,
     ) {
         parent::__construct(
             $name,
@@ -31,10 +32,12 @@ abstract class Garagiste extends User
             $password,
             $resetToken,
             $tokenExpiration,
-            $phone,    // goes to User::$phone
+            $phone,
+            $city
         );
 
         $this->workingHours = $workingHours;
+        $this->city = $city;
     }
 
     public function getWorkingHours(): ?string

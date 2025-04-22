@@ -65,4 +65,9 @@ class MechanicRepository extends ServiceEntityRepository implements MechanicRepo
             ->getQuery()
             ->getOneOrNullResult();
     }
+//    public function findCityByMechanicId(int $mechanicId): ?Mechanic
+        public function getmecha()
+        {
+
+        }
 }

@@ -45,7 +45,24 @@ class SeedClientCommand extends Command
         $faker = Factory::create();
         $count = $input->getOption('count');
         $skipExisting = $input->getOption('skip-existing');
-
+        $cities= [
+            'Casablanca', 'Rabat', 'Marrakech', 'Fes', 'Tangier',
+            'Agadir', 'Meknes', 'Oujda', 'Kenitra', 'Tetouan',
+            'Safi', 'El Jadida', 'Nador', 'Beni Mellal', 'Khouribga',
+            'Sidi Kacem', 'Laayoune', 'Dakhla', 'Errachidia', 'Taroudant',
+            'Inezgane', 'Chefchaouen', 'Ksar el-Kebir', 'Berkane', 'Taza',
+            'Midelt', 'Settat', 'Azilal', 'Ouarzazate', 'Mohammedia',
+            'Larache', 'Tinghir', 'Al Hoceima', 'Moulay Yacoub', 'Messaoud',
+            'Sidi Ifni', 'Skhirat', 'Tiznit', 'Jorf El Melha', 'El Aaiún',
+            'Boujdour', 'Tata', 'Fkih Ben Salah', 'Khemisset', 'Tiznit',
+            'Sidi Slimane', 'Tiflet', 'Fquih Ben Salah', 'Erfoud', 'Oulad Teima',
+            'Souk Sebt', 'Lala Chafia', 'Moulay Idriss', 'Sefrou', 'Azrou',
+            'Imilchil', 'Algeria', 'Boudnib', 'Bouskoura', 'Rissani', 'Meknès',
+            'Essaouira', 'Oulad Ziane', 'Ait Ourir', 'Ait Melloul', 'Ben Ahmed',
+            'Boudouaou', 'Sidi Moumen', 'Zaouiat Ahansal', 'Boujniba', 'Dcheira',
+            'Berkane', 'Khouribga', 'Tiflet', 'Taza', 'Oued Zem', 'Essaouira'
+        ];
+        $city = $cities[array_rand($cities)];
         $io->title('Seeding clients...');
 
         // Check if clients already exist
@@ -62,10 +79,10 @@ class SeedClientCommand extends Command
         // Get available locations that are not already assigned to clients
         $qb = $this->em->createQueryBuilder();
         $qb->select('l')
-           ->from(Location::class, 'l')
-           ->leftJoin('l.client', 'c')
-           ->where('c.id IS NULL');
-        
+            ->from(Location::class, 'l')
+            ->leftJoin('l.client', 'c')
+            ->where('c.id IS NULL');
+
         $availableLocations = $qb->getQuery()->getResult();
 
         if (empty($availableLocations)) {
@@ -77,7 +94,7 @@ class SeedClientCommand extends Command
         shuffle($availableLocations);
 
         if (count($availableLocations) < $count) {
-            $io->warning(sprintf('Only %d locations available. Will create %d clients instead of %d.', 
+            $io->warning(sprintf('Only %d locations available. Will create %d clients instead of %d.',
                 count($availableLocations), count($availableLocations), $count));
             $count = count($availableLocations);
         }
@@ -88,10 +105,10 @@ class SeedClientCommand extends Command
         $batchSize = 100;
         $totalBatches = ceil($count / $batchSize);
         $locationIndex = 0;
-        
+
         for ($batch = 0; $batch < $totalBatches; $batch++) {
             $currentBatchSize = min($batchSize, $count - ($batch * $batchSize));
-            
+
             for ($i = 0; $i < $currentBatchSize; $i++) {
                 if ($locationIndex >= count($availableLocations)) {
                     $io->warning('Ran out of available locations. Stopping client creation.');
@@ -99,34 +116,36 @@ class SeedClientCommand extends Command
                 }
 
                 $client = new Client();
-                
+
                 // Set basic client information
                 $client->setName($faker->name());
                 $client->setEmail($faker->unique()->safeEmail());
                 $client->setPhone($faker->phoneNumber());
                 $client->setPassword($this->passwordHasher->hashPassword($client, 'password123'));
                 $client->setRoles("CLIENT");
-                $client->setVerificationStatus(true);
+
+                $client->setVerificationStatus($faker->boolean(70) // 70% chance true, 30% false
+                );
                 $client->setLoyaltyPoints($faker->numberBetween(0, 1000));
                 $client->setDateInscription(new \DateTimeImmutable());
-                $photoProfil = "avatar5-67f2b22f9551d.png"; // Default avatar
+                $client->setCity($cities[array_rand($cities)]);                // Set a random address
+                $client->setPhotoProfil('avatar5.png');
 
-                // Set a random address
                 $client->setAddress($faker->streetAddress());
-                
+
                 // Set the next available location
                 $client->setLocation($availableLocations[$locationIndex++]);
-                
+
                 // Persist the client
                 $this->em->persist($client);
-                
+
                 $io->progressAdvance();
             }
-            
+
             // Flush after each batch
             $this->em->flush();
             $this->em->clear(Client::class);
-            
+
             $io->note(sprintf('Processed batch %d/%d', $batch + 1, $totalBatches));
         }
 

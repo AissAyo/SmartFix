@@ -19,7 +19,7 @@ class Admin extends User
         ?string            $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string            $phone = null,
-        ?string            $photoProfil = "avatar5-67f2b22f9551d.png"
+        ?string            $photoProfil = "avatar5.png"
     ) {
         parent::__construct(
             $name,

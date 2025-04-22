@@ -85,16 +85,34 @@ class SeedMechanicCommand extends Command
             '08:00-18:00',
             '09:00-19:00'
         ];
+        $cities= [
+            'Casablanca', 'Rabat', 'Marrakech', 'Fes', 'Tangier',
+            'Agadir', 'Meknes', 'Oujda', 'Kenitra', 'Tetouan',
+            'Safi', 'El Jadida', 'Nador', 'Beni Mellal', 'Khouribga',
+            'Sidi Kacem', 'Laayoune', 'Dakhla', 'Errachidia', 'Taroudant',
+            'Inezgane', 'Chefchaouen', 'Ksar el-Kebir', 'Berkane', 'Taza',
+            'Midelt', 'Settat', 'Azilal', 'Ouarzazate', 'Mohammedia',
+            'Larache', 'Tinghir', 'Al Hoceima', 'Moulay Yacoub', 'Messaoud',
+            'Sidi Ifni', 'Skhirat', 'Tiznit', 'Jorf El Melha', 'El Aaiún',
+            'Boujdour', 'Tata', 'Fkih Ben Salah', 'Khemisset', 'Tiznit',
+            'Sidi Slimane', 'Tiflet', 'Fquih Ben Salah', 'Erfoud', 'Oulad Teima',
+            'Souk Sebt', 'Lala Chafia', 'Moulay Idriss', 'Sefrou', 'Azrou',
+            'Imilchil', 'Algeria', 'Boudnib', 'Bouskoura', 'Rissani', 'Meknès',
+            'Essaouira', 'Oulad Ziane', 'Ait Ourir', 'Ait Melloul', 'Ben Ahmed',
+            'Boudouaou', 'Sidi Moumen', 'Zaouiat Ahansal', 'Boujniba', 'Dcheira',
+            'Berkane', 'Khouribga', 'Tiflet', 'Taza', 'Oued Zem', 'Essaouira'
+        ];
+        $city = $cities[array_rand($cities)];
 
         $io->progressStart($count);
 
         // Process in batches to avoid memory issues
         $batchSize = 100;
         $totalBatches = ceil($count / $batchSize);
-        
+
         for ($batch = 0; $batch < $totalBatches; $batch++) {
             $currentBatchSize = min($batchSize, $count - ($batch * $batchSize));
-            
+
             for ($i = 0; $i < $currentBatchSize; $i++) {
                 // Generate Fake Data
                 $name = $faker->name;
@@ -105,8 +123,7 @@ class SeedMechanicCommand extends Command
                 $resetToken = null;
                 $tokenExpiration = null;
                 $phone = $faker->phoneNumber;
-                $photoProfil = "avatar5-67f2b22f9551d.png"; // Default avatar
-                
+                $photoProfil = "avatar5.png"; // Default avatar
                 // Mechanic-specific properties
                 $specialization = $faker->randomElement($specializations);
                 $experienceYears = $faker->numberBetween(1, 30);
@@ -139,18 +156,19 @@ class SeedMechanicCommand extends Command
                 );
 
                 // Set additional properties that aren't in the constructor
-                $mechanic->setLogo($faker->imageUrl(200, 200, 'business'));
-
+                $mechanic->setPhotoProfil('avatar5.png');
+                $mechanic->setCity($cities[array_rand($cities)]);
+                $mechanic->setCertifications($certificationOptions[array_rand($certificationOptions)]);
                 // Persist the mechanic entity
                 $this->em->persist($mechanic);
-                
+
                 $io->progressAdvance();
             }
-            
+
             // Flush after each batch
             $this->em->flush();
             $this->em->clear(Mechanic::class);
-            
+
             $io->note(sprintf('Processed batch %d/%d', $batch + 1, $totalBatches));
         }
 

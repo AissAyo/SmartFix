@@ -91,11 +91,10 @@
                                     <td>{{ mechanic.experienceYears ?? '0' }} years</td>
                                     <td>
                                         {% if mechanic.certifications %}
-                                            <ul>
-                                                {% for cert in mechanic.certifications %}
-                                                    <li>{{ cert }}</li>
-                                                {% endfor %}
-                                            </ul>
+
+                                                    {{ mechanic.certifications }}
+
+
                                         {% else %}
                                             <p class="text-muted">No certifications</p>
                                         {% endif %}
