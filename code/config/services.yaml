@@ -8,14 +8,11 @@ parameters:
     TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
     TWILIO_FROM_NUMBER: '%env(TWILIO_FROM_NUMBER)%'
     TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
+    mercure.public_url: '%env(MERCURE_PUBLIC_URL)%'
+    mercure.default_hub.jwt.secret: '%env(MERCURE_JWT_SECRET)%'
 
 services:
-    # default configuration for services in *this* file
-
-    App\Repository\VehiculeRepositoryInterface: '@App\Repository\VehiculeRepository'
-
-
-    # Default configuration for services in this file
+    # default configuration for services in this file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
@@ -27,7 +24,6 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
-
             - '../src/Kernel.php'
 
     # controllers are imported separately to make sure services can be injected
@@ -37,7 +33,7 @@ services:
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # please note that last definitions always replace previous ones
 
     Twilio\Rest\Client:
         arguments:

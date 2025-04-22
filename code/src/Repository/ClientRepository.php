@@ -7,11 +7,10 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ClientRepository extends ServiceEntityRepository implements ClientRepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
+    
 
-    public function __construct(EntityManagerInterface $entityManager , ManagerRegistry $registry)
+    public function __construct( ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
         parent::__construct($registry, Client::class);
     }
 

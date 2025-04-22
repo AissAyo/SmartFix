@@ -1,0 +1,8 @@
+mercure:
+    hubs:
+        default:
+            url: 'http://mercure:80/.well-known/mercure'
+            public_url: 'http://localhost:3000/.well-known/mercure'
+            jwt:
+                secret: '%env(MERCURE_JWT_SECRET)%'
+                publish: '*'
