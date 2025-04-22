@@ -15,7 +15,7 @@ class CarController extends AbstractController
 {
 
 
-    #[Route('admincars/{page}', name: 'listclient', defaults: ['page' => 1], methods: ['GET'])]
+    #[Route('admincars/{page}', name: 'list_cars', defaults: ['page' => 1], methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, int $page, PaginatorInterface $paginator): Response
     {
         $car = $entityManager->getRepository(vehicule::class)

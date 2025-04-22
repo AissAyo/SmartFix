@@ -80,8 +80,8 @@ new Assert\Range(['min' => 0, 'max' => 50]),
 'label' => 'Certifications',
 'required' => false,
 ])
-->add('logoFile', VichImageType::class, [
-'label' => 'Logo',
+->add('photoProfilFile', VichImageType::class, [
+'label' => 'Profil Photo ',
 'required' => false,
 'allow_delete' => true,
 'download_uri' => false,

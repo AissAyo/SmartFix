@@ -20,11 +20,8 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
-    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
-    private ?File $logoFile = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $logo = null;  // Initialize as null
+
 
     #[Vich\UploadableField(mapping: 'mechanic_photoProfil', fileNameProperty: 'photoProfil')]
     private ?File $photoProfilFile = null;
@@ -164,25 +161,7 @@ class Mechanic extends Garagiste
         $this->photoProfil = $photoProfil;
     }
 
-    public function getLogoFile(): ?File
-    {
-        return $this->logoFile;
-    }
 
-    public function setLogoFile(?File $logoFile): void
-    {
-        $this->logoFile = $logoFile;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
-    public function setLogo(?string $logo): void
-    {
-        $this->logo = $logo;
-    }
 
     public function getSentMessages(): Collection
     {

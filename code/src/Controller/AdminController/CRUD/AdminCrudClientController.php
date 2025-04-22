@@ -15,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AdminCrudClientController extends AbstractController
 {
     #[Route('/listclients/{page}', name: 'list_clients', methods: ['GET', 'POST'])]
-    public function index(EntityManagerInterface $entityManager, int $page, PaginatorInterface $paginator): Response
+    public function index(EntityManagerInterface $entityManager, int $page=1, PaginatorInterface $paginator): Response
     {
         $client = $entityManager->getRepository(Client::class)
             ->createQueryBuilder('c')

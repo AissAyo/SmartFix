@@ -5,6 +5,7 @@ namespace App\Controller\AdminController\login;
 use App\Controller\AdminController\Autowire;
 use App\Entity\Admin;
 use App\Type\AdminAuthType;
+use App\Form\LoginType;
 use App\Service\authAdmin\authAdminService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,14 @@ class AdminLoginController extends AbstractController
     #[Route('/admin/login', name: 'admin_login', methods: ['GET', 'POST'])]
     public function loginpage(): Response
     {
-        return $this->render('Admin/Login/adminlogin.html.twig');
+        $form = $this->createForm(AdminAuthType::class);
+        return $this->render('Admin/Login/adminlogin.html.twig',[
+            'form' => $form->createView(),]);
     }
+    #[Route('/navbar', name: 'nav_bar', methods: ['GET', 'POST'])]
+    public function navbar()
+    {
+        return $this->render('navtest.html.twig');
+    }
+
 }
