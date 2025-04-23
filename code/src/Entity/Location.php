@@ -82,13 +82,13 @@ class Location
             $this->garage = null;
             $oldGarage->setLocation(null);
         }
-        
+
         $this->garage = $garage;
-        
+
         if ($garage !== null && $garage->getLocation() !== $this) {
             $garage->setLocation($this);
         }
-        
+
         return $this;
     }
 

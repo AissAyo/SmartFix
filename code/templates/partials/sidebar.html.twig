@@ -1,0 +1,38 @@
+
+
+    <div class="widget">
+        <h2 class="widget-title">Services</h2>
+        <ul class="sidebar_category">
+            {% if categories is defined and categories is not empty %}
+                {% for category in categories %}
+                    <li class="category_item">
+                        <div class="category_item_inner">
+                            <div class="cat_name">
+                                <a href="#">{{ category.Categoryname }}</a>
+                            </div>
+                            <span class="cat_toggler">
+                            <a data-bs-toggle="collapse" href="#{{ loop.index }}_services" aria-expanded="false" aria-controls="{{ loop.index }}_services">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </span>
+                        </div>
+                        <ul id="{{ loop.index }}_services" class="child_category collapse">
+                            {% for service in category.services %}
+                                <li>
+                                    <div class="cat_name">
+                                        <a href="#">{{ service.serviceName }}</a>
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="no-services">Aucun service dans cette catégorie.</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li class="no-categories">
+                    <div class="cat_name">Aucune catégorie de services disponible.</div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
