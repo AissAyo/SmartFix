@@ -11,14 +11,14 @@ class Message
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Conversation::class, inversedBy: 'messages')]
+    #[ORM\ManyToOne(targetEntity: Chat::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(nullable: false)]
-    private Conversation $conversation;
+    private Chat $chat;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'sentMessages')]
+    #[ORM\ManyToOne(targetEntity: Client::class)]
     private ?Client $clientSender = null;
 
-    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'sentMessages')]
+    #[ORM\ManyToOne(targetEntity: Mechanic::class)]
     private ?Mechanic $mechanicSender = null;
 
     #[ORM\Column(type: 'text')]
@@ -44,14 +44,14 @@ class Message
         return $this->id;
     }
 
-    public function getConversation(): Conversation
+    public function getChat(): Chat
     {
-        return $this->conversation;
+        return $this->chat;
     }
 
-    public function setConversation(Conversation $conversation): self
+    public function setChat(Chat $chat): self
     {
-        $this->conversation = $conversation;
+        $this->chat = $chat;
         return $this;
     }
 

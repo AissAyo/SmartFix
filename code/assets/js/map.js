@@ -2,11 +2,31 @@
 	'use strict';
 	
     $(document).ready(function(){
-            //Google Map
-            var mapProp= {
-                center:new google.maps.LatLng(51.508742,-0.120850),
-                zoom: 14,
-                styles: [
+        // Check if Google Maps API is loaded
+        if (typeof google === 'undefined') {
+            console.warn('Google Maps API not loaded. Loading it now...');
+            // Load Google Maps API
+            var script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY'; // Replace with your actual API key
+            script.async = true;
+            script.defer = true;
+            
+            script.onload = function() {
+                initializeMap();
+            };
+            
+            document.head.appendChild(script);
+        } else {
+            initializeMap();
+        }
+    });
+    
+    function initializeMap() {
+        //Google Map
+        var mapProp= {
+            center:new google.maps.LatLng(51.508742,-0.120850),
+            zoom: 14,
+            styles: [
             {
                 "featureType": "all",
                 "elementType": "all",
@@ -290,9 +310,9 @@
                 ]
             }
         ]
-            };
-            var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-    });
+        };
+        var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    }
 	
 	
-})(jQuery);
+})(window.jQuery || window.$);

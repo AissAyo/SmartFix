@@ -20,7 +20,6 @@ $update = new Update(
 $topic,  // This will be the Mercure topic (e.g., conversation ID)
 json_encode($data)  // Data you want to send in the message
 );
-
 $this->publisher->publish($update);
 }
 }

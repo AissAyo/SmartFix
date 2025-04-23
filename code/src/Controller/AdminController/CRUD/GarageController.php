@@ -22,7 +22,7 @@ class GarageController extends AbstractController
     #[Route('/', name: 'garage_index', methods: ['GET'])]
     public function index(GarageRepository $garageRepository, LocationRepository $locationRepository): Response
     {
-        return $this->render('Admin/CRUD/garage/index.html.twig', [
+        return $this->render('Admin/CRUD/garage/MechanicIndexGarage.html.twig', [
             'garages' => $garageRepository->findAll(),
             'location' => $locationRepository->getAllEntities(),
         ]);
@@ -71,7 +71,7 @@ class GarageController extends AbstractController
         }
 
         // Render the form
-        return $this->render('Admin/CRUD/garage/new.html.twig', [
+        return $this->render('Admin/CRUD/garage/MechanicAddGarage.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -134,7 +134,7 @@ class GarageController extends AbstractController
         }
 
         // Render the edit form view
-        return $this->render('Admin/CRUD/garage/edit.html.twig', [
+        return $this->render('Admin/CRUD/garage/MechanicEditGarage.html.twig', [
             'form' => $form->createView(),
             'garage' => $garage,
         ]);

@@ -11,7 +11,7 @@ class MechanicAppointmentController extends AbstractController
     #[Route('/mechanic/appointment', name: 'app_mechanic_appointment')]
     public function index(): Response
     {
-        return $this->render('mechanic_appointment/index.html.twig', [
+        return $this->render('mechanic_appointment/MechanicIndexGarage.html.twig', [
             'controller_name' => 'MechanicAppointmentController',
         ]);
     }

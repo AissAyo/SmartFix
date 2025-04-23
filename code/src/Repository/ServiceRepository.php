@@ -3,8 +3,9 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Service;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-class ServiceRepository implements ServiceRepositoryInterface
+class ServiceRepository  extends ServiceEntityRepository implements ServiceRepositoryInterface
 {
     private EntityManagerInterface $entityManager;
 
@@ -12,11 +13,30 @@ class ServiceRepository implements ServiceRepositoryInterface
     {
         $this->entityManager = $entityManager;
     }
+    public function findAllWithPagination(int $page, int $itemsPerPage): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('s')
+            ->from(Service::class, 's')
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage);
+
+        return $qb->getQuery()->getResult();
+    }
+    public function countAll(): int
+    {
+        return (int) $this->createQueryBuilder('s')
+            ->select('COUNT(s)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 
     public function getEntityById(int $id): ?Service
     {
         return $this->entityManager->getRepository(Service::class)->find($id);
     }
+
 
     public function getAllEntities(): array
     {

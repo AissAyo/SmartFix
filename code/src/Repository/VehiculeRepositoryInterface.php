@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Repository;
 
-interface VehiculeRepositoryInterface extends RepositoryInterface
+interface VehiculeRepositoryInterface
 {
-    // Add methods specific to Client entity if needed
-} 
+
+}

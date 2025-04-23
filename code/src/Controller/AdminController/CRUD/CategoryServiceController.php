@@ -35,7 +35,7 @@ class CategoryServiceController extends AbstractController
             10
         );
 
-        return $this->render('Admin/CRUD/category_service/index.html.twig', [
+        return $this->render('Admin/CRUD/category_service/MechanicIndexGarage.html.twig', [
             'pagination' => $pagination,
         ]);
     }
@@ -57,7 +57,7 @@ class CategoryServiceController extends AbstractController
             return $this->redirectToRoute('category_service_index');
         }
 
-        return $this->render('Admin/CRUD/category_service/new.html.twig', [
+        return $this->render('Admin/CRUD/category_service/MechanicAddGarage.html.twig', [
             'category_service' => $categoryService,
             'form' => $form->createView(),
         ]);
@@ -78,7 +78,7 @@ class CategoryServiceController extends AbstractController
             return $this->redirectToRoute('category_service_index');
         }
 
-        return $this->render('Admin/CRUD/category_service/edit.html.twig', [
+        return $this->render('Admin/CRUD/category_service/MechanicEditGarage.html.twig', [
             'category_service' => $categoryService,
             'form' => $form->createView(),
         ]);

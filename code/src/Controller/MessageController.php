@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Conversation;
+use App\Entity\Chat;
 use App\Entity\Message;
 use App\Service\MercurePublisher;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,24 +27,24 @@ class MessageController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $conversation = $this->entityManager
-            ->getRepository(Conversation::class)
-            ->find($data['conversation_id']);
+        $chat = $this->entityManager
+            ->getRepository(Chat::class)
+            ->find($data['chat_id']);
 
-        if (!$conversation) {
-            return $this->json(['error' => 'Conversation not found'], 404);
-        }
-
-        // Verify the user is a participant
-        if (!$conversation->hasParticipant($user)) {
-            return $this->json(['error' => 'Not a conversation participant'], 403);
+        if (!$chat) {
+            return $this->json(['error' => 'Chat not found'], 404);
         }
 
         // Create and persist the message
         $message = new Message();
-        $message->setConversation($conversation);
+        $message->setChat($chat);
         $message->setContent($data['content']);
-        $message->setSender($user); // This will handle the proper sender type
+        
+        if ($user instanceof \App\Entity\Client) {
+            $message->setClientSender($user);
+        } elseif ($user instanceof \App\Entity\Mechanic) {
+            $message->setMechanicSender($user);
+        }
 
         $this->entityManager->persist($message);
         $this->entityManager->flush();
@@ -62,7 +62,7 @@ class MessageController extends AbstractController
 
         // Publish to Mercure hub
         $this->mercurePublisher->publish(
-            'conversation_'.$conversation->getId(),
+            'chat_'.$chat->getId(),
             $update
         );
 
