@@ -174,6 +174,10 @@ abstract class User implements PasswordAuthenticatedUserInterface
         return $this->roles;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
 
 
 }

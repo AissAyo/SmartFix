@@ -27,10 +27,7 @@ class UserRepository extends ServiceEntityRepository
         // Recherche parmi toutes les entités incluant Admin
         return $this->getEntityManager()->getRepository(Client::class)->findOneBy(['email' => $email])
             ?? $this->getEntityManager()->getRepository(ServiceClient::class)->findOneBy(['email' => $email])
-            ?? $this->getEntityManager()->getRepository(Seller::class)->findOneBy(['email' => $email])
-            ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['email' => $email])
-            ?? $this->getEntityManager()->getRepository(CarRentalService::class)->findOneBy(['email' => $email])
-            ?? $this->getEntityManager()->getRepository(Admin::class)->findOneBy(['email' => $email]); // Ajout de l'Admin
+            ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['email' => $email]);
     }
 
     public function findUserByResetToken(string $token)
@@ -38,10 +35,7 @@ class UserRepository extends ServiceEntityRepository
         // Recherche du token parmi toutes les entités incluant Admin
         return $this->getEntityManager()->getRepository(Client::class)->findOneBy(['resetToken' => $token])
             ?? $this->getEntityManager()->getRepository(ServiceClient::class)->findOneBy(['resetToken' => $token])
-            ?? $this->getEntityManager()->getRepository(Seller::class)->findOneBy(['resetToken' => $token])
-            ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['resetToken' => $token])
-            ?? $this->getEntityManager()->getRepository(CarRentalService::class)->findOneBy(['resetToken' => $token])
-            ?? $this->getEntityManager()->getRepository(Admin::class)->findOneBy(['resetToken' => $token]); // Ajout de l'Admin
+            ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['resetToken' => $token]);
     }
 
     // Mettre à jour l'utilisateur (mot de passe, supprimer le token, etc.)

@@ -34,7 +34,8 @@ class ServiceController extends AbstractController
         RequestStack $requestStack,
         GarageServiceRepository $garageServiceRepository,
         Request $request,
-        CategoryServiceRepository $categoryServiceRepository 
+        CategoryServiceRepository $categoryServiceRepository,
+        ServiceRepository $serviceRepository
     ): Response {
         //dump($session->all()); die;
 
@@ -54,6 +55,8 @@ class ServiceController extends AbstractController
 
     
         $vehicules = $vehiculeRepository->findBy(['client' => $userId]);
+
+
         $categories = $categoryServiceRepository->findAllWithServices();
     
         $vehicleId = $request->query->get('vehicleId');
@@ -122,8 +125,10 @@ class ServiceController extends AbstractController
         }
     
         // Cas défaut : tout afficher
-        $garageServices = $garageServiceRepository->findAllWithPagination($page, $itemsPerPage);
-        $totalServices = $garageServiceRepository->countAll();
+        $garageServices = $serviceRepository->findAllWithPagination($page, $itemsPerPage);
+        //$garageServices = $garageServiceRepository->findAllWithPagination($page, $itemsPerPage);
+        $totalServices = $serviceRepository->countAll();
+        //$totalServices = $garageServiceRepository->countAll();
         $totalPages = ceil($totalServices / $itemsPerPage);
     
         return $this->render('page/services.html.twig', [
