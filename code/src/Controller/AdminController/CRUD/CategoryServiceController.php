@@ -17,9 +17,17 @@ class CategoryServiceController extends AbstractController
     #[Route('/categoryservic/{page}', name: 'category_service_index', defaults: ['page' => 1], methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, CategoryServiceRepository $categoryServiceRepository, int $page, PaginatorInterface $paginator): Response
     {
-        $query = $entityManager->getRepository(CategoryService::class)
-            ->createQueryBuilder('c')
-            ->orderBy('c.Categoryname', 'ASC');
+        $dql = '
+    SELECT c
+    FROM App\Entity\CategoryService c
+    WHERE c.id IN (
+        SELECT MIN(c2.id)
+        FROM App\Entity\CategoryService c2
+        GROUP BY c2.Categoryname
+    )
+    ORDER BY c.Categoryname ASC
+';        $query = $entityManager->createQuery($dql);
+
 
         $pagination = $paginator->paginate(
             $query,

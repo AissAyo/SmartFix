@@ -44,6 +44,7 @@ class Reservation
     public function __construct()
     {
         $this->repairParts = new ArrayCollection();
+        $this->service = new Service(); // placeholder to satisfy typed property
     }
 
     public function getId(): int

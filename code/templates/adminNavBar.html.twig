@@ -4,7 +4,7 @@
     {% block head %}
         <meta charset="UTF-8">
         <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
-        <link rel="stylesheet" href="./assets/main.css">
+        <link rel="stylesheet" href="{{ asset('main.css') }}">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% endblock head %}
 
@@ -188,7 +188,9 @@
             <aside class="main-sidebar sidebar-dark-primary elevation-4">
                 <!-- Brand Logo -->
                 <a href="index3.html" class="brand-link">
-                    <img src="{{ asset('assets/img/logo.png') }}" alt="smartfix Logo" class="brand-image img-circle elevation-3" style="opacity: .8">                    <span class="brand-text font-weight-light"> SmartFix</span>
+                    <img src="{{ asset('img/logo.png') }}" alt="smartfix Logo" >
+
+                  
                 </a>
 
                 <!-- Sidebar -->
@@ -220,14 +222,8 @@
                         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <!-- Add icons to the links using the .nav-icon class
                                  with font-awesome or any other icon font library -->
-                            <li class="nav-item menu-open">
-                                <a href="#" class="nav-link active">
-                                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                                    <p>
-                                        Dashboard
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
+                            <li class="nav-item ">
+
                                 <!-- Users Management Menu -->
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link clickable">
@@ -251,17 +247,8 @@
                                             <p>Mechanics</p>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a href="{{ path('admin_list_mechanic') }}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Sellers</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <p>Car Rental</p>
-                                        </a>
-                                    </li>
+
+
                                 </ul>
                             </li>
 
@@ -273,69 +260,43 @@
                                         Cars
                                     </p>
                                 </a>
-                                {#                        <ul class="nav nav-treeview" style="display: none;">#}
-                                {#                            <li class="nav-item">#}
-                                {#                                <a href="{{ path('list_cars') }}"  class="nav-link">#}
-                                {#                                    <p>List</p>#}
-                                {#                                </a>#}
-                                {#                            </li>#}
-                                {#                            <li class="nav-item">#}
-                                {#                                <a href="#" class="nav-link">#}
-                                {#                                    <i class="far fa-circle nav-icon"></i>#}
-                                {#                                    <p>Add</p>#}
-                                {#                                </a>#}
-                                {#                            </li>#}
-                                {#                            <li class="nav-item">#}
-                                {#                                <a href="#" class="nav-link">#}
-                                {#                                    <i class="far fa-circle nav-icon"></i>#}
-                                {#                                    <p>Update</p>#}
-                                {#                                </a>#}
-                                {#                            </li>#}
-                                {#                            <li class="nav-item">#}
-                                {#                                <a href="#" class="nav-link">#}
-                                {#                                    <i class="far fa-circle nav-icon"></i>#}
-                                {#                                    <p>Delete</p>#}
-                                {#                                </a>#}
-                                {#                            </li>#}
-                                {#                        </ul>#}
+
                             </li>
 
-                            <!-- Shops Menu -->
-                            <!-- Shops Menu -->
-                            {#                            <li class="nav-item has-treeview">#}
-                            {#                                <a href="#" class="nav-link clickable">#}
-                            {#                                    <i class="fas fa-shopping-cart"></i>#}
-                            {#                                    <p>#}
-                            {#                                        Shops#}
-                            {#                                    </p>#}
-                            {#                                </a>#}
-                            {#                                <ul class="nav nav-treeview" style="display: none;">#}
-                            {#                                    <li class="nav-item">#}
-                            {#                                        <a href="#" class="nav-link">#}
-                            {#                                            <i class="far fa-circle nav-icon"></i>#}
-                            {#                                            <p>List</p>#}
-                            {#                                        </a>#}
-                            {#                                    </li>#}
-                            {#                                    <li class="nav-item">#}
-                            {#                                        <a href="#" class="nav-link">#}
-                            {#                                            <i class="far fa-circle nav-icon"></i>#}
-                            {#                                            <p>Add</p>#}
-                            {#                                        </a>#}
-                            {#                                    </li>#}
-                            {#                                    <li class="nav-item">#}
-                            {#                                        <a href="#" class="nav-link">#}
-                            {#                                            <i class="far fa-circle nav-icon"></i>#}
-                            {#                                            <p>Update</p>#}
-                            {#                                        </a>#}
-                            {#                                    </li>#}
-                            {#                                    <li class="nav-item">#}
-                            {#                                        <a href="#" class="nav-link">#}
-                            {#                                            <i class="far fa-circle nav-icon"></i>#}
-                            {#                                            <p>Delete</p>#}
-                            {#                                        </a>#}
-                            {#                                    </li>#}
-                            {#                                </ul>#}
-                            {#                            </li>#}
+                            <!-- garage Menu -->
+                            <li class="nav-item has-treeview">
+                                <a href="{{ path('list_cars') }}" class="nav-link clickable">
+                                    <i class="fas fa-wrench"></i>
+                                    <p>
+                                        Garages
+                                    </p>
+                                </a>
+                            </li>
+                            <!-- garage Menu -->
+                                                        <li class="nav-item has-treeview">
+                                                            <a href="#" class="nav-link clickable">
+                                                                <i class="fas fa-tools"></i>                                                                 <p>
+                                                                   Service
+                                                                    <i class="right fas fa-angle-left"></i>
+
+                                                                </p>
+                                                            </a>
+                                                            <ul class="nav nav-treeview" style="display: none;">
+                                                                <li class="nav-item">
+                                                                    <a href="{{ path('category_service_index') }}" class="nav-link">
+                                                                        <i class="far fa-circle nav-icon"></i>
+                                                                        <p>Manage Category </p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="{{ path('service_index') }}" class="nav-link">
+                                                                        <i class="far fa-circle nav-icon"></i>
+                                                                        <p>Manager Service</p>
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </li>
 
 
                             <!-- Statistics Menu -->
@@ -345,8 +306,7 @@
                                     <p>
                                         Statistics
                                         <i class="right fas fa-angle-left"></i>
-
-                                    </p>
+                                                                         </p>
                                 </a>
                                 <ul class="nav nav-treeview" style="display: none;">
                                     <li class="nav-item">
@@ -399,12 +359,7 @@
                             <div class="col-sm-6">
                                 <h1 class="m-0"></h1>
                             </div><!-- /.col -->
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active"> v1</li>
-                                </ol>
-                            </div><!-- /.col -->
+
                         </div><!-- /.row -->
                     </div><!-- /.container-fluid -->
                 </div>
@@ -416,6 +371,7 @@
                         <!-- Your page content here -->
 
                         {% block content %}
+                            
                         {% endblock %}
                     </div>
                 </section>
@@ -478,10 +434,16 @@
     <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{ asset('admin/dist/js/pages/dashboard.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // Collapse the sidebar on page load
+            $('body').removeClass('sidebar-collapse');
+            $('body').addClass('sidebar-collapse');
 
-    {#    {{ encore_entry_script_tags('app') }}#}
-    {#    {% block extra_javascripts %}{% endblock %}#}
-    {#    {% block importmap %}{{ importmap('app') }}{% endblock %}#}
+            // Or if using AdminLTE's pushmenu
+            $('[data-widget="pushmenu"]').PushMenu('collapse');
+        });
+    </script>
 {% endblock javascripts %}
 </body>
 </html>

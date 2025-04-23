@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #6366f1;
+            --primary-color: #ef4444;
             --primary-dark: #4f46e5;
             --dark-color: #1e293b;
             --light-color: #f8fafc;
@@ -101,7 +101,7 @@
         .input-icon {
             position: absolute;
             right: 1rem;
-            top: 50%;
+            top: 70%;
             transform: translateY(-50%);
             color: #94a3b8;
         }
@@ -129,11 +129,6 @@
             box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
-        .btn-google {
-            background: #fff;
-            color: #4f46e5;
-            border: 1px solid #e2e8f0;
-        }
 
         .btn-google:hover {
             background: #f8fafc;
@@ -209,14 +204,7 @@
 
             {{ form_end(form) }}
 
-            <div style="text-align: center; margin: 1.5rem 0; position: relative;">
-                <div style="height: 1px; background: #e2e8f0; width: 100%; position: absolute; top: 50%;"></div>
-                <span style="background: white; padding: 0 1rem; position: relative; color: #64748b; font-size: 0.875rem;">OR CONTINUE WITH</span>
-            </div>
 
-            <button class="btn btn-google" style="margin-bottom: 1.5rem;">
-                <i class="fab fa-google"></i> Google
-            </button>
 
             <div class="login-footer">
                 <a href="{{ path('app_forgot_password') }}">Forgot password?</a>

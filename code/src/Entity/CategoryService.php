@@ -77,7 +77,7 @@ class CategoryService
         return $this;
     }
 
-    public function getGarage(): Garage
+    public function getGarage(): ?Garage
     {
         return $this->garage;
     }
