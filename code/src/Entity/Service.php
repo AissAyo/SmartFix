@@ -57,7 +57,6 @@ class Service
     public function getId(): int
     {
         return $this->id;
-        return $this->Id;
     }
 
     public function isAvailable(): bool
@@ -75,6 +74,10 @@ class Service
         $this->name = $name;
 
         return $this;
+    }
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function setPrice(float $price): self
