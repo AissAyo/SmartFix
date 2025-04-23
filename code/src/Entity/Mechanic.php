@@ -40,7 +40,7 @@ class Mechanic extends Garagiste
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
-
+ 
     public function __construct(
         string $name = '',
         string $email = '',

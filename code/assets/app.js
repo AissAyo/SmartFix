@@ -7,6 +7,10 @@ window.jQuery = $;
 import './js/bootstrap.min.js';
 import './js/adminlte.js'; // This one uses jQuery too
 
+// ✅ Import WOW.js and assign it globally
+import WOW from './plugins/wow/wow.js';
+window.WOW = WOW;
+
 // ✅ Stimulus
 import '@hotwired/stimulus';
 
