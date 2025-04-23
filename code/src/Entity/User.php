@@ -6,11 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-
-
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
+
 #[ORM\MappedSuperclass]
-abstract class User implements  PasswordAuthenticatedUserInterface
+abstract class User implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,17 +18,22 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     private int $id;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
+
     private ?string $name = null;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $password;
 
+
     #[ORM\Column(type: "string", length: 255, nullable: true)]
-    private ?string $email;
+    private string $email;
+
+
+
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $city;
-    
+
 
     #[ORM\Column(type: "string", nullable: true)]
     private ?string $roles=null;
@@ -96,10 +101,6 @@ abstract class User implements  PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
 
     public function setEmail(string $email): void
     {
@@ -171,6 +172,11 @@ abstract class User implements  PasswordAuthenticatedUserInterface
     public function getRoles(): ?string
     {
         return $this->roles;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
     }
 
 

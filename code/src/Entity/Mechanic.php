@@ -56,13 +56,13 @@ class Mechanic extends Garagiste
         ?string $certifications = ''
     ) {
         parent::__construct(
-            $name, 
-            $email, 
-            $address, 
-            $roles, 
-            $password, 
-            $resetToken, 
-            $tokenExpiration, 
+            $name,
+            $email,
+            $address,
+            $roles,
+            $password,
+            $resetToken,
+            $tokenExpiration,
             $phone
         );
         $this->garages = new ArrayCollection();

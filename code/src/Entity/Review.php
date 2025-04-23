@@ -24,6 +24,9 @@ class Review
     #[ORM\JoinColumn(nullable: false)]
     private Client $client;
 
+    #[ORM\ManyToOne(inversedBy: 'reviews')]
+    private ?GarageService $GarageService = null;
+
     // Other fields and methods...
 
     public function getId(): int
@@ -61,6 +64,18 @@ class Review
     public function setClient(Client $client): self
     {
         $this->client = $client;
+        return $this;
+    }
+
+    public function getGarageService(): ?GarageService
+    {
+        return $this->GarageService;
+    }
+
+    public function setGarageService(?GarageService $GarageService): static
+    {
+        $this->GarageService = $GarageService;
+
         return $this;
     }
 }

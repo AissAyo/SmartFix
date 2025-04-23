@@ -1,6 +1,5 @@
 <?php
 
-// src/Repository/CategoryServiceRepository.php
 namespace App\Repository;
 
 use App\Entity\CategoryService;
@@ -14,5 +13,13 @@ class CategoryServiceRepository extends ServiceEntityRepository
         parent::__construct($registry, CategoryService::class);
     }
 
-    // You can add custom queries here, if needed.
+    public function findAllWithServices(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.services', 's')
+            ->addSelect('s')
+            ->orderBy('c.Categoryname', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

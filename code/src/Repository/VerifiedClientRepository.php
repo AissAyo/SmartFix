@@ -13,6 +13,14 @@ class VerifiedClientRepository implements RepositoryInterface
         $this->entityManager = $entityManager;
     }
 
+
+
+    // Implémentation de la méthode findBy
+    public function findBy(array $criteria): array
+    {
+        return $this->entityManager->getRepository(Vehicule::class)->findBy($criteria);
+    }
+
     public function getEntityById(int $id): ?VerifiedClient
     {
         return $this->entityManager->getRepository(VerifiedClient::class)->find($id);

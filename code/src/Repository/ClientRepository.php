@@ -7,14 +7,16 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ClientRepository extends ServiceEntityRepository implements ClientRepositoryInterface
 {
-public function __construct(ManagerRegistry $registry)
-{
-parent::__construct($registry, Client::class);
-}
+    
+
+    public function __construct( ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Client::class);
+    }
 
 public function getEntityById(int $id): ?Client
 {
-return $this->find($id);
+    return $this->entityManager->getRepository(Client::class)->find($id);
 }
 
 public function getAllEntities(): array

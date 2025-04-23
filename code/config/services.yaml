@@ -12,7 +12,7 @@ parameters:
     mercure.default_hub.jwt.secret: '%env(MERCURE_JWT_SECRET)%'
 
 services:
-    # default configuration for services in *this* file
+    # default configuration for services in this file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
@@ -33,7 +33,7 @@ services:
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # please note that last definitions always replace previous ones
 
     Twilio\Rest\Client:
         arguments:

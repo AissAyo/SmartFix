@@ -1,44 +1,48 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Vehicule;
-
-class VehiculeRepository implements VehiculeRepositoryInterface
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+class VehiculeRepository extends ServiceEntityRepository
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, Vehicule::class);
     }
 
     public function getEntityById(int $id): ?Vehicule
     {
-        return $this->entityManager->getRepository(Vehicule::class)->find($id);
+        if ($id <= 0) {
+            // Si l'ID est invalide
+            return null;
+        }
+
+        return $this->find($id);
     }
 
     public function getAllEntities(): array
     {
+
         return $this->entityManager->getRepository(vehicule::class)->findAll();
     }
 
 
-    public function addEntity($entity): void
+    public function addEntity(Vehicule $entity): void
     {
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
+        $this->_em->persist($entity);
+        $this->_em->flush();
     }
 
-    public function updateEntity($entity): void
+    public function updateEntity(Vehicule $entity): void
     {
-        $this->entityManager->merge($entity);
-        $this->entityManager->flush();
+        $this->_em->merge($entity);
+        $this->_em->flush();
     }
 
-    public function deleteEntity($entity): void
+    public function deleteEntity(Vehicule $entity): void
     {
-        $this->entityManager->remove($entity);
-        $this->entityManager->flush();
+        $this->_em->remove($entity);
+        $this->_em->flush();
     }
 }
