@@ -3,49 +3,47 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Reservation;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: "App\Repository\ReviewRepository")]
 class Review
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private int $id;
+    private ?int $id;
 
-    #[ORM\Column(type: "text")]
-    private string $content;
+    #[ORM\ManyToOne(targetEntity: Reservation::class, inversedBy: "reviews")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Reservation $reservation;
 
     #[ORM\Column(type: "integer")]
-    private int $rating;
+    private ?int $rating;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: "reviews")]
-    #[ORM\JoinColumn(nullable: false)]
-    private Client $client;
+    #[ORM\Column(type: "text")]
+    private ?string $comment;
 
-    #[ORM\ManyToOne(inversedBy: 'reviews')]
-    private ?GarageService $GarageService = null;
+    #[ORM\Column(type: "datetime")]
+    private ?\DateTimeInterface $createdAt;
 
-    // Other fields and methods...
-
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getContent(): string
+    public function getReservation(): ?Reservation
     {
-        return $this->content;
+        return $this->reservation;
     }
 
-    public function setContent(string $content): self
+    public function setReservation(?Reservation $reservation): self
     {
-        $this->content = $content;
+        $this->reservation = $reservation;
+
         return $this;
     }
 
-    public function getRating(): int
+    public function getRating(): ?int
     {
         return $this->rating;
     }
@@ -53,28 +51,30 @@ class Review
     public function setRating(int $rating): self
     {
         $this->rating = $rating;
+
         return $this;
     }
 
-    public function getClient(): Client
+    public function getComment(): ?string
     {
-        return $this->client;
+        return $this->comment;
     }
 
-    public function setClient(Client $client): self
+    public function setComment(string $comment): self
     {
-        $this->client = $client;
+        $this->comment = $comment;
+
         return $this;
     }
 
-    public function getGarageService(): ?GarageService
+    public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->GarageService;
+        return $this->createdAt;
     }
 
-    public function setGarageService(?GarageService $GarageService): static
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
-        $this->GarageService = $GarageService;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
