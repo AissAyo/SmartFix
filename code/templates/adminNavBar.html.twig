@@ -373,7 +373,9 @@
                         <!-- Your page content here -->
 
                         {% block content %}
-                            
+                            {% block chat %}
+
+                            {% endblock %}
                         {% endblock %}
                     </div>
                 </section>
@@ -383,6 +385,8 @@
         {% endblock container %}
 
         {% block footer %}
+            {{ render(controller("App\\Controller\\AChatController::start")) }}
+
             <footer class="main-footer">
                 <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
                 All rights reserved.
