@@ -68,6 +68,149 @@
         .table td {
             vertical-align: middle;
         }
+         .overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .confirm-box {
+    background: white;
+    color: #000000;
+    padding: 20px 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .btn {
+    margin: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-yes {
+    background-color:var(--color-one);
+    color: white;
+  }
+
+  .btn-no {
+    background-color: #bdc3c7;
+    color: #2c3e50;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    display: grid;
+    place-items: center;
+    font-family: 'Manrope', sans-serif;
+    background: #000;
+    
+}
+
+
+
+
+
+ .cross {
+         padding: 10px;
+    color: #d6312d;
+    cursor: pointer;
+    font-size: 23px;
+ }
+
+.cross i{
+    
+    margin-top: -5px;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+.comment-box {
+    padding: 5px
+}
+
+.comment-area textarea {
+    resize: none;
+    border: 1px solid #ff0000
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ffffff;
+    outline: 0;
+    box-shadow: 0 0 0 1px rgb(255, 0, 0) !important
+}
+
+.send {
+    color: #fff;
+    background-color: #ff0000;
+    border-color: #ff0000
+}
+
+.send:hover {
+    color: #fff;
+    background-color: #f50202;
+    border-color: #f50202
+}
+
+.rating {
+   display: inline-flex;
+    margin-top: -10px;
+    flex-direction: row-reverse;
+   
+    
+}
+
+.rating>input {
+    display: none
+}
+
+.rating>label {
+    position: relative;
+    width: 28px;
+    font-size: 35px;
+    color: #ff0000;
+    cursor: pointer;
+}
+
+.rating>label::before {
+    content: "\2605";
+    position: absolute;
+    opacity: 0
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before {
+    opacity: 1 !important
+}
+
+.rating>input:checked~label:before {
+    opacity: 1
+}
+
+.rating:hover>input:checked~label:before {
+    opacity: 0.4
+}
     </style>
 {% endblock %}
 
@@ -113,6 +256,7 @@
                                     <th scope="col">Service</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Price</th>
+                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,7 +266,28 @@
                                     <td>{{ reservation.vehicle.plateNumber }}</td>
                                     <td>{{ reservation.service.name }}</td>
                                     <td>{{ reservation.status }}</td>
-                                    <td>{{ reservation.estimatedPrice }} €</td>
+                                    <td>{{ reservation.estimatedPrice }} MAD</td>
+                                   <td class="text-center">
+                                       {% if reservation.status|lower == 'completed' %}
+                                           <div class="d-flex justify-content-center">
+                                               <a href="#" 
+                                                  class="text-center review-link"
+                                                  data-id="{{ reservation.id }}"
+                                                  data-bs-toggle="modal" 
+                                                  data-bs-target="#form">
+                                                   <i class="bi bi-star me-2"></i>
+                                               </a>
+                                           </div>
+                                       {% elseif reservation.status|lower == 'pending' %}
+                                           <div class="d-flex justify-content-center">
+                                               <a href="{{ path('client_reservation_cancel', {id: reservation.id}) }}"
+                                                  class="text-center cancel-link"
+                                                  data-href="{{ path('client_reservation_cancel', {id: reservation.id}) }}">
+                                                   <i class="bi bi-x-circle me-2"></i>
+                                               </a>
+                                           </div>
+                                       {% endif %}
+                                   </td>
                                 </tr>
                                 {% else %}
                                 <tr>
@@ -131,7 +296,46 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                        <!-- Overlay de confirmation - à placer en dehors de la boucle -->
+<div id="customConfirm" class="overlay">
+  <div class="confirm-box">
+    <p>Are you sure you want to cancel this reservation?</p>
+    <button class="btn btn-yes" id="confirmYes">Yes</button>
+    <button class="btn btn-no" onclick="closeConfirm()">No</button>
+  </div>
+</div>
+
+   
+<div class="modal fade" id="form" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Leave a Review</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="comment-box text-center">
+                    <h4>Add a comment</h4>
+                    <div class="rating">
+                        <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                        <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                        <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                        <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                        <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
                     </div>
+                    <div class="comment-area">
+                        <textarea id="review-text" class="form-control" placeholder="Write your review here..." rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-success" id="submit-review">Submit Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
                 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center p-3">
@@ -196,4 +400,80 @@
     </div>
         </section>
     </main>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+let currentReservationId = null;
+
+// Initialize Bootstrap modal
+const formModal = new bootstrap.Modal(document.getElementById('form'));
+
+// Handle review link click
+$(document).on('click', '.review-link', function(e) {
+    console.log("Button clicked");
+    e.preventDefault();
+    currentReservationId = $(this).data('id');
+    
+    // Reset form
+    $('input[name="rating"]').prop('checked', false);
+    $('#review-text').val('');
+    
+    // Show modal
+    formModal.show();
+});
+
+// Handle review submission
+$(document).on('click', '#submit-review', function() {
+    console.log("Button clicked");
+    const rating = $('input[name="rating"]:checked').val();
+    const comment = $('#review-text').val();
+
+    if (!rating) {
+        alert('Please select a rating');
+        return;
+    }
+
+    if (!comment) {
+        alert('Please write a comment');
+        return;
+    }
+
+    // Send the review to the server
+    $.ajax({
+        url: '{{ path('client_reservation_review_submit') }}',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            reservationId: currentReservationId,
+            rating: parseInt(rating),
+            comment: comment
+        }),
+        success: function(response) {
+            console.log('Success:', response);
+            alert('Review submitted successfully!');
+            formModal.hide();
+            // Refresh the page to show the new review
+            window.location.reload();
+        },
+        error: function(xhr, status, error) {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                console.error('Error details:', response);
+                alert(`Error: ${response.error}\n\nDebug info:\n${response.debug}`);
+            } catch (e) {
+                console.error('Error:', error);
+                alert(`Error submitting review: ${error}\n\nCheck browser console for more details`);
+            }
+        }
+    });
+});
+
+// Close modal when clicking the close button
+$(document).on('click', '.btn-close', function() {
+    formModal.hide();
+});
+</script>
 {% endblock %}

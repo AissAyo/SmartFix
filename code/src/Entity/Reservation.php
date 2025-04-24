@@ -41,9 +41,15 @@ class Reservation
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="reservation", orphanRemoval=true)
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->repairParts = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
         $this->service = new Service(); // placeholder to satisfy typed property
     }
 
@@ -153,6 +159,36 @@ class Reservation
     public function setService(Service $service): self
     {
         $this->service = $service;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setReservation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getReservation() === $this) {
+                $review->setReservation(null);
+            }
+        }
+
         return $this;
     }
 }
