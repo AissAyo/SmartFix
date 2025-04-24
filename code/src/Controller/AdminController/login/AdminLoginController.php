@@ -37,7 +37,7 @@ class AdminLoginController extends AbstractController
             $this->addFlash('error', 'Invalid credentials');
         }
 
-        return $this->render('admin/Login/adminlogin.html.twig');
+        return $this->render('Admin/Login/adminlogin.html.twig');
     }
 
     #[Route('/admin/login', name: 'admin_login', methods: ['GET', 'POST'])]

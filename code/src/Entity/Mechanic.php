@@ -124,15 +124,7 @@ class Mechanic extends Garagiste
     }
 
 
-    public function getMechanicphotoProfilFile(): ?File
-    {
-        return $this->MechanicphotoProfilFile;
-    }
 
-    public function setMechanicphotoProfilFile(?File $MechanicphotoProfilFile): void
-    {
-        $this->MechanicphotoProfilFile = $MechanicphotoProfilFile;
-    }
 
     public function getMechanicServices(): Collection
     {

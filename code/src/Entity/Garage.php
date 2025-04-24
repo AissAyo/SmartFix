@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
+#[Vich\Uploadable]
 class Garage
 {
     #[ORM\Id]
@@ -231,7 +234,7 @@ class Garage
         if ($this->categoryServices->removeElement($categoryService)) {
             // set the owning side to null (unless already changed)
             if ($categoryService->getGarage() === $this) {
-                $categoryService->setGarage(null);
+                $categoryService->setGarage($this);
             }
         }
         return $this;

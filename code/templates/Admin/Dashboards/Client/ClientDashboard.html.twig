@@ -275,9 +275,9 @@
     </style>
 {% endblock %}
 
-{% block container %}
+{% block content %}
     <div class="dashboard-container">
-        <h2 class="section-title">Client Dashboard</h2>
+{#        <h2 class="section-title">Client Dashboard</h2>#}
 
         <!-- Stat Cards Row -->
     {{ render(controller("App\\Controller\\AdminController\\Stats\\ClientDashboardController::clientcount")) }}

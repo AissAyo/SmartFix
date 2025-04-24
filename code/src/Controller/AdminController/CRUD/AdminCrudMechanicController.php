@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class AdminCrudMechanicController extends AbstractController
 {
     private MechanicService $mechanicService;
+    
     private FileUploader $fileUploader;
 
     public function __construct(MechanicService $mechanicService, FileUploader $fileUploader)
@@ -44,24 +45,74 @@ class AdminCrudMechanicController extends AbstractController
         $mechanic = new Mechanic();
         $form = $this->createForm(MechanicType::class, $mechanic);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
+            // Retrieve the uploaded file
             $photoProfilFile = $form->get('photoProfilFile')->getData();
-
-            if ($photoProfilFile) {
-                $photoPath = $this->fileUploader->upload($photoProfilFile);
-                $mechanic->setPhotoProfil($photoPath);
+    
+            // Debugging: Check if the file is uploaded
+            if (!$photoProfilFile) {
+                $this->addFlash('error', 'No file was uploaded.');
+                return $this->redirectToRoute('admin_mechanics_add');
             }
-
+    
+            if (!$photoProfilFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                $this->addFlash('error', 'Invalid file upload.');
+                return $this->redirectToRoute('admin_mechanics_add');
+            }
+    
+            // Handle the file upload
+            if ($photoProfilFile) {
+                $mechanic->setPhotoProfilFile($photoProfilFile); // VichUploader will handle the upload
+            }
+    
+            // Persist the mechanic entity
             $this->mechanicService->createMechanic($mechanic);
+    
             $this->addFlash('success', 'Mechanic created successfully!');
             return $this->redirectToRoute('admin_list_mechanic');
         }
-
+    
         return $this->render('Admin/CRUD/Mechanic/adminCrudMechanicAdd.html.twig', [
             'form' => $form->createView(),
         ]);
     }
+//    #[Route('/editmechanic/{id}', name: 'admin_mechanics_edit', methods: ['GET', 'POST'])]
+//    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+//    {
+//        $mechanic = $entityManager->getRepository(Mechanic::class)->find($id);
+//
+//        if (!$mechanic) {
+//            throw $this->createNotFoundException('No mechanic found for id ' . $id);
+//        }
+//
+//        $form = $this->createForm(MechanicType::class, $mechanic);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $photoProfil = $form->get('photoProfilFile')->getData();
+//            $logoFile = $form->get('logoFile')->getData();
+//
+//            if ($photoProfil) {
+//                $photoPath = $this->fileUploader->upload($photoProfil);
+//                $mechanic->setPhotoProfil($photoPath);
+//            }
+//
+//            if ($logoFile) {
+//                $logoPath = $this->fileUploader->upload($logoFile);
+//                $mechanic->setLogo($logoPath);
+//            }
+//
+//            $entityManager->flush();
+//
+//            return $this->redirectToRoute('admin_list_mechanic');
+//        }
+//
+//        return $this->render('Admin/CRUD/Mechanic/adminCrudMechanicEdit.html.twig', [
+//            'mechanic' => $mechanic,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     #[Route('/editmechanic/{id}', name: 'admin_mechanics_edit', methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
@@ -71,24 +122,16 @@ class AdminCrudMechanicController extends AbstractController
         if (!$mechanic) {
             throw $this->createNotFoundException('No mechanic found for id ' . $id);
         }
+        
 
         $form = $this->createForm(MechanicType::class, $mechanic);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $photoProfil = $form->get('photoProfilFile')->getData();
-            $logoFile = $form->get('logoFile')->getData();
+            // No need to manually upload files, VichUploader will do this for you
 
-            if ($photoProfil) {
-                $photoPath = $this->fileUploader->upload($photoProfil);
-                $mechanic->setPhotoProfil($photoPath);
-            }
-
-            if ($logoFile) {
-                $logoPath = $this->fileUploader->upload($logoFile);
-                $mechanic->setLogo($logoPath);
-            }
-
+            // Just persist the changes
             $entityManager->flush();
 
             return $this->redirectToRoute('admin_list_mechanic');
@@ -99,6 +142,7 @@ class AdminCrudMechanicController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
     #[Route('showmechanic/{id}', name: 'admin_mechanics_show', methods: ['GET'])]
     public function showMechanic(int $id): Response

@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class MechanicType extends AbstractType
 {
@@ -81,10 +82,10 @@ new Assert\Range(['min' => 0, 'max' => 50]),
 'required' => false,
 ])
 ->add('photoProfilFile', VichImageType::class, [
-'label' => 'Profil Photo ',
-'required' => false,
-'allow_delete' => true,
-'download_uri' => false,
+    'label' => 'Profile Photo',
+    'required' => false,
+    'allow_delete' => true, // Allow the user to delete the file
+    'download_uri' => true, // Provide a download link for the file
 ])
 //->add('photoProfilFile', VichImageType::class, [
 //'label' => 'Profile Photo',

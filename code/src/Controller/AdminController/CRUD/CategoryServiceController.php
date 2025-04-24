@@ -35,7 +35,7 @@ class CategoryServiceController extends AbstractController
             10
         );
 
-        return $this->render('Admin/CRUD/category_service/MechanicIndexGarage.html.twig', [
+        return $this->render('Admin/CRUD/category_service/index.html.twig', [
             'pagination' => $pagination,
         ]);
     }

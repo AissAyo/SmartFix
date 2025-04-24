@@ -4,6 +4,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
         :root {
             --primary-color: #ef4444;
             --primary-dark: #4f46e5;
@@ -14,7 +15,10 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            background-image: url('{{ asset('assets/img/adminbackground.jpg') }}');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -171,6 +175,7 @@
 {% endblock %}
 
 {% block body %}
+
     <div class="login-container">
         <div class="login-header">
             <h2>Admin Portal</h2>
@@ -213,7 +218,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // Toggle password visibility
         const togglePassword = document.querySelector('#togglePassword');
