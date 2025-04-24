@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garages{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+
+        .garage-card {
+            background-color: #1a1a1a;
+            border: none;
+            border-radius: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .garage-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .garage-img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 1rem auto;
+            display: block;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        .badge {
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background-color: #d70006;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #a60004;
+        }
+
+        .text-muted {
+            color: #bbb !important;
+        }
+    </style>
+{% endblock %}
+
+{% block container %}
+    <div class="container mt-4">
+        <h1 class="mb-4 text-white">Our Garages</h1>
+
+        <div class="row">
+            {% for garage in garages %}
+                <div class="col-md-4 mb-4">
+                    <div class="card garage-card h-100 text-center text-white p-3">
+                        {% if garage.logoProfil %}
+                            <img src="{{ asset('uploads/mechanics/garage/' ~ garage.logoProfil) }}"
+                                 alt="{{ garage.name }}"
+                                 class="garage-img">
+                        {% else %}
+                            <img src="{{ asset('uploads/6.jpg') }}"
+                                 alt="Default garage image"
+                                 class="garage-img">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ garage.name }}</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-{{ garage.status == 'active' ? 'success' : 'warning' }}">
+                                    {{ garage.status|capitalize }}
+                                </span>
+                                <span class="badge bg-info">
+                                    Rating: {{ garage.rating }}/5
+                                </span>
+                                {% if garage.distance is defined %}
+                                    <span class="badge bg-secondary">
+                                        <i class="fas fa-location-arrow"></i> {{ garage.distance }} km
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text">
+                                <i class="fas fa-map-marker-alt"></i> {{ garage.garageAddress }}
+                                {% if garage.location and garage.location.city %}
+                                    <br><small class="text-muted">{{ garage.location.city }}</small>
+                                {% endif %}
+                            </p>
+                            {% if garage.workingHours %}
+                                <p class="card-text">
+                                    <i class="fas fa-clock"></i> {{ garage.workingHours }}
+                                </p>
+                            {% endif %}
+                            {% if garage.phoneNumber %}
+                                <p class="card-text">
+                                    <i class="fas fa-phone"></i> {{ garage.phoneNumber }}
+                                </p>
+                            {% endif %}
+                            <div class="mt-3">
+                                <a href="{{ path('app_garage_show', {'id': garage.id}) }}" class="btn btn-primary">
+                                    <i class="fas fa-info-circle"></i> View Garage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No garages found in your city.
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if garages|length > 0 %}
+            <div class="d-flex justify-content-center mt-4">
+                {{ knp_pagination_render(garages) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

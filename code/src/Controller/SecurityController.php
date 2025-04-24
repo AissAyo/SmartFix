@@ -96,7 +96,7 @@ class SecurityController extends AbstractController
         // Créer le DTO et le formulaire
         $resetPasswordDTO = new ResetPasswordDTO();
         $form = $this->createForm(ResetPasswordType::class, $resetPasswordDTO);
-        $form->handleRequest($request);
+        $form->handleRequest($request); 
 
         // Vérifier si le formulaire est soumis et valide
         if ($form->isSubmitted() && $form->isValid()) {

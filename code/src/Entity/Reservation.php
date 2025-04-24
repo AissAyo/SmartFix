@@ -20,10 +20,10 @@ class Reservation
     private \DateTimeInterface $reservationDate;
 
     #[ORM\Column(type: "string", length: 20)]
-    private string $status;
+    private ?string $status;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private string $estimatedPrice;
+    private ?string $estimatedPrice;
 
     #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations", cascade: ['persist'])]
     private Vehicule $vehicle;
@@ -36,7 +36,7 @@ class Reservation
     private Service $service;
 
     #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')]
-    private Collection $repairParts;
+    private ?Collection $repairParts;
 
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
