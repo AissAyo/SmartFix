@@ -6,9 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
+#[Vich\Uploadable]
 class Garage
 {
     #[ORM\Id]
@@ -55,32 +58,14 @@ class Garage
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $City;
 
-
+   
     #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
-
-    /**
-     * @var Collection<int, GarageService>
-     */
-
-    /**
-     * @var Collection<int, GarageService>
-     */
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_garage')]
-    private Collection $service;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logo = null;
-
-
-
     public function __construct()
     {
         $this->categoryServices = new ArrayCollection();
-        $this->garageServices = new ArrayCollection();
-        $this->service = new ArrayCollection();
     }
 
     // Getters and setters for the properties
@@ -171,7 +156,7 @@ class Garage
     {
         return $this->categoryServices;
     }
-
+    
 
     public function getLocation(): ?Location
     {
@@ -186,13 +171,13 @@ class Garage
             $this->location = null;
             $oldLocation->setGarage(null);
         }
-
+        
         $this->location = $location;
-
+        
         if ($location !== null && $location->getGarage() !== $this) {
             $location->setGarage($this);
         }
-
+        
         return $this;
     }
 
@@ -249,7 +234,7 @@ class Garage
         if ($this->categoryServices->removeElement($categoryService)) {
             // set the owning side to null (unless already changed)
             if ($categoryService->getGarage() === $this) {
-                $categoryService->setGarage(null);
+                $categoryService->setGarage($this);
             }
         }
         return $this;

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\CategoryService;
 
 #[ORM\Entity]
 #[ORM\Table(name: "services")]
@@ -31,33 +32,18 @@ class Service
     #[ORM\JoinColumn(nullable: false)]
     private CategoryService $categoryService;
 
-    public function getServiceName(): string
-    {
-        return $this->serviceName;
-    }
-
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'service')]
     private Collection $reservations;
-    /**
-     * @var Collection<int, GarageService>
-     */
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_service')]
-    private Collection $garageServices;
 
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
+        $this->categoryService = new categoryService();
     }
-    /**
-     * @var Collection<int, GarageService>
-     */
-    #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_service')]
-    private Collection $id_garage;
 
     public function getId(): int
     {
         return $this->id;
-        return $this->Id;
     }
 
     public function isAvailable(): bool
@@ -123,58 +109,7 @@ class Service
         return $this;
     }
 
-
-
-    /**
-     * @return Collection<int, GarageService>
-     */
-    public function getGarageServices(): Collection
-    {
-        return $this->garageServices;
-    }
-
-    public function addGarageService(GarageService $garageService): static
-    {
-        if (!$this->garageServices->contains($garageService)) {
-            $this->garageServices->add($garageService);
-            $garageService->setIdService($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGarageService(GarageService $garageService): static
-    {
-        if ($this->garageServices->removeElement($garageService)) {
-            // set the owning side to null (unless already changed)
-            if ($garageService->getIdService() === $this) {
-                $garageService->setIdService(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, GarageService>
-     */
-    public function getIdGarage(): Collection
-    {
-        return $this->id_garage;
-    }
-
-    public function addIdGarage(GarageService $idGarage): static
-    {
-        if (!$this->id_garage->contains($idGarage)) {
-            $this->id_garage->add($idGarage);
-            $idGarage->setIdService($this);
-        }
-
-        return $this;
-    }
-
-
-    public function getServiceCode(): string
+    public function getReservations(): Collection
     {
         return $this->reservations;
     }
@@ -197,5 +132,15 @@ class Service
             }
         }
         return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 }

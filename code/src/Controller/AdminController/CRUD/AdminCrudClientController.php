@@ -14,19 +14,19 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AdminCrudClientController extends AbstractController
 {
-    #[Route('/list/clients/{page}', name: 'listclients', methods: ['GET', 'POST'])]
-    public function index(EntityManagerInterface $entityManager, int $page, PaginatorInterface $paginator): Response
+    #[Route('/listclients/{page}', name: 'list_clients', methods: ['GET', 'POST'])]
+    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator, int $page = 1): Response
     {
         $client = $entityManager->getRepository(Client::class)
             ->createQueryBuilder('c')
-            ->orderBy('c.name', 'ASC');  // Default sorting
+            ->orderBy('c.name', 'ASC');
+
         $pagination = $paginator->paginate(
             $client,
-            $page,  // Automatically takes from URL (e.g., `/listclients/2`)
-            10      // Items per page
+            $page,
+            10
         );
 
-        // Format dates
         foreach ($pagination as $client) {
             $client->formattedDate = $client->getDateInscription()->format('Y-m-d H:i:s');
         }
@@ -35,6 +35,7 @@ class AdminCrudClientController extends AbstractController
             'pagination' => $pagination,
         ]);
     }
+
 
 #[Route('/admin/clients/{id}', name: 'app_admin_crud_client_show', methods: ['GET'])]
 public function show(Client $client): Response

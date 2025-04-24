@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    {% block head %}
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
+        {% block head %}
+                <meta charset="UTF-8">
+                <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
 
-        {# Inject main.css compiled by Webpack Encore #}
-                {{ encore_entry_link_tags('app-css') }}
-                  {{ encore_entry_link_tags('main-css') }}
+                <link rel="icon" href="data:image/svg+xml,
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+            <text y='1.2em' font-size='96'>⚫️</text>
+            <text y='1.3em' x='0.2em' font-size='76' fill='#fff'>sf</text>
+        </svg>">
+        {% endblock %}
 
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    {% endblock head %}
-
-    {% block stylesheets %}
-        {# Place additional styles here if needed #}
-    {% endblock stylesheets %}
+        {% block stylesheets %}
+                {{ encore_entry_link_tags('app') }}
+        {% endblock %}
 </head>
+
 <body>
 {% block body %}
-    {% block header %}{% endblock header %}
-    {% block menu %}{% endblock menu %}
-    {% block container %}{% endblock container %}
-    {% block footer %}{% endblock footer %}
+        {% block header %}{% endblock %}
+        {% block darkmode %}{% endblock %}
+        {% block menu %}{% endblock %}
+        {% block container %}{% endblock %}
+        {% block footer %}{% endblock %}
 
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-        {% block extra_javascripts %}{% endblock %}
-        {{ encore_entry_script_tags('app') }}
-    {% endblock javascripts %}
-{% endblock body %}
+
+        {% block javascripts %}
+                {{ encore_entry_script_tags('app') }}
+                {% block extra_javascripts %}{% endblock %}
+        {% endblock %}
+{% endblock %}
 </body>
 </html>

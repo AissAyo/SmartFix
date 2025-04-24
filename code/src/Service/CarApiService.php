@@ -48,7 +48,7 @@ class CarApiService
     {
         try {
             $this->logger->info('Attempting to authenticate with CarAPI');
-            
+
             $response = $this->client->request('POST', $this->baseUrl . '/api/auth/login', [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -156,26 +156,26 @@ class CarApiService
                 'limit' => $limit
             ]
         ]);
-        
+
         $this->logger->info('Car API makes response:', ['response' => $response]);
-        
+
         // Handle different possible response structures
         if (isset($response['data'])) {
             return $response['data'];
         }
-        
+
         if (isset($response['response']) && isset($response['response']['data'])) {
             return $response['response']['data'];
         }
-        
+
         if (is_array($response) && !empty($response)) {
             return $response;
         }
-        
+
         $this->logger->warning('Unexpected response structure from CarAPI makes endpoint', [
             'response' => $response
         ]);
-        
+
         return [];
     }
 
@@ -239,11 +239,11 @@ class CarApiService
             // Check if the table exists first
             $connection = $this->em->getConnection();
             $tableExists = $connection->createSchemaManager()->tablesExist(['car_api']);
-            
+
             if ($tableExists) {
                 $this->logger->info('Clearing existing car data');
                 $this->em->createQuery('DELETE FROM App\Entity\CarAPI c')->execute();
-        $this->em->flush();
+                $this->em->flush();
                 $this->logger->info('Successfully cleared existing car data');
             } else {
                 $this->logger->info('Car API table does not exist yet, skipping clear operation');
@@ -253,17 +253,17 @@ class CarApiService
                 'error' => $e->getMessage(),
                 'code' => $e->getCode()
             ]);
-            
+
             if (strpos($e->getMessage(), 'Connection refused') !== false) {
                 // Get the current database host
                 $databaseHost = $this->databaseService->getDatabaseHost();
-                
+
                 throw new \Exception(
                     "Cannot connect to the database at {$databaseHost}. Please ensure MySQL is running and accessible. " .
                     'Error: ' . $e->getMessage()
                 );
             }
-            
+
             throw $e;
         } catch (QueryException $e) {
             $this->logger->error('Query error while clearing data', [
@@ -318,7 +318,7 @@ class CarApiService
     public function fetchAndStoreCarData(int $limit = 50): void
     {
         $this->logger->info("Starting to fetch car data from CarAPI (limit: {$limit})...");
-        
+
         try {
             // Add initial delay before first request
             sleep(2);
@@ -351,9 +351,9 @@ class CarApiService
                     if (isset($makeData['id'])) {
                         // Add delay before model requests
                         sleep(1);
-                        
+
                         $models = $this->makeApiRequest('/api/models', ['make_id' => $makeData['id']]);
-                        
+
                         if (isset($models['data'])) {
                             foreach ($models['data'] as $modelData) {
                                 $model = new Model();
@@ -381,7 +381,7 @@ class CarApiService
     public function fetchCars(): array
     {
         $this->logger->info('Starting car data fetch process');
-        
+
         $page = 1;
         $limit = 100;
         $totalProcessed = 0;
@@ -391,7 +391,7 @@ class CarApiService
         try {
             while ($hasMore) {
                 $this->logger->info("Fetching page {$page} with limit {$limit}");
-                
+
                 $response = $this->makeRequest('GET', '/api/cars', [
                     'query' => [
                         'page' => $page,
@@ -401,7 +401,7 @@ class CarApiService
                 ]);
 
                 $data = $response;
-                
+
                 if (empty($data['data'])) {
                     $this->logger->info('No more car data available');
                     break;
@@ -410,13 +410,13 @@ class CarApiService
                 $cars = $data['data'];
                 $totalProcessed += count($cars);
                 $allCars = array_merge($allCars, $cars);
-                
+
                 $this->logger->info("Processed {$totalProcessed} cars so far");
 
                 // Check if there are more pages
                 $pagination = $data['pagination'] ?? null;
                 $hasMore = $pagination && $pagination['current_page'] < $pagination['total_pages'];
-                
+
                 if ($hasMore) {
                     $page++;
                     // Be nice to the API - add a small delay between requests
@@ -527,12 +527,12 @@ class CarApiService
                     $yearCarApi->setYear($yearData['year']);
 
                     $this->em->persist($yearCarApi);
-        $this->em->flush();
-    }
-}
+                    $this->em->flush();
+                }
+            }
         } catch (\Exception $e) {
             $this->logger->error('Error in processMake: ' . $e->getMessage());
             throw $e;
         }
     }
-}    
+}

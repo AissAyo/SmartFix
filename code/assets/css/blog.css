@@ -65,7 +65,7 @@
     letter-spacing: -0.5px;
 }
 .blog-details .blog-details-inner .widget-title::before {
-    content: url('../img/more/divider.svg');
+    content: url('../img2/more/divider.svg');
 }
 
 /* .blog-details .widget-title:before {

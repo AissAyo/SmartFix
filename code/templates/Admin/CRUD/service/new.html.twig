@@ -2,7 +2,7 @@
 
 {% block title %}Add New Service{% endblock %}
 
-{% block container %}
+{% block content %}
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -31,16 +31,16 @@
                             {# Service Name Field #}
                             <div class="col-12">
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.serviceName, {
+                                    {{ form_widget(form.name, {
                                         'attr': {
                                             'class': 'form-control',
                                             'placeholder': 'Service Name',
                                             'required': 'required'
                                         }
                                     }) }}
-                                    {{ form_label(form.serviceName, 'Service Name') }}
+                                    {{ form_label(form.name, 'Service Name') }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.serviceName) }}
+                                        {{ form_errors(form.name) }}
                                     </div>
                                 </div>
                             </div>

@@ -20,7 +20,7 @@
     </style>
 {% endblock %}
 
-{% block container %}
+{% block content %}
     <section class="bg-light p-3 p-sm-5">
         <div class="container-fluid px-4 px-lg-12">
             <!-- Start coding here -->
@@ -47,27 +47,36 @@
                         <thead>
                         <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Reservation Date</th>
-                            <th scope="col">Client</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Garage Name</th>
-                            <th scope="col">Garage Address</th>
-                            <th scope="col">Car</th>
-                            <th scope="col">Model</th>
-                            <th scope="col" class="text-end">Actions</th>
+                            <th>Client Name</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Notes</th>
+                            <th>Service</th>
+                            <th>Garage</th>
+                            <th>Garage Address</th>
+                            <th>City</th>
+                            <th>Make</th>
+                            <th>Model</th>
+                            <th>Year</th>
+                            <th>Fuel</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for reservation in pagination %}
                             <tr>
                                 <td>{{ reservation.id }}</td>
-                                <td>{{ reservation.reservationDate|date('Y-m-d') }}</td>
-                                <td>{{ reservation.client.name }}</td>
+                                <td>{{ reservation.client_name }}</td>
                                 <td>{{ reservation.status }}</td>
-                                <td>{{ reservation.garage.name }}</td>
-                                <td>{{ reservation.garage.location.address }}</td>
-                                <td>{{ reservation.vehicle.brand }} </td>
-                                <td>{{ reservation.vehicle.model }}</td>
+                                <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
+                                <td>{{ reservation.notes }}</td>
+                                <td>{{ reservation.service_name }}</td>
+                                <td>{{ reservation.garage_name }}</td>
+                                <td>{{ reservation.address }}</td>
+                                <td>{{ reservation.city }}</td>
+                                <td>{{ reservation.make }}</td>
+                                <td>{{ reservation.model }}</td>
+                                <td>{{ reservation.year }}</td>
+                                <td>{{ reservation.fuelType }}</td>
                                 <td class="text-end">
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0" type="button" id="reservation-{{ reservation.id }}-dropdown-button" data-bs-toggle="dropdown" aria-expanded="false">

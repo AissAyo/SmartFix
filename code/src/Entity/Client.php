@@ -42,11 +42,19 @@ class Client extends User
     #[ORM\OneToMany(targetEntity: Complaint::class, mappedBy: "client")]
     private Collection $complaints;
 
+    
+
     #[Vich\UploadableField(mapping: 'client_photoProfil', fileNameProperty: 'photoProfil')]
     private ?File $photoProfilFile = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photoProfil = null;
+
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'clientSender')]
+    private Collection $sentMessages;
+
+    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'client')]
+    private Collection $conversations;
 
     public function __construct(
         string $name = '',
@@ -73,6 +81,8 @@ class Client extends User
         $this->vehicules = new ArrayCollection();
         $this->critiques = new ArrayCollection();
         $this->complaints = new ArrayCollection();
+        $this->sentMessages = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
     }
 
     public function setRoles(string $roles): User
@@ -95,6 +105,17 @@ class Client extends User
         }
     }
 
+    // Getter and setter for the filename (photo profile)
+
+
+    
+
+
+
+
+
+
+    // Other getters and setters
     public function isVerificationStatus(): bool
     {
         return $this->verificationStatus;
@@ -183,9 +204,6 @@ class Client extends User
     public function setPhotoProfilFile(?File $photoProfilFile): void
     {
         $this->photoProfilFile = $photoProfilFile;
-        if ($photoProfilFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
     }
 
     public function getPhotoProfil(): ?string
@@ -196,6 +214,54 @@ class Client extends User
     public function setPhotoProfil(?string $photoProfil): void
     {
         $this->photoProfil = $photoProfil;
+    }
+
+    public function getSentMessages(): Collection
+    {
+        return $this->sentMessages;
+    }
+
+    public function addSentMessage(Message $message): self
+    {
+        if (!$this->sentMessages->contains($message)) {
+            $this->sentMessages->add($message);
+            $message->setClientSender($this);
+        }
+        return $this;
+    }
+
+    public function removeSentMessage(Message $message): self
+    {
+        if ($this->sentMessages->removeElement($message)) {
+            if ($message->getClientSender() === $this) {
+                $message->setClientSender(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): self
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->setClient($this);
+        }
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): self
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            if ($conversation->getClient() === $this) {
+                $conversation->setClient(null);
+            }
+        }
+        return $this;
     }
 
     public function getLocation(): ?Location

@@ -167,7 +167,7 @@
             "ref": "528285147494380298f8f991ee8c47abebaf79db"
         },
         "files": [
-            "./config/packages/mercure.yaml"
+            "config/packages/mercure.yaml"
         ]
     },
     "symfony/messenger": {
@@ -295,6 +295,9 @@
             "version": "7.0",
             "ref": "0df5844274d871b37fc3816c57a768ffc60a43a5"
         }
+    },
+    "symfony/ux-chartjs": {
+        "version": "v2.24.0"
     },
     "symfony/ux-turbo": {
         "version": "v2.21.0"

@@ -51,7 +51,7 @@ body.theme-style--light {
 
 /* About */
 .theme-style--light .wptb-about-company-one {
-    background-image: url(../img/background/bg-2-light.png) !important;
+    background-image: url(../img2/background/bg-2-light.png) !important;
 }
 
 
@@ -87,11 +87,11 @@ body.theme-style--light {
 
 /* Service Two */
 .theme-style--light .wptb-service-one {
-    background-image: url('../img/background/bg-1-light.png') !important;
+    background-image: url('../img2/background/bg-1-light.png') !important;
 }
 .theme-style--light .wptb-service-two {
     background-color: var(--color-white);
-    background-image: url('../img/background/bg-1-light.png') !important;
+    background-image: url('../img2/background/bg-1-light.png') !important;
 }
 .theme-style--light .wptb-service-two .wptb-icon-box2.active, 
 .theme-style--light .wptb-service-two .wptb-icon-box2:hover {

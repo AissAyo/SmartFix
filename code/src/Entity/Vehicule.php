@@ -49,22 +49,7 @@ class Vehicule
     public function __construct()
     {
         $this->reservations = new ArrayCollection();
-        //$this->carAPIs = new ArrayCollection();
     }
-
-    #[ORM\ManyToOne(targetEntity: CarAPI::class, inversedBy: 'vehicles')]
-    #[ORM\JoinColumn(nullable: false)]
-
-
-
-
-    public function getClient(): Client
-    {
-        $this->reservations = new ArrayCollection();
-        return $this->client;
-    }
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -138,7 +123,10 @@ class Vehicule
         return $this;
     }
 
-
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
 
     public function setClient(Client $client): self
     {
@@ -146,7 +134,7 @@ class Vehicule
         return $this;
     }
 
-    public function getCarAPI(): ?CarAPI
+    public function getCarAPI(): CarAPI
     {
         return $this->carAPI;
     }

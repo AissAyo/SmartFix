@@ -489,7 +489,7 @@ Ready Components Stylesheet
     top: 0;
     bottom: 0;
     z-index: 1;
-    background-image: url('../img/slider/layer-3.png');
+    background-image: url('../img2/slider/layer-3.png');
     background-repeat: repeat;
     width: 84px;
     height: 100%;
@@ -644,7 +644,7 @@ Ready Components Stylesheet
     background-color:  #F3F3F3;
 }
 .wptb-slider.light .wptb-slider--item::before {
-    background-image: url('../img/slider/layer-4.png');
+    background-image: url('../img2/slider/layer-4.png');
 }
 .wptb-slider.light .wptb-heading .wptb-item--title {
     color: var(--color-black);
@@ -2626,7 +2626,7 @@ Ready Components Stylesheet
     height: 630px;
     overflow: hidden;
     padding: 75px 50px;
-    background-image: url('../img/more/price-bg.jpg');
+    background-image: url('../img2/more/price-bg.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

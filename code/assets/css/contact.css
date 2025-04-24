@@ -3,7 +3,7 @@
 }
 .contact-section.home {
     padding: var(--space-0);
-    background-image: url(../img/services/16.jpg);
+    background-image: url(../img2/services/16.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -95,7 +95,7 @@
 }
 
 .contact-form {
-    background-image: url('../img/background/bg-6.jpg');
+    background-image: url('../img2/background/bg-6.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

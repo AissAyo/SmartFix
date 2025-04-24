@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class ClientType extends AbstractType
 {
@@ -59,6 +61,12 @@ class ClientType extends AbstractType
                 ],
                 'attr' => [
                     'placeholder' => 'At least 8 characters'
+                ]
+            ])
+            ->add('verificationStatus', ChoiceType::class, [
+                'choices' => [
+                    'Verified' => 'verified',
+                    'Rejected' => 'rejected',
                 ]
             ])
             ->add('phone', TelType::class, [

@@ -1,6 +1,10 @@
 {% extends 'adminNavBar.html.twig' %}
 
 {% block container %}
+    <br>
+    <br>
+    <br>
+
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -19,7 +23,7 @@
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.name, 'Full Name') }}
+                                    {{ form_label(form.name) }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.name) }}
                                     </div>
@@ -27,47 +31,33 @@
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.email, 'Email Address') }}
+                                    {{ form_label(form.email) }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.email) }}
                                     </div>
                                 </div>
 
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.phone, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.phone, 'Phone Number') }}
+                                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.password) }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.phone) }}
+                                        {{ form_errors(form.password) }}
                                     </div>
                                 </div>
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.address, 'Address') }}
+                                    {{ form_label(form.address) }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.address) }}
                                     </div>
                                 </div>
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.garageAddress, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.garageAddress, 'Garage Address') }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.garageAddress) }}
-                                    </div>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.city, 'City') }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.city) }}
-                                    </div>
-                                </div>
 
                                 <div class="form-floating mb-3">
-                                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.password, 'Password') }}
+                                    {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.city) }}
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.password) }}
+                                        {{ form_errors(form.city) }}
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +68,7 @@
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.specialization, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.specialization, 'Specialization') }}
+                                    {{ form_label(form.specialization) }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.specialization) }}
                                     </div>
@@ -86,14 +76,22 @@
 
                                 <div class="form-floating mb-3">
                                     {{ form_widget(form.experienceYears, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
-                                    {{ form_label(form.experienceYears, 'Experience (Years)') }}
+                                    {{ form_label(form.experienceYears) }}
                                     <div class="invalid-feedback">
                                         {{ form_errors(form.experienceYears) }}
                                     </div>
                                 </div>
 
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(form.workingHours, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                    {{ form_label(form.workingHours) }}
+                                    <div class="invalid-feedback">
+                                        {{ form_errors(form.workingHours) }}
+                                    </div>
+                                </div>
+
                                 <div class="mb-3">
-                                    {{ form_label(form.certifications, 'Certifications', {'label_attr': {'class': 'form-label'}}) }}
+                                    {{ form_label(form.certifications) }}
                                     {{ form_widget(form.certifications, {'attr': {
                                         'class': 'form-control',
                                         'rows': 3,
@@ -110,22 +108,11 @@
 
                                 <div class="mb-3">
                                     <div class="file-upload-card p-3 border rounded">
-                                        {{ form_label(form.logoFile, 'Garage Logo', {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.logoFile, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_label(form.photoProfilFile) }}
+                                        {{ form_widget(form.photoProfilFile, {'attr': {'class': 'form-control'}}) }}
                                         <small class="text-muted">PNG/JPG, max 2MB</small>
                                         <div class="invalid-feedback">
-                                            {{ form_errors(form.logoFile) }}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <div class="file-upload-card p-3 border rounded">
-                                        {{ form_label(form.MechanicphotoProfilFile, 'Profile Photo', {'label_attr': {'class': 'form-label'}}) }}
-                                        {{ form_widget(form.MechanicphotoProfilFile, {'attr': {'class': 'form-control'}}) }}
-                                        <small class="text-muted">PNG/JPG, max 2MB</small>
-                                        <div class="invalid-feedback">
-                                            {{ form_errors(form.MechanicphotoProfilFile) }}
+                                            {{ form_errors(form.photoProfilFile) }}
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +120,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <button type="submit" class="btn btn-do btn-lg px-4">
+                            <button type="submit" class="btn btn-danger btn-lg px-4">
                                 <i class="fas fa-save me-2"></i>Save Mechanic
                             </button>
                             <a href="{{ path('admin_list_mechanic') }}" class="btn btn-outline-secondary btn-lg px-4">
