@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Reservation;
 use Doctrine\Persistence\ManagerRegistry;
+use \Doctrine\ORM\QueryBuilder;
 
 class ReservationRepository extends ServiceEntityRepository
 
@@ -32,11 +33,11 @@ class ReservationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function createQueryBuilder($alias)
-    {
-        return $this->entityManager->getRepository(Reservation::class)
-            ->createQueryBuilder($alias);
-    }
+//    public function createQueryBuilder($alias)
+//    {
+//        return $this->entityManager->getRepository(Reservation::class)
+//            ->createQueryBuilder($alias);
+//    }
 
     public function addEntity($entity): void
     {

@@ -62,7 +62,7 @@ return $this->render('Admin/CRUD/show.html.twig', [
             }
 
             // Handle file upload for profile photo
-            $photoProfil = $form->get('ClientphotoProfilFile')->getData();
+            $photoProfil = $form->get('photoProfilFile')->getData();
             if ($photoProfil) {
                 $clientPhotoProfilFile = $fileUploader->upload($photoProfil);
                 $client->setPhotoProfil($clientPhotoProfilFile);
@@ -76,7 +76,7 @@ return $this->render('Admin/CRUD/show.html.twig', [
             $lastPage = 1; // Set to 1 for now or retrieve it dynamically if necessary
 
             // Redirect to the client list page after successful creation
-            return $this->redirectToRoute('listclients', ['page' => $lastPage]);
+            return $this->redirectToRoute('list_clients', ['page' => $lastPage]);
         }
 
         return $this->render('Admin/CRUD/Client/adminAddClient.html.twig', [

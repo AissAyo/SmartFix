@@ -4,9 +4,11 @@
         <div class="wptb-grand-total">
             <ul>
                 {% if isLoggedIn %}
-                    <li><a href="{{ path('app_logout') }}">Logout</a></li>
+                    <li><a href="{{ path('app_logout') }}">Log out</a></li>
                 {% else %}
-                    <li><a href="{{ path('app_login') }}">Login</a></li>
+                    <li><a href="{{ path('app_login') }}">Log in</a></li>
+                    <li><a href="{{ path('app_register_client') }}">Sign Up</a></li>
+
                 {% endif %}
                 <li><a href="shop-product.html">My commands</a> <span class="value"></span></li>
                 <li><a href="shop-product.html">My reservations</a> <span class="value"></span></li>

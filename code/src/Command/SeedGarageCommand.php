@@ -89,7 +89,7 @@ class SeedGarageCommand extends Command
                 $garage->setWorkingHours('8AM-5PM');
                 $garage->setPhoneNumber($faker->phoneNumber());
                 $garage->setCity($faker->city());
-                
+                $garage->setLogoProfil('garagedefault.jpeg');
                 // Assign a random mechanic
                 $randomMechanic = $mechanics[array_rand($mechanics)];
                 $garage->setMechanic($randomMechanic);

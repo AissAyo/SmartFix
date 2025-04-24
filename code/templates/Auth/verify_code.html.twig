@@ -1,22 +1,60 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Verify Your Phone{% endblock %}
 
-{% block body %}
-    <h1>Verify Your Phone Number</h1>
+{% block container %}
+    <main>
+        <section class="pd-bottom-300">
+            <div class="container">
+                <div class="wptb-signup-form">
+                    <div class="wptb-form--wrapper">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
+                                {% if error %}
+                                    <div class="alert alert-danger">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}
 
-    <form method="post" action="{{ path('app_verify_code', { 'id': client.id }) }}">
-        <div>
-            <label for="verification_code">Enter your verification code:</label>
-            <input type="text" id="verification_code" name="verification_code" required>
-        </div>
+                                <div class="wptb-heading">
+                                    <div class="wptb-item--inner">
+                                        <h1 class="wptb-item--title">Verify Your Phone Number</h1>
+                                    </div>
+                                </div>
 
-        <div>
-            <button type="submit">Verify</button>
-        </div>
-    </form>
+                                <form method="post" action="{{ path('app_verify_code', { 'id': client.id }) }}" class="wptb-form">
+                                    <div class="wptb-form--inner">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="verification_code">Verification Code</label>
+                                                    <input type="text"
+                                                           id="verification_code"
+                                                           name="verification_code"
+                                                           class="form-control"
+                                                           placeholder="Enter the code you received"
+                                                           required>
+                                                </div>
+                                            </div>
 
-    {% if error %}
-        <div style="color: red;">{{ error }}</div>
-    {% endif %}
+                                            <div class="col-md-12 col-lg-12">
+                                                <div class="wptb-item--button mt-4">
+                                                    <button class="btn-two white" type="submit">
+                                                        <div class="btn-wrap">
+                                                            <span class="text-first">Verify</span>
+                                                            <span class="text-second"><i class="bi bi-check"></i></span>
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 {% endblock %}
