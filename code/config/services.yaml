@@ -60,7 +60,9 @@ services:
 
     App\Controller\MenuController:
         tags: ['controller.service_arguments']
-
+    App\Repository\ReservationRepository:
+        autowire: true
+        autoconfigure: true
     App\Service\AuthClient\AuthClientService:
     # Rely on autowiring for dependencies:
     # - ClientService (autoregistered service)

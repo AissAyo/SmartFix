@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 
 
-class GaragesController extends abstractController
+    class GaragesController extends abstractController
 {
 
     #[Route('/AllGarages', name: 'all_garage_index', methods: ['GET'])]

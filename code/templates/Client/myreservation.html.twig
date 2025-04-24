@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block container %}
+    {# head #}
+    <div class="wptb-page-heading" style="background-image: url('{{ asset('img/background/page-header-bg.jpg') }}');">
+        <div class="container">
+            <div class="wptb-item--inner">
+                <h2 class="wptb-item--title">My Reservation</h2>
+                <div class="wptb-breadcrumb-wrap">
+                    <ul class="wptb-breadcrumb">
+                        <li><a href="#">Home</a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {# reservation  #}
+    <div class="col-lg-3 col-md-4 p-md-0">
+        <div class="sidebar">
+            <div class="wptb-project-info1">
+                <h5 class="wptb-item--title">My <br> reservation</h5>
+                <div class="wptb--holder">
+                    <div class="wptb--item">
+                        <div class="wptb--meta"><label>photo:</label> <span>John Doe</span></div>
+                    </div>
+                    <div class="wptb--item">
+                        <div class="wptb--meta"><label>Garage:</label> <span>John Doe</span></div>
+                    </div>
+                    <div class="wptb--item">
+                        <div class="wptb--meta"><label>Reservation Date :</label> <span>California, USA</span></div>
+                    </div>
+                    <div class="wptb--item">
+                        <div class="wptb--meta"><label>Reservation Status:</label> <span>Wheel Replacement </span></div>
+                    </div>
+                    <div class="wptb--item">
+                        <div class="wptb--meta"><label>Note:</label> <span>15/07/2023</span></div>
+                    </div>
+                    <div class="wptb--item rating">
+                        <div class="wptb--meta"><label>Action :</label> <span><i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i> <i class="bi bi-star-fill"></i></span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
