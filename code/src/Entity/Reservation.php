@@ -51,6 +51,7 @@ class Reservation
         $this->repairParts = new ArrayCollection();
         $this->reviews = new ArrayCollection();
         $this->service = new Service(); // placeholder to satisfy typed property
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): int

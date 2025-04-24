@@ -14,16 +14,12 @@ use App\Service\ReviewService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Review;
 use App\Entity\Reservation;
-use App\Repository\ReservationRepository;
+
 /**
  * @author Your Name
  */
 final class HistoryClientController extends AbstractController
 {
-    public function __construct(ReservationRepository $reservationRepository)
-    {
-        $this->reservationRepository = $reservationRepository;
-    }
    #[Route('/history/client/{page<\d+>?1}', name: 'app_history_client')]
    public function index(
        Request $request,
