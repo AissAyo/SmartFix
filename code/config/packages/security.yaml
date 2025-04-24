@@ -41,6 +41,7 @@ security:
     access_control:
         # Allow access to chat routes without authentication
         - { path: ^/chat/, roles: PUBLIC_ACCESS }
+        - { path: ^/history/client, roles: IS_AUTHENTICATED_FULLY }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
 #        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

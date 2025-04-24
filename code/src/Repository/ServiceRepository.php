@@ -1,28 +1,30 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Service;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
-class ServiceRepository  extends ServiceEntityRepository implements ServiceRepositoryInterface
+class ServiceRepository extends ServiceEntityRepository implements ServiceRepositoryInterface
 {
-    private EntityManagerInterface $entityManager;
+    private ManagerRegistry $registry;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, Service::class);
+        $this->registry = $registry;
     }
+
     public function findAllWithPagination(int $page, int $itemsPerPage): array
     {
-        $qb = $this->entityManager->createQueryBuilder()
-            ->select('s')
-            ->from(Service::class, 's')
+        $qb = $this->createQueryBuilder('s')
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage);
 
         return $qb->getQuery()->getResult();
     }
+
     public function countAll(): int
     {
         return (int) $this->createQueryBuilder('s')
@@ -31,33 +33,36 @@ class ServiceRepository  extends ServiceEntityRepository implements ServiceRepos
             ->getSingleScalarResult();
     }
 
-
     public function getEntityById(int $id): ?Service
     {
-        return $this->entityManager->getRepository(Service::class)->find($id);
+        return $this->find($id);
     }
-
 
     public function getAllEntities(): array
     {
-        return $this->entityManager->getRepository(Service::class)->findAll();
+        return $this->findAll();
     }
 
     public function addEntity($entity): void
     {
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
     }
 
     public function updateEntity($entity): void
     {
-        $this->entityManager->merge($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->merge($entity);
+        $this->getEntityManager()->flush();
     }
 
     public function deleteEntity($entity): void
     {
-        $this->entityManager->remove($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->registry->getManager();
     }
 }

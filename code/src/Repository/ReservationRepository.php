@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -29,6 +30,12 @@ class ReservationRepository extends ServiceEntityRepository
             ->orderBy('r.id', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function createQueryBuilder($alias)
+    {
+        return $this->entityManager->getRepository(Reservation::class)
+            ->createQueryBuilder($alias);
     }
 
     public function addEntity($entity): void

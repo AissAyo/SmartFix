@@ -62,6 +62,10 @@ class Service
 
         return $this;
     }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
     public function setPrice(float $price): self
     {
