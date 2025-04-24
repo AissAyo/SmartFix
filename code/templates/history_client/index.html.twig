@@ -1,0 +1,96 @@
+{% extends 'layout.html.twig' %}
+
+{% block container %}
+    <section class="bg-light p-3 p-sm-5">
+        <div class="container-fluid px-4 px-lg-12">
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Véhicule</th>
+                                <th scope="col">Service</th>
+                                <th scope="col">Statut</th>
+                                <th scope="col">Prix estimé</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reservation in reservations %}
+                            <tr>
+                                <td>{{ reservation.reservationDate|date('Y-m-d H:i') }}</td>
+                                <td>{{ reservation.vehicle.plateNumber }}</td>
+                                <td>{{ reservation.service.name }}</td>
+                                <td>{{ reservation.status }}</td>
+                                <td>{{ reservation.estimatedPrice }} €</td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5">Aucune réservation trouvée</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center p-3">
+                    <span class="text-muted">
+                        <span class="fw-bold text-danger">{{ pagination.getCurrentPageNumber * pagination.getItemNumberPerPage - pagination.getItemNumberPerPage + 1 }} - {{ min(pagination.getCurrentPageNumber * pagination.getItemNumberPerPage, pagination.getTotalItemCount) }}</span>
+                        of
+                        <span class="fw-bold text-danger">{{ pagination.getTotalItemCount }}</span>
+                    </span>
+
+                    <ul class="pagination mb-0">
+                        {% if pagination.currentPageNumber != 1 %}
+                            <li class="page-item">
+                                <a class="page-link text-danger" href="{{ path('app_history_client', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {% set start = max(1, pagination.currentPageNumber - 2) %}
+                        {% set end = min(pagination.pageCount, pagination.currentPageNumber + 2) %}
+
+                        {% if start > 1 %}
+                            <li class="page-item">
+                                <a class="page-link text-danger" href="{{ path('app_history_client', {page: 1}) }}">1</a>
+                            </li>
+                            {% if start > 2 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link text-danger">...</span>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for i in start..end %}
+                            <li class="page-item {% if pagination.currentPageNumber == i %}active{% endif %}">
+                                <a class="page-link text-danger" href="{{ path('app_history_client', {page: i}) }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if end < pagination.pageCount %}
+                            {% if end < pagination.pageCount - 1 %}
+                                <li class="page-item disabled">
+                                    <span class="page-link text-danger">...</span>
+                                </li>
+                            {% endif %}
+                            <li class="page-item">
+                                <a class="page-link text-danger" href="{{ path('app_history_client', {page: pagination.pageCount}) }}">{{ pagination.pageCount }}</a>
+                            </li>
+                        {% endif %}
+
+                        {% if pagination.currentPageNumber != pagination.pageCount %}
+                            <li class="page-item">
+                                <a class="page-link text-danger" href="{{ path('app_history_client', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
