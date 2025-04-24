@@ -52,4 +52,19 @@ class ReservationService
             'cancelled' => 'Cancelled'
         ];
     }
+    public function cancelReservation(int $reservationId, Client $client)
+    {
+        $reservation = $this->reservationRepository->getEntityById($reservationId);
+    
+        if (!$reservation) {
+            throw new \Exception('Reservation not found');
+        }
+    
+        if ($reservation->getStatus() !== 'PENDING') {
+            throw new \Exception('Only pending reservations can be cancelled');
+        }
+    
+        // Delete the reservation
+        $this->reservationRepository->deleteEntity($reservation);
+    }
 }
