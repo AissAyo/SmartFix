@@ -1,11 +1,11 @@
 from math import radians, sin, cos, sqrt, atan2
 from typing import List, Dict, Tuple
 import requests
-from DBConnector import connection
+from DBConnector import db
 
 class DistanceCalculator:
     def __init__(self):
-        self.connection = connection
+        self.connection = db
         self.garage_locations = self._load_garage_locations()
 
     def _load_garage_locations(self) -> Dict[str, Tuple[float, float]]:
