@@ -3,6 +3,7 @@
 namespace App\Controller\Client;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\Client\ReservationService;
@@ -13,6 +14,7 @@ final class HistoryClientController extends AbstractController
 {
     #[Route('/history/client/{page<\d+>?1}', name: 'app_history_client')]
     public function index(
+        Request $request,
         ReservationService $reservationService,
         int $page = 1,
         AuthService $authService
@@ -28,11 +30,15 @@ final class HistoryClientController extends AbstractController
             throw $this->createAccessDeniedException('Accès réservé aux clients');
         }
 
-        $reservations = $reservationService->getReservationsForClient($user, $page);
+        $status = $request->query->get('status');
+        $reservations = $reservationService->getReservationsForClient($user, $page, 10, $status);
+        $statusOptions = $reservationService->getStatusOptions();
 
         return $this->render('history_client/index.html.twig', [
             'reservations' => $reservations,
-            'pagination' => $reservations
+            'pagination' => $reservations,
+            'statusOptions' => $statusOptions,
+            'selectedStatus' => $status
         ]);
     }
 }
