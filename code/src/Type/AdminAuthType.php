@@ -26,7 +26,7 @@ class AdminAuthType extends AbstractType
                     new Email(['message' => 'Please enter a valid email address'])
                 ],
                 'attr' => [
-                    'placeholder' => 'your@email.com'
+                    'placeholder' => 'smartfix@gmail.com'
                 ]
             ])
             ->add('password', PasswordType::class, [
