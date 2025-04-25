@@ -20,15 +20,17 @@ class Mechanic extends Garagiste
     #[ORM\Column(type: 'integer', nullable: true)]
     #[Assert\Range(min: 0, max: 50)]
     private ?int $experienceYears = null;
+    #[Vich\UploadableField(mapping: 'mechanic_logo', fileNameProperty: 'logo')]
+    private ?File $logoFile = null;
 
-
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $logo = null;  // Initialize as null
 
     #[Vich\UploadableField(mapping: 'mechanic_photoProfil', fileNameProperty: 'photoProfil')]
     private ?File $photoProfilFile = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $photoProfil = null;
-
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $certifications ;
@@ -38,13 +40,7 @@ class Mechanic extends Garagiste
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'mechanicSender')]
-    private Collection $sentMessages;
-
-    #[ORM\OneToMany(targetEntity: Conversation::class, mappedBy: 'mechanic')]
-    private Collection $conversations;
-
+ 
     public function __construct(
         string $name = '',
         string $email = '',
@@ -54,31 +50,26 @@ class Mechanic extends Garagiste
         ?string $resetToken = null,
         ?DateTimeInterface $tokenExpiration = null,
         ?string $phone = null,
-        ?string $photoProfil = "avatar5.png",
+        ?string $photoProfil = "avatar5-67f2b22f9551d.png",
         ?string $specialization = null,
         ?int $experienceYears = null,
-        ?string $certifications = '',
-        ?string $city = null,
+        ?string $certifications = ''
     ) {
         parent::__construct(
-            $name, 
-            $email, 
-            $address, 
-            $roles, 
-            $password, 
-            $resetToken, 
-            $tokenExpiration, 
-            $phone,
-            $city
+            $name,
+            $email,
+            $address,
+            $roles,
+            $password,
+            $resetToken,
+            $tokenExpiration,
+            $phone
         );
         $this->garages = new ArrayCollection();
         $this->specialization = $specialization;
         $this->experienceYears = $experienceYears;
         $this->certifications = $certifications;
-        $this->photoProfil = $photoProfil ?? "avatar5.png";
-        $this->sentMessages = new ArrayCollection();
-        $this->conversations = new ArrayCollection();
-        $this->city = $city;
+        $this->photoProfil = $photoProfil ?? "avatar5-67f2b22f9551d.png";
     }
 
     public function getGarages(): Collection
@@ -116,15 +107,20 @@ class Mechanic extends Garagiste
         return $this->certifications ; // Return empty string if null
     }
 
-
-
     public function setCertifications(string $certifications): void
     {
         $this->certifications = $certifications;
     }
 
+    public function getMechanicphotoProfilFile(): ?File
+    {
+        return $this->MechanicphotoProfilFile;
+    }
 
-
+    public function setMechanicphotoProfilFile(?File $MechanicphotoProfilFile): void
+    {
+        $this->MechanicphotoProfilFile = $MechanicphotoProfilFile;
+    }
 
     public function getMechanicServices(): Collection
     {
@@ -156,53 +152,23 @@ class Mechanic extends Garagiste
         $this->photoProfil = $photoProfil;
     }
 
-
-
-    public function getSentMessages(): Collection
+    public function getLogoFile(): ?File
     {
-        return $this->sentMessages;
+        return $this->logoFile;
     }
 
-    public function addSentMessage(Message $message): self
+    public function setLogoFile(?File $logoFile): void
     {
-        if (!$this->sentMessages->contains($message)) {
-            $this->sentMessages->add($message);
-            $message->setMechanicSender($this);
-        }
-        return $this;
+        $this->logoFile = $logoFile;
     }
 
-    public function removeSentMessage(Message $message): self
+    public function getLogo(): ?string
     {
-        if ($this->sentMessages->removeElement($message)) {
-            if ($message->getMechanicSender() === $this) {
-                $message->setMechanicSender(null);
-            }
-        }
-        return $this;
+        return $this->logo;
     }
 
-    public function getConversations(): Collection
+    public function setLogo(?string $logo): void
     {
-        return $this->conversations;
-    }
-
-    public function addConversation(Conversation $conversation): self
-    {
-        if (!$this->conversations->contains($conversation)) {
-            $this->conversations->add($conversation);
-            $conversation->setMechanic($this);
-        }
-        return $this;
-    }
-
-    public function removeConversation(Conversation $conversation): self
-    {
-        if ($this->conversations->removeElement($conversation)) {
-            if ($conversation->getMechanic() === $this) {
-                $conversation->setMechanic(null);
-            }
-        }
-        return $this;
+        $this->logo = $logo;
     }
 }

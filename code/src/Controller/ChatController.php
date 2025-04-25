@@ -54,8 +54,7 @@ class ChatController extends AbstractController
         if (!$chat) {
             $chat = new Chat();
             $chat->setClient($client)
-                ->setMechanic($mechanic)
-                ->setStatus('active');
+                ->setMechanic($mechanic);
             $this->entityManager->persist($chat);
             $this->entityManager->flush();
         }

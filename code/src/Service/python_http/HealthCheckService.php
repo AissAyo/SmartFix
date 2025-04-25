@@ -15,7 +15,8 @@ $this->client = $client;
 
 public function healthCheck(): array
 {
-$response = $this->client->request('GET', 'http://python:8000/health');
-return $response->toArray();
+    $response = $this->client->request('GET', 'http://python:8000/health');
+    return $response->toArray();
 }
 }
+ 

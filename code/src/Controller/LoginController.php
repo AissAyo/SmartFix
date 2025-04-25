@@ -62,7 +62,7 @@ class LoginController extends AbstractController
                 return $this->redirectToRoute('app_home');
             }
 
-        }
+        } 
         // Dernière erreur de connexion
         $error = $authenticationUtils->getLastAuthenticationError();
 

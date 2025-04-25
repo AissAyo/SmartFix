@@ -88,3 +88,7 @@ services:
             - timeout: 30
               connect_timeout: 10
               http_errors: false
+
+    App\Service\Client\RecommenderService:
+        arguments:
+            $recommenderUrl: '%env(RECOMMENDER_URL)%'

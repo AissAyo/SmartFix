@@ -43,7 +43,7 @@ class Garage
     private ?string $phoneNumber = null;
 
 
-    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'logo')]
+    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'LogoProfil')]
     private ?File $LogoFile = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -208,7 +208,7 @@ class Garage
     public function setLogoProfil(?string $LogoProfil): void
     {
         $this->LogoProfil = $LogoProfil;
-    }
+    } 
 
     public function getLogoFile(): ?File
     {
