@@ -1,360 +1,428 @@
 {% extends 'layout.html.twig' %}
 
-{% block container %}
-    {# head #}
-    <div class="wptb-page-heading" style="background-image: url('{{ asset('img/background/page-header-bg.jpg') }}');">
-        <div class="container">
-            <div class="wptb-item--inner">
-                <h2 class="wptb-item--title">My Reservations</h2>
-                <div class="wptb-breadcrumb-wrap">
-                    <ul class="wptb-breadcrumb">
-                        <li><a href="{{ path('app_home') }}">Home</a></li>
-                        <li>My Reservations</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# main content #}
-    <div class="wptb-main-content">
-        <div class="container">
-            <div class="row">
-                {# sidebar #}
-                <div class="col-lg-3 col-md-4">
-                    <div class="sidebar">
-                        <div class="wptb-project-info1">
-                            <h5 class="wptb-item--title">Reservation<br>History</h5>
-                            <div class="wptb--holder">
-                                <div class="wptb--item">
-                                    <div class="wptb--meta"><label>Total Reservations:</label> <span>{{ pagination.getTotalItemCount }}</span></div>
-                                </div>
-                                <div class="wptb--item">
-                                    <div class="wptb--meta"><label>Filter by Status:</label></div>
-                                    <form method="get" class="mt-2">
-                                        <select class="form-select" name="status" onchange="this.form.submit()">
-                                            {% for value, label in statusOptions %}
-                                                <option value="{{ value }}" {% if value == selectedStatus %}selected{% endif %}>{{ label }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {# main content #}
-                <div class="col-lg-9 col-md-8">
-                    <div class="wptb-reservation-history">
-                        {% if reservations|length > 0 %}
-                            {% for reservation in reservations %}
-                                <div class="wptb-reservation-item">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-3">
-                                            <div class="wptb-reservation-date">
-                                                <h6>{{ reservation.reservationDate|date('d M Y') }}</h6>
-                                                <span>{{ reservation.reservationDate|date('H:i') }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <div class="wptb-reservation-vehicle">
-                                                <h6>{{ reservation.vehicle.plateNumber }}</h6>
-                                                <span>{{ reservation.vehicle.model }}</span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="wptb-reservation-service">
-                                                {{ reservation.service.name }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="wptb-reservation-status">
-                                                <span class="badge bg-{{ reservation.status|lower == 'completed' ? 'success' : (reservation.status|lower == 'pending' ? 'warning' : 'secondary') }}">
-                                                    {{ reservation.status }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 text-end">
-                                            <div class="wptb-reservation-price">
-                                                {{ reservation.estimatedPrice }} MAD
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="wptb-reservation-actions">
-                                        {% if reservation.status|lower == 'completed' %}
-                                            <a href="#" class="wptb-btn-review"
-                                               data-id="{{ reservation.id }}"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#reviewModal">
-                                                <i class="bi bi-star-fill"></i> Review
-                                            </a>
-                                        {% elseif reservation.status|lower == 'pending' %}
-                                            <a href="{{ path('client_reservation_cancel', {id: reservation.id}) }}"
-                                               class="wptb-btn-cancel"
-                                               data-href="{{ path('client_reservation_cancel', {id: reservation.id}) }}">
-                                                <i class="bi bi-x-circle"></i> Cancel
-                                            </a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-
-                            {# pagination #}
-                            <div class="wptb-pagination">
-                                {{ knp_pagination_render(pagination) }}
-                            </div>
-                        {% else %}
-                            <div class="wptb-no-reservations">
-                                <p>No reservations found</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Review Modal #}
-    <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reviewModalLabel">Leave a Review</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="wptb-review-form">
-                        <div class="rating mb-3">
-                            <input type="radio" name="rating" value="5" id="star5"><label for="star5"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" name="rating" value="4" id="star4"><label for="star4"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" name="rating" value="3" id="star3"><label for="star3"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" name="rating" value="2" id="star2"><label for="star2"><i class="bi bi-star-fill"></i></label>
-                            <input type="radio" name="rating" value="1" id="star1"><label for="star1"><i class="bi bi-star-fill"></i></label>
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" id="reviewComment" rows="4" placeholder="Write your review here..."></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="wptb-btn wptb-btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="wptb-btn wptb-btn-primary" id="submitReview">Submit Review</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# Confirmation Modal #}
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmModalLabel">Confirm Cancellation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to cancel this reservation?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="wptb-btn wptb-btn-secondary" data-bs-dismiss="modal">No</button>
-                    <button type="button" class="wptb-btn wptb-btn-danger" id="confirmCancel">Yes, Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
 {% block stylesheets %}
     {{ parent() }}
-    <style>
-        .wptb-reservation-history {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.05);
-            padding: 30px;
-        }
+{#    <style>#}
+{#        .content-wrapper {#}
+{#            min-height: calc(100vh - 120px);#}
+{#            margin-bottom: 100px;#}
+{#        }#}
+{#        .footer {#}
+{#            margin-top: 50px;#}
+{#        }#}
+{#        .page-content {#}
+{#            padding: 40px 0;#}
+{#        }#}
+{#        .table-responsive {#}
+{#            margin: 0;#}
+{#        }#}
+{#        .pagination {#}
+{#            margin: 40px 0;#}
+{#        }#}
+{#        .filter-section {#}
+{#            margin-bottom: 30px;#}
+{#        }#}
+{#        .filter-section form {#}
+{#            display: flex;#}
+{#            align-items: center;#}
+{#            gap: 1rem;#}
+{#        }#}
+{#        /* Styles pour la table */#}
+{#        .table {#}
+{#            background-color: #ffffff;#}
+{#            color: #000000;#}
+{#        }#}
+{#        .table th {#}
+{#            background-color: #f8f9fa;#}
+{#        }#}
+{#        .table-striped tbody tr:nth-of-type(odd) {#}
+{#            background-color: rgba(0, 0, 0, 0.05);#}
+{#        }#}
+{#        /* Styles pour les boutons de pagination */#}
+{#        .page-link.text-danger:hover {#}
+{#            color: #fff !important;#}
+{#            background-color:var(--color-one);#}
+{#            border-color: var(--color-one);#}
+{#        }#}
+{#        .page-link.text-danger:focus {#}
+{#            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);#}
+{#        }#}
+{#        .page-item.active .page-link {#}
+{#            background-color: var(--color-one);#}
+{#            border-color: var(--color-one);#}
+{#        }#}
+{#        .page-link.text-danger {#}
+{#            color: var(--color-one);#}
+{#        }#}
+{#        /* Styles pour le sélecteur de statut */#}
+{#        .form-select {#}
+{#            background-color: #ffffff;#}
+{#            border-color: #ced4da;#}
+{#            color: #000000;#}
+{#        }#}
+{#        .form-select:focus {#}
+{#            border-color:var(--color-one);#}
+{#            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);#}
+{#        }#}
+{#        /* Styles pour les cellules de la table */#}
+{#        .table td {#}
+{#            vertical-align: middle;#}
+{#        }#}
+{#        .overlay {#}
+{#            position: fixed;#}
+{#            top: 0; left: 0;#}
+{#            width: 100%; height: 100%;#}
+{#            background: rgba(0, 0, 0, 0.6);#}
+{#            display: none;#}
+{#            justify-content: center;#}
+{#            align-items: center;#}
+{#            z-index: 1000;#}
+{#        }#}
 
-        .wptb-reservation-item {
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
-            margin-bottom: 15px;
-        }
+{#        .confirm-box {#}
+{#            background: white;#}
+{#            color: #000000;#}
+{#            padding: 20px 30px;#}
+{#            border-radius: 10px;#}
+{#            text-align: center;#}
+{#            width: 300px;#}
+{#            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);#}
+{#        }#}
 
-        .wptb-reservation-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
+{#        .btn {#}
+{#            margin: 10px;#}
+{#            padding: 8px 16px;#}
+{#            border: none;#}
+{#            border-radius: 5px;#}
+{#            cursor: pointer;#}
+{#        }#}
 
-        .wptb-reservation-date h6,
-        .wptb-reservation-vehicle h6 {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: #333;
-        }
+{#        .btn-yes {#}
+{#            background-color:var(--color-one);#}
+{#            color: white;#}
+{#        }#}
 
-        .wptb-reservation-date span,
-        .wptb-reservation-vehicle span {
-            font-size: 14px;
-            color: #777;
-        }
+{#        .btn-no {#}
+{#            background-color: #bdc3c7;#}
+{#            color: #2c3e50;#}
+{#        }#}
+{#        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');#}
 
-        .wptb-reservation-service {
-            font-weight: 500;
-            color: #444;
-        }
+{#        html,#}
+{#        body {#}
+{#            height: 100%#}
+{#        }#}
 
-        .wptb-reservation-status .badge {
-            padding: 5px 10px;
-            font-weight: 500;
-            font-size: 13px;
-        }
+{#        body {#}
+{#            display: grid;#}
+{#            place-items: center;#}
+{#            font-family: 'Manrope', sans-serif;#}
+{#            background: #000;#}
 
-        .wptb-reservation-price {
-            font-weight: 600;
-            color: var(--color-one);
-        }
+{#        }#}
 
-        .wptb-reservation-actions {
-            margin-top: 15px;
-        }
 
-        .wptb-btn-review, .wptb-btn-cancel {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
 
-        .wptb-btn-review {
-            background: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-        }
 
-        .wptb-btn-review:hover {
-            background: #ffc107;
-            color: #fff;
-        }
 
-        .wptb-btn-cancel {
-            background: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
-        }
+{#        .cross {#}
+{#            padding: 10px;#}
+{#            color: #d6312d;#}
+{#            cursor: pointer;#}
+{#            font-size: 23px;#}
+{#        }#}
 
-        .wptb-btn-cancel:hover {
-            background: #dc3545;
-            color: #fff;
-        }
+{#        .cross i{#}
 
-        .wptb-no-reservations {
-            text-align: center;
-            padding: 50px 0;
-            color: #777;
-        }
+{#            margin-top: -5px;#}
+{#            cursor: pointer;#}
+{#        }#}
 
-        .rating {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
 
-        .rating input {
-            display: none;
-        }
 
-        .rating label {
-            color: #ddd;
-            font-size: 24px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
 
-        .rating input:checked ~ label,
-        .rating label:hover,
-        .rating label:hover ~ label {
-            color: #ffc107;
-        }
 
-        .wptb-pagination .pagination {
-            justify-content: center;
-            margin-top: 30px;
-        }
 
-        .wptb-pagination .page-item.active .page-link {
-            background-color: var(--color-one);
-            border-color: var(--color-one);
-        }
 
-        .wptb-pagination .page-link {
-            color: var(--color-one);
-        }
-    </style>
+{#        .comment-box {#}
+{#            padding: 5px#}
+{#        }#}
+
+{#        .comment-area textarea {#}
+{#            resize: none;#}
+{#            border: 1px solid #ff0000#}
+{#        }#}
+
+{#        .form-control:focus {#}
+{#            color: #495057;#}
+{#            background-color: #fff;#}
+{#            border-color: #ffffff;#}
+{#            outline: 0;#}
+{#            box-shadow: 0 0 0 1px rgb(255, 0, 0) !important#}
+{#        }#}
+
+{#        .send {#}
+{#            color: #fff;#}
+{#            background-color: #ff0000;#}
+{#            border-color: #ff0000#}
+{#        }#}
+
+{#        .send:hover {#}
+{#            color: #fff;#}
+{#            background-color: #f50202;#}
+{#            border-color: #f50202#}
+{#        }#}
+
+{#        .rating {#}
+{#            display: inline-flex;#}
+{#            margin-top: -10px;#}
+{#            flex-direction: row-reverse;#}
+
+
+{#        }#}
+
+{#        .rating>input {#}
+{#            display: none#}
+{#        }#}
+
+{#        .rating>label {#}
+{#            position: relative;#}
+{#            width: 28px;#}
+{#            font-size: 35px;#}
+{#            color: #ff0000;#}
+{#            cursor: pointer;#}
+{#        }#}
+
+{#        .rating>label::before {#}
+{#            content: "\2605";#}
+{#            position: absolute;#}
+{#            opacity: 0#}
+{#        }#}
+
+{#        .rating>label:hover:before,#}
+{#        .rating>label:hover~label:before {#}
+{#            opacity: 1 !important#}
+{#        }#}
+
+{#        .rating>input:checked~label:before {#}
+{#            opacity: 1#}
+{#        }#}
+
+{#        .rating:hover>input:checked~label:before {#}
+{#            opacity: 0.4#}
+{#        }#}
+{#    </style>#}
+{% endblock %}
+
+{% block container %}
+    <div class="wptb-page-heading" style="background-image: url('{{ asset('img/background/page-header-bg.jpg') }}');">
+    <div class="container">
+        <div class="wptb-item--inner">
+            <h2 class="wptb-item--title">My Reservation</h2>
+            <div class="wptb-breadcrumb-wrap">
+                <ul class="wptb-breadcrumb">
+                    <li><a href="#">Home</a></li>
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+    {# Filter Section #}
+    <div class="filter-section">
+        <div class="container-fluid p-3">
+            <form method="get" class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label class="visually-hidden" for="status">Status</label>
+                    <select class="form-select" id="status" name="status" onchange="this.form.submit()">
+                        {% for value, label in statusOptions %}
+                            <option value="{{ value }}" {% if value == selectedStatus %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# Reservation Cards #}
+    <div class="container">
+        <div class="row">
+            {% for reservation in reservations %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="sidebar">
+                        <div class="wptb-project-info1 p-3 border rounded shadow-sm">
+                            <h5 class="wptb-item--title mb-3">My <br>{{ reservation.vehicle.plateNumber }}</h5>
+                            <div class="wptb--holder">
+                                <div class="wptb--item">
+                                    <div class="wptb--meta"><label>Photo:</label>
+                                        <span>
+{#                                        {% if reservation.vehicle.image %}#}
+{#                                            <img src="{{ asset(reservation.vehicle.image) }}" alt="Vehicle" width="100">#}
+{#                                        {% else %}#}
+{#                                            No image#}
+{#                                        {% endif %}#}dd
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="wptb--item">
+                                    <div class="wptb--meta"><label>Garage:</label> <span>as</span></div>
+                                </div>
+                                <div class="wptb--item">
+                                    <div class="wptb--meta"><label>Reservation Date:</label> <span> ssss </span></div>
+                                </div>
+                                <div class="wptb--item">
+                                    <div class="wptb--meta"><label>Status:</label> <span>{{ reservation.status }}</span></div>
+                                </div>
+                                <div class="wptb--item">
+                                    <div class="wptb--meta"><label>Note:</label> <span>{{ reservation.note ?? 'N/A' }}</span></div>
+                                </div>
+                                <div class="wptb--item mt-3">
+                                    <button class="btn btn-danger review-link" data-id="{{ reservation.id }}">Leave a Review</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-12">
+                    <p>No reservations found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="wptb-pagination-wrap text-center">
+        <ul class="pagination">
+            {# Previous button #}
+            <li>
+                <a class="page-number previous {% if pagination.currentPageNumber == 1 %}disabled{% endif %}"
+                   href="{% if pagination.currentPageNumber > 1 %}{{ path('app_history_client', {page: pagination.currentPageNumber - 1, status: selectedStatus}) }}{% else %}#{% endif %}">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+
+            {# First page #}
+            {% if pagination.currentPageNumber > 3 %}
+                <li>
+                    <a class="page-number" href="{{ path('app_history_client', {page: 1, status: selectedStatus}) }}">1</a>
+                </li>
+                {% if pagination.currentPageNumber > 4 %}
+                    <li><span class="page-number">.....</span></li>
+                {% endif %}
+            {% endif %}
+
+            {# Page numbers around current page #}
+            {% for i in max(1, pagination.currentPageNumber - 2)..min(pagination.pageCount, pagination.currentPageNumber + 2) %}
+                <li>
+                    {% if pagination.currentPageNumber == i %}
+                        <span class="page-number current">{{ i }}</span>
+                    {% else %}
+                        <a class="page-number" href="{{ path('app_history_client', {page: i, status: selectedStatus}) }}">{{ i }}</a>
+                    {% endif %}
+                </li>
+            {% endfor %}
+
+            {# Last page #}
+            {% if pagination.currentPageNumber < pagination.pageCount - 2 %}
+                {% if pagination.currentPageNumber < pagination.pageCount - 3 %}
+                    <li><span class="page-number">.....</span></li>
+                {% endif %}
+                <li>
+                    <a class="page-number" href="{{ path('app_history_client', {page: pagination.pageCount, status: selectedStatus}) }}">
+                        {{ pagination.pageCount }}
+                    </a>
+                </li>
+            {% endif %}
+
+            {# Next button #}
+            <li>
+                <a class="page-number next {% if pagination.currentPageNumber == pagination.pageCount %}disabled{% endif %}"
+                   href="{% if pagination.currentPageNumber < pagination.pageCount %}{{ path('app_history_client', {page: pagination.currentPageNumber + 1, status: selectedStatus}) }}{% else %}#{% endif %}">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            let currentReservationId = null;
-            let cancelUrl = null;
+        let currentReservationId = null;
 
-            // Review modal handling
-            $(document).on('click', '.wptb-btn-review', function(e) {
-                e.preventDefault();
-                currentReservationId = $(this).data('id');
-            });
+        // Initialize Bootstrap modal
+        const formModal = new bootstrap.Modal(document.getElementById('form'));
 
-            $('#submitReview').click(function() {
-                const rating = $('input[name="rating"]:checked').val();
-                const comment = $('#reviewComment').val();
+        // Handle review link click
+        $(document).on('click', '.review-link', function(e) {
+            console.log("Button clicked");
+            e.preventDefault();
+            currentReservationId = $(this).data('id');
 
-                if (!rating) {
-                    alert('Please select a rating');
-                    return;
-                }
+            // Reset form
+            $('input[name="rating"]').prop('checked', false);
+            $('#review-text').val('');
 
-                $.ajax({
-                    url: '{{ path('client_reservation_review_submit') }}',
-                    method: 'POST',
-                    data: {
-                        reservationId: currentReservationId,
-                        rating: rating,
-                        comment: comment
-                    },
-                    success: function(response) {
-                        $('#reviewModal').modal('hide');
-                        alert('Thank you for your review!');
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        alert('An error occurred. Please try again.');
-                        console.error(xhr.responseText);
+            // Show modal
+            formModal.show();
+        });
+
+        // Handle review submission
+        $(document).on('click', '#submit-review', function() {
+            console.log("Button clicked");
+            const rating = $('input[name="rating"]:checked').val();
+            const comment = $('#review-text').val();
+
+            if (!rating) {
+                alert('Please select a rating');
+                return;
+            }
+
+            if (!comment) {
+                alert('Please write a comment');
+                return;
+            }
+
+            // Send the review to the server
+            $.ajax({
+                url: '{{ path('client_reservation_review_submit') }}',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    reservationId: currentReservationId,
+                    rating: parseInt(rating),
+                    comment: comment
+                }),
+                success: function(response) {
+                    console.log('Success:', response);
+                    alert('Review submitted successfully!');
+                    formModal.hide();
+                    // Refresh the page to show the new review
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.error('Error details:', response);
+                        alert(`Error: ${response.error}\n\nDebug info:\n${response.debug}`);
+                    } catch (e) {
+                        console.error('Error:', error);
+                        alert(`Error submitting review: ${error}\n\nCheck browser console for more details`);
                     }
-                });
-            });
-
-            // Cancel confirmation handling
-            $(document).on('click', '.wptb-btn-cancel', function(e) {
-                e.preventDefault();
-                cancelUrl = $(this).data('href');
-                $('#confirmModal').modal('show');
-            });
-
-            $('#confirmCancel').click(function() {
-                if (cancelUrl) {
-                    window.location.href = cancelUrl;
                 }
             });
+        });
 
-            // Reset modals when closed
-            $('#reviewModal, #confirmModal').on('hidden.bs.modal', function() {
-                $('input[name="rating"]').prop('checked', false);
-                $('#reviewComment').val('');
-                currentReservationId = null;
-                cancelUrl = null;
-            });
+        // Close modal when clicking the close button
+        $(document).on('click', '.btn-close', function() {
+            formModal.hide();
         });
     </script>
 {% endblock %}
+
+

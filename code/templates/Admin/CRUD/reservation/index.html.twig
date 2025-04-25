@@ -36,7 +36,7 @@
                         </form>
                     </div>
                     <div class="w-100 w-md-auto d-flex flex-column flex-md-row align-items-stretch justify-content-end mt-2 mt-md-0">
-                        <a href="{{ path('reservation_new') }}" class="btn btn-danger d-flex align-items-center">
+                        <a href="{{ path('admin_reservation_new') }}" class="btn btn-danger d-flex align-items-center">
                             <i class="bi bi-plus me-2"></i>
                             Create New
                         </a>
@@ -85,13 +85,13 @@
                                         <ul class="dropdown-menu" aria-labelledby="reservation-{{ reservation.id }}-dropdown-button">
 
                                             <li>
-                                                <a href="{{ path('reservation_edit', {id: reservation.id}) }}" class="dropdown-item">
+                                                <a href="{{ path('admin_reservation_edit', {id: reservation.id}) }}" class="dropdown-item">
                                                     <i class="bi bi-pencil me-2"></i>
                                                     Edit
                                                 </a>
                                             </li>
                                             <li>
-                                                <form method="post" action="{{ path('reservation_delete', {id: reservation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                                                <form method="post" action="{{ path('admin_reservation_delete', {id: reservation.id}) }}" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
                                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ reservation.id) }}">
                                                     <button type="submit" class="dropdown-item text-danger">
                                                         <i class="bi bi-trash me-2"></i>
@@ -118,7 +118,7 @@
                     <ul class="pagination mb-0">
                         {% if pagination.currentPageNumber != 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('reservation_index', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
+                                <a class="page-link text-danger" href="{{ path('admin_reservation_inde', {page: pagination.currentPageNumber - 1}) }}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -130,7 +130,7 @@
 
                         {% if start > 1 %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('reservation_index', {page: 1}) }}">1</a>
+                                <a class="page-link text-danger" href="{{ path('admin_reservation_inde', {page: 1}) }}">1</a>
                             </li>
                             {% if start > 2 %}
                                 <li class="page-item disabled">
@@ -142,7 +142,7 @@
                         {% for page in start..end %}
                             <li class="page-item {% if page == pagination.currentPageNumber %}active{% endif %}">
                                 <a class="page-link {% if page != pagination.currentPageNumber %}text-danger{% else %}text-white bg-danger border-danger{% endif %}"
-                                   href="{{ path('reservation_index', {page: page}) }}">
+                                   href="{{ path('admin_reservation_index', {page: page}) }}">
                                     {{ page }}
                                 </a>
                             </li>
@@ -155,7 +155,7 @@
                                 </li>
                             {% endif %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('reservation_index', {page: pagination.pageCount}) }}">
+                                <a class="page-link text-danger" href="{{ path('admin_reservation_index', {page: pagination.pageCount}) }}">
                                     {{ pagination.pageCount }}
                                 </a>
                             </li>
@@ -163,7 +163,7 @@
 
                         {% if pagination.currentPageNumber != pagination.pageCount %}
                             <li class="page-item">
-                                <a class="page-link text-danger" href="{{ path('reservation_index', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
+                                <a class="page-link text-danger" href="{{ path('admin_reservation_index', {page: pagination.currentPageNumber + 1}) }}" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>

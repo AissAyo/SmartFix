@@ -2,7 +2,7 @@
 
 namespace App\Service\Client;
 
-use App\Repository\ReservationRepositoryInterface;
+use App\Repository\ReservationRepository;
 use App\Entity\Client;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -12,7 +12,7 @@ class ReservationService
     private $paginator;
 
     public function __construct(
-        ReservationRepositoryInterface $reservationRepository,
+        ReservationRepository $reservationRepository,
         PaginatorInterface $paginator
     ) {
         $this->reservationRepository = $reservationRepository;
@@ -28,14 +28,13 @@ class ReservationService
 
         if ($status && $status !== '') {
             $query->andWhere('r.status = :status')
-                  ->setParameter('status', $status);
+                ->setParameter('status', $status);
         }
 
-        $query->orderBy('r.reservationDate', 'DESC')
-              ->getQuery();
+        $query->orderBy('r.reservationDate', 'DESC');
 
         return $this->paginator->paginate(
-            $query,
+            $query->getQuery(),
             $page,
             $limit
         );
@@ -52,19 +51,20 @@ class ReservationService
             'cancelled' => 'Cancelled'
         ];
     }
+
     public function cancelReservation(int $reservationId, Client $client)
     {
-        $reservation = $this->reservationRepository->getEntityById($reservationId);
-    
+        $reservation = $this->reservationRepository->find($reservationId);
+
         if (!$reservation) {
             throw new \Exception('Reservation not found');
         }
-    
+
         if ($reservation->getStatus() !== 'PENDING') {
             throw new \Exception('Only pending reservations can be cancelled');
         }
-    
+
         // Delete the reservation
-        $this->reservationRepository->deleteEntity($reservation);
+        $this->reservationRepository->remove($reservation, true);
     }
 }
