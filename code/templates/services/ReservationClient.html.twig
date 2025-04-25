@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation - {{ garage.name }}{% endblock %}
+
+{% block body %}
+    <div class="container pd-top-100 pd-bottom-100">
+        <div class="page-header mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_garages') }}">Garages</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_garage_show', {'id': garage.id}) }}">{{ garage.name }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">New Reservation</li>
+                </ol>
+            </nav>
+            <h1 class="page-title">New Reservation at {{ garage.name }}</h1>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(form) }}
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ form_widget(form.reservationDate) }}
+                                    {{ form_label(form.reservationDate) }}
+                                </div>
+                                {{ form_errors(form.reservationDate) }}
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ form_widget(form.vehicle) }}
+                                    {{ form_label(form.vehicle) }}
+                                </div>
+                                {{ form_errors(form.vehicle) }}
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ form_widget(form.service) }}
+                                    {{ form_label(form.service) }}
+                                </div>
+                                {{ form_errors(form.service) }}
+                            </div>
+
+                           
+
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    {{ form_widget(form.notes) }}
+                                    {{ form_label(form.notes) }}
+                                </div>
+                                {{ form_errors(form.notes) }}
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+                                <a href="{{ path('app_garage_show', {'id': garage.id}) }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to Garage
+                                </a>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="bi bi-calendar-check me-2"></i>Create Reservation
+                                </button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-update estimated price when service is selected
+            const serviceSelect = document.querySelector('#reservation_service');
+    
+            serviceSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.text) {
+                    const priceMatch = selectedOption.text.match(/(\d+(?:\.\d{2})?)/);
+                    if (priceMatch) {
+                        estimatedPriceInput.value = priceMatch[1];
+                    }
+                }
+            });
+        });
+    </script>
+    {% endblock %}
+{% endblock %}
