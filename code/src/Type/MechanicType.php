@@ -37,14 +37,14 @@ class MechanicType extends AbstractType
                     new Assert\Email(),
                 ],
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotBlank(),
-                    new Assert\Length(['min' => 6]),
-                ],
-            ])
+            // ->add('password', PasswordType::class, [
+            //     'label' => 'Password',
+            //     'required' => true,
+            //     'constraints' => [
+            //         new Assert\NotBlank(),
+            //         new Assert\Length(['min' => 6]),
+            //     ],
+            // ])
             ->add('city', ChoiceType::class, [
                 'label' => 'City',
                 'required' => true,
