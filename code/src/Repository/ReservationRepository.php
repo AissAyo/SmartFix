@@ -33,6 +33,22 @@ class ReservationRepository implements ReservationRepositoryInterface
         return $this->entityManager->getRepository(Reservation::class)
             ->createQueryBuilder($alias);
     }
+   public function countReservationsForClient(Client $client, ?string $status = null): int
+   {
+       $qb = $this->createQueryBuilder('r')
+           ->innerJoin('r.vehicle', 'v')
+           ->where('v.client = :client')
+           ->setParameter('client', $client);
+   
+       if ($status !== null && $status !== '') {
+           $qb->andWhere('LOWER(r.status) = :status')
+              ->setParameter('status', strtolower($status));
+       }
+   
+       return $qb->select('COUNT(r)')
+                 ->getQuery()
+                 ->getSingleScalarResult();
+   }
 
     public function addEntity($entity): void
     {

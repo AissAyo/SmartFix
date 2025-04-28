@@ -26,7 +26,7 @@ class UserRepository extends ServiceEntityRepository
     {
         // Recherche parmi toutes les entités incluant Admin
         return $this->getEntityManager()->getRepository(Client::class)->findOneBy(['email' => $email])
-            ?? $this->getEntityManager()->getRepository(ServiceClient::class)->findOneBy(['email' => $email])
+            ?? $this->getEntityManager()->getRepository(Admin::class)->findOneBy(['email' => $email])
             ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['email' => $email]);
     }
 
@@ -34,7 +34,7 @@ class UserRepository extends ServiceEntityRepository
     {
         // Recherche du token parmi toutes les entités incluant Admin
         return $this->getEntityManager()->getRepository(Client::class)->findOneBy(['resetToken' => $token])
-            ?? $this->getEntityManager()->getRepository(ServiceClient::class)->findOneBy(['resetToken' => $token])
+            ?? $this->getEntityManager()->getRepository(Admin::class)->findOneBy(['resetToken' => $token])
             ?? $this->getEntityManager()->getRepository(Mechanic::class)->findOneBy(['resetToken' => $token]);
     }
 

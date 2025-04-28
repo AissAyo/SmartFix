@@ -40,11 +40,6 @@ class Garage
     private ?string $phoneNumber = null;
 
 
-    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'logo')]
-    private ?File $LogoFile = null;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $LogoProfil = null;
 
     #[ORM\OneToMany(targetEntity: CategoryService::class, mappedBy: 'garage')]
     private Collection $categoryServices;
@@ -70,9 +65,6 @@ class Garage
      */
     #[ORM\OneToMany(targetEntity: GarageService::class, mappedBy: 'id_garage')]
     private Collection $service;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logo = null;
 
 
 
@@ -215,26 +207,7 @@ class Garage
         $this->phoneNumber = $phoneNumber;
     }
 
-    public function getLogoProfil(): ?string
-    {
-        return $this->LogoProfil;
-    }
-
-    public function setLogoProfil(?string $LogoProfil): void
-    {
-        $this->LogoProfil = $LogoProfil;
-    }
-
-    public function getLogoFile(): ?File
-    {
-        return $this->LogoFile;
-    }
-
-    public function setLogoFile(?File $LogoFile): void
-    {
-        $this->LogoFile = $LogoFile;
-    }
-
+    
     public function addCategoryService(CategoryService $categoryService): self
     {
         if (!$this->categoryServices->contains($categoryService)) {

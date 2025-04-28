@@ -20,26 +20,45 @@ class ReservationService
     }
 
     public function getReservationsForClient(Client $client, int $page = 1, int $limit = 10, ?string $status = null)
-    {
-        $query = $this->reservationRepository->createQueryBuilder('r')
-            ->innerJoin('r.vehicle', 'v')
-            ->where('v.client = :client')
-            ->setParameter('client', $client);
+   {
+       $query = $this->reservationRepository->createQueryBuilder('r')
+           ->innerJoin('r.vehicle', 'v')
+           ->innerJoin('r.service', 's')
+           ->innerJoin('s.categoryService', 'c')
+           ->innerJoin('c.garage', 'g')
+           ->where('v.client = :client')
+           ->setParameter('client', $client);
 
-        if ($status && $status !== '') {
-            $query->andWhere('r.status = :status')
-                  ->setParameter('status', $status);
-        }
+       if ($status !== null && $status !== '') {
+           $query->andWhere('LOWER(r.status) = :status')
+                 ->setParameter('status', strtolower($status));
+       }
 
-        $query->orderBy('r.reservationDate', 'DESC')
-              ->getQuery();
+       $query->orderBy('r.reservationDate', 'DESC');
 
-        return $this->paginator->paginate(
-            $query,
-            $page,
-            $limit
-        );
-    }
+       return $this->paginator->paginate(
+           $query,
+           $page,
+           $limit
+       );
+   }
+
+   public function getTotalReservationsForClient(Client $client, ?string $status = null): int
+   {
+       $qb = $this->reservationRepository->createQueryBuilder('r')
+           ->innerJoin('r.vehicle', 'v')
+           ->where('v.client = :client')
+           ->setParameter('client', $client);
+   
+       if ($status !== null && $status !== '') {
+           $qb->andWhere('LOWER(r.status) = :status')
+              ->setParameter('status', strtolower($status));
+       }
+   
+       return $qb->select('COUNT(r)')
+                 ->getQuery()
+                 ->getSingleScalarResult();
+   }
 
     public function getStatusOptions(): array
     {
@@ -48,8 +67,7 @@ class ReservationService
             'pending' => 'Pending',
             'confirmed' => 'Confirmed',
             'in_progress' => 'In Progress',
-            'completed' => 'Completed',
-            'cancelled' => 'Cancelled'
+            'completed' => 'Completed'
         ];
     }
     public function cancelReservation(int $reservationId, Client $client)

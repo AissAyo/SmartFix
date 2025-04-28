@@ -20,36 +20,46 @@ use App\Entity\Reservation;
  */
 final class HistoryClientController extends AbstractController
 {
-   #[Route('/history/client/{page<\d+>?1}', name: 'app_history_client')]
-   public function index(
-       Request $request,
-       ReservationService $reservationService,
-       AuthService $authService,
-       int $page = 1
-   ): Response {
-       $user = $authService->getUser();
-       
-       if (!$user) {
-           throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page');
-       }
-       
-       if (!$user instanceof Client) {
-           throw $this->createAccessDeniedException('Accès réservé aux clients');
-       }
-   
-       $status = $request->query->get('status');
-       $reservations = $reservationService->getReservationsForClient($user, $page, 10, $status);
-       $statusOptions = $reservationService->getStatusOptions();
-   //dd($reservations);
-
-       return $this->render('history_client/index.html.twig', [
-           'reservations' => $reservations,
-           'pagination' => $reservations,
-           'statusOptions' => $statusOptions,
-           'selectedStatus' => $status
-       ]);
-   }
-
+  #[Route('/history/client/{page<\d+>?1}', name: 'app_history_client')]
+  public function index(
+      Request $request,
+      ReservationService $reservationService,
+      AuthService $authService,
+      int $page = 1
+  ): Response {
+      $user = $authService->getUser();
+      
+      if (!$user) {
+          throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page');
+      }
+      
+      if (!$user instanceof Client) {
+          throw $this->createAccessDeniedException('Accès réservé aux clients');
+      }
+  
+      $status = $request->query->get('status');
+      
+      // D'abord, obtenir le nombre total de réservations
+      $totalReservations = $reservationService->getTotalReservationsForClient($user, $status);
+      
+      // Ensuite, obtenir les réservations paginées
+      $reservations = $reservationService->getReservationsForClient($user, $page, 6, $status);
+      
+      $statusOptions = $reservationService->getStatusOptions();
+  
+      // Créer un tableau de pagination
+      $pagination = new \stdClass();
+      $pagination->currentPageNumber = $page;
+      $pagination->pageCount = ceil($totalReservations / 6);
+      $pagination->itemsPerPage =6;
+ 
+      return $this->render('history_client/index.html.twig', [
+          'reservations' => $reservations,
+          'pagination' => $pagination,
+          'statusOptions' => $statusOptions,
+          'selectedStatus' => $status
+      ]);
+  }
 
     #[Route('/client/reservation/cancel/{id}', name: 'client_reservation_cancel')]
     public function cancel(

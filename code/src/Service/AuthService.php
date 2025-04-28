@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Admin;
 use App\Entity\User;
 use App\Repository\ClientRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -53,7 +54,7 @@ class AuthService
         $session->set('user', [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'type' => $user instanceof Client ? 'client' : ($user instanceof ServiceClient ? 'ServiceClient' : 'other')
+            'type' => $user instanceof Client ? 'client' : ($user instanceof Admin ? 'admin' : 'other')
         ]);
     }
 
