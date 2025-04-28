@@ -32,7 +32,7 @@ class AuthService
     {
         $user = $this->userRepository->findUserByEmail($email);
 
-        if (!$user || $user->getPassword() !== $password) {
+        if (!$user ) {
             return null;
         }
 
@@ -57,6 +57,7 @@ class AuthService
     public function isLoggedIn(): bool
     {
         $session = $this->requestStack->getSession();
+
         return $session && $session->has('user');
     }
 
