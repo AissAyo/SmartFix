@@ -1,0 +1,222 @@
+{% extends 'adminNavBar.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-danger text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="h4 mb-0">
+                                <i class="bi bi-tools me-2"></i>Create a New Reservation
+                            </h2>
+                            <a href="/admin/reservations" class="btn btn-sm btn-light">
+                                <i class="bi bi-arrow-left me-1"></i> Back to Reservations
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <form class="needs-validation" novalidate method="post">
+
+                            <div class="row g-3">
+                                <!-- Client Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="client" required>
+                                            <option value="" selected disabled>Select a client</option>
+                                            <!-- Client options would be populated dynamically -->
+                                            <option value="1">John Doe (555-1234)</option>
+                                            <option value="2">Jane Smith (555-5678)</option>
+                                        </select>
+                                        <label for="client">Client</label>
+                                        <div class="invalid-feedback">
+                                            Please select a client.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Vehicle Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="vehicle" required>
+                                            <option value="" selected disabled>Select a vehicle</option>
+                                            <!-- Vehicle options would be populated dynamically -->
+                                            <option value="1">Toyota Camry (ABC123)</option>
+                                            <option value="2">Honda Accord (XYZ789)</option>
+                                        </select>
+                                        <label for="vehicle">Vehicle</label>
+                                        <div class="invalid-feedback">
+                                            Please select a vehicle.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Service Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="service" required>
+                                            <option value="" selected disabled>Select a service</option>
+                                            <!-- Service options would be populated dynamically -->
+                                            <option value="1">Oil Change</option>
+                                            <option value="2">Brake Inspection</option>
+                                        </select>
+                                        <label for="service">Service</label>
+                                        <div class="invalid-feedback">
+                                            Please select a service.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Garage Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="garage" required>
+                                            <option value="" selected disabled>Select a garage</option>
+                                            <!-- Garage options would be populated dynamically -->
+                                            <option value="1">Main Garage (main@example.com)</option>
+                                            <option value="2">Downtown Garage (downtown@example.com)</option>
+                                        </select>
+                                        <label for="garage">Garage</label>
+                                        <div class="invalid-feedback">
+                                            Please select a garage.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Reservation Date Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="datetime-local" class="form-control datetimepicker" id="reservationDate" required>
+                                        <label for="reservationDate">Reservation Date</label>
+                                        <div class="invalid-feedback">
+                                            Please provide a reservation date and time.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Estimated Price Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="number" step="0.01" class="form-control" id="estimatedPrice" required>
+                                        <label for="estimatedPrice">Estimated Price</label>
+                                        <div class="invalid-feedback">
+                                            Please provide an estimated price.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Status Field -->
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="status" required>
+                                            <option value="pending">Pending</option>
+                                            <option value="confirmed">Confirmed</option>
+                                            <option value="in_progress">In Progress</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                        <label for="status">Status</label>
+                                        <div class="invalid-feedback">
+                                            Please select a status.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Notes Field -->
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <textarea class="form-control" id="notes" style="height: 100px"></textarea>
+                                        <label for="notes">Notes</label>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="col-12 mt-4">
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="submit" class="btn btn-danger btn-lg px-4 me-md-2">
+                                            <i class="bi bi-save me-2"></i> Create Reservation
+                                        </button>
+                                        <a href="/admin/reservations" class="btn btn-outline-secondary btn-lg px-4">
+                                            Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize flatpickr for datetime picker
+            flatpickr('.datetimepicker', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true
+            });
+
+            // Form validation
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.querySelectorAll('.needs-validation')
+
+                // Loop over them and prevent submission
+                Array.prototype.slice.call(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+        });
+    </script>
+
+    {# Add datepicker initialization #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize flatpickr for datetime picker
+            flatpickr('.datetimepicker', {
+                enableTime: true,
+                dateFormat: "Y-m-d H:i",
+                time_24hr: true
+            });
+        });
+    </script>
+
+    <style>
+        .form-control:focus, .form-select:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+        }
+        .card {
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .card-header {
+            border-radius: 1rem 1rem 0 0 !important;
+        }
+        .form-floating>label {
+            padding: 0.5rem 0.75rem;
+        }
+        textarea.form-control {
+            min-height: 100px;
+        }
+    </style>
+{% endblock %}

@@ -93,7 +93,7 @@
 }
 
 .widget-title::before {
-  content: url('../img/more/divider-sm.svg');
+  content: url('../img2/more/divider-sm.svg');
   position: relative;
   left: 0px;
   margin-right: 10px;

@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 
 class ClientType extends AbstractType
 {
@@ -61,6 +63,12 @@ class ClientType extends AbstractType
                     'placeholder' => 'At least 8 characters'
                 ]
             ])
+            ->add('verificationStatus', ChoiceType::class, [
+                'choices' => [
+                    'Verified' => 'verified',
+                    'Rejected' => 'rejected',
+                ]
+            ])
             ->add('phone', TelType::class, [
                 'label' => 'Phone Number',
                 'constraints' => [
@@ -83,7 +91,7 @@ class ClientType extends AbstractType
                     'placeholder' => 'Casablanca'
                 ]
             ])
-            ->add('profileImage', FileType::class, [
+            ->add('photoProfilFile', FileType::class, [
                 'label' => 'Profile Picture (optional)',
                 'mapped' => false,
                 'required' => false,
@@ -94,7 +102,8 @@ class ClientType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid image (JPEG or PNG)',
                     ])
                 ]
-            ]);
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

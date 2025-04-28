@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ garage.name }} - Services{% endblock %}
+
+{% block body %}
+<main class="wrapper bg-black text-white">
+
+    <!-- Page Header -->
+    <div class="wptb-page-heading" style="background-image: url('assets/img/background/page-header-bg.jpg');">
+        <div class="container">
+            <div class="wptb-item--inner">
+                <h2 class="wptb-item--title">{{ garage.name }}</h2>
+                <div class="wptb-breadcrumb-wrap">
+                    <ul class="wptb-breadcrumb">
+                        <li><a href="{{ path('app_home') }}">Home</a></li>
+                        <li><a href="{{ path('app_garages') }}">Garages</a></li>
+                        <li><span>{{ garage.name }}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section class="pd-top-100 pd-bottom-100">
+        <div class="container">
+            <div class="row">
+                <!-- Left Panel -->
+                <div class="col-lg-4">
+                    <div class="card bg-dark text-white mb-4">
+                        {% if garage.logoProfil %}
+                            <img src="{{ asset('uploads/mechanics/garage/' ~ garage.logoProfil) }}" class="card-img-top" alt="{{ garage.name }}">
+                        {% else %}
+                            <img src="{{ asset('uploads/6.jpg') }}" class="card-img-top" alt="Default garage image">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ garage.name }}</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-{{ garage.status == 'active' ? 'success' : 'warning' }}">{{ garage.status|capitalize }}</span>
+                                <span class="badge bg-info">Rating: {{ garage.rating }}/5</span>
+                                {% if garage.distance is defined %}
+                                    <span class="badge bg-secondary"><i class="fas fa-location-arrow"></i> {{ garage.distance }} km</span>
+                                {% endif %}
+                            </div>
+                            <p class="card-text"><i class="fas fa-map-marker-alt"></i> {{ garage.garageAddress }}
+                                {% if garage.location and garage.location.city %}
+                                    <br><small class="text-muted">{{ garage.location.city }}</small>
+                                {% endif %}
+                            </p>
+                            {% if garage.workingHours %}
+                                <p class="card-text"><i class="fas fa-clock"></i> {{ garage.workingHours }}</p>
+                            {% endif %}
+                            {% if garage.phoneNumber %}
+                                <p class="card-text"><i class="fas fa-phone"></i> {{ garage.phoneNumber }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel -->
+                <div class="col-lg-8">
+                    <div class="row g-4">
+                        {% for category in garage.categoryServices %}
+                            <div class="col-md-6">
+                                <div class="card bg-dark text-white h-100 border border-secondary">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title border-bottom border-secondary pb-2">{{ category.categoryname }}</h5>
+                                        <ul class="list-group list-group-flush flex-grow-1">
+                                            {% for service in category.services %}
+                                                <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center border-0 py-2 px-0">
+                                                    <div>
+                                                        <i class="fas fa-cogs text-warning me-2"></i>
+                                                        {{ service.name }}
+                                                    </div>
+                                                    <div class="text-end">
+                                                        {% if service.price %}
+                                                            <span class="badge bg-primary me-2">${{ service.price }}</span>
+                                                        {% endif %}
+                                                        <a href="{{ path('app_reservation_new', {'id': garage.id, 'serviceId': service.id}) }}" class="btn btn-sm btn-danger">
+                                                            Reserve
+                                                        </a>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i> No services available for this garage.
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehicle Modal -->
+    <div class="modal fade" id="vehicleModal" tabindex="-1" aria-labelledby="vehicleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vehicleModalLabel">Select Your Vehicle</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if app.user %}
+                        <form id="vehicleForm">
+                            <input type="hidden" id="selectedServiceId">
+                            <div class="mb-3">
+                                <label for="vehicleSelect" class="form-label">Choose a vehicle</label>
+                                <select class="form-select" id="vehicleSelect" required>
+                                    <option value="" disabled selected>Select vehicle</option>
+                                    {% for vehicle in app.user.vehicles %}
+                                        <option value="{{ vehicle.id }}">{{ vehicle.brand }} - {{ vehicle.model }} ({{ vehicle.licensePlate }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="text-center">
+                            <p class="mb-3">Please log in to make a reservation.</p>
+                            <a href="{{ path('app_login') }}" class="btn btn-danger">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Login to Continue
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    {% if app.user %}
+                        <button type="button" class="btn btn-danger" onclick="submitReservation()">Confirm</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function openReservationModal(event, serviceId) {
+            event.preventDefault();
+            document.getElementById('selectedServiceId').value = serviceId;
+            const modal = new bootstrap.Modal(document.getElementById('vehicleModal'));
+            modal.show();
+        }
+
+        function submitReservation() {
+            const vehicleId = document.getElementById('vehicleSelect').value;
+            const serviceId = document.getElementById('selectedServiceId').value;
+
+            if (!vehicleId) {
+                alert("Please select a vehicle.");
+                return;
+            }
+
+            const url = "{{ path('app_reservation_new') }}?serviceId=" + serviceId + "&vehicleId=" + vehicleId;
+            window.location.href = url;
+        }
+    </script>
+{% endblock %}

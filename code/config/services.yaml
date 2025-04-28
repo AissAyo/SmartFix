@@ -1,23 +1,39 @@
+#This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
 parameters:
+    client_directory: '%kernel.project_dir%/public/uploads/client'
     upload_directory: '%kernel.project_dir%/public/uploads'
     TWILIO_ACCOUNT_SID: '%env(TWILIO_ACCOUNT_SID)%'
     TWILIO_AUTH_TOKEN: '%env(TWILIO_AUTH_TOKEN)%'
     TWILIO_FROM_NUMBER: '%env(TWILIO_FROM_NUMBER)%'
     TWILIO_CONTENT_SID: '%env(TWILIO_CONTENT_SID)%'
+    mercure.public_url: '%env(MERCURE_PUBLIC_URL)%'
+    mercure.default_hub.jwt.secret: '%env(MERCURE_JWT_SECRET)%'
 
 services:
+    # default configuration for services in this file
     _defaults:
-        autowire: true
-        autoconfigure: true
-        public: false
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always replace previous ones
 
     Twilio\Rest\Client:
         arguments:
@@ -35,3 +51,45 @@ services:
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%upload_directory%'
+
+    App\Service\CRUD\MechanicService:
+    App\Service\CRUD\SellerService:
+    App\Repository\:
+        resource: '../src/Repository/'
+        tags: ['doctrine.repository_service']
+
+    App\Controller\MenuController:
+        tags: ['controller.service_arguments']
+    App\Repository\ReservationRepository:
+        autowire: true
+        autoconfigure: true
+    App\Service\AuthClient\AuthClientService:
+    # Rely on autowiring for dependencies:
+    # - ClientService (autoregistered service)
+    # - WhatsAppVerificationCodeSender (configured above)
+    # - LoggerInterface (Symfony core service)
+    App\Service\CarApiService:
+        public: true
+        arguments:
+            $client: '@GuzzleHttp\Client'
+            $logger: '@logger'
+            $databaseService: '@App\Service\DatabaseConnectionService'
+            $em: '@doctrine.orm.entity_manager'
+            $apiKey: '%env(CARAPI_KEY)%'
+            $apiSecret: '%env(CARAPI_SECRET)%'
+            $baseUrl: '%env(CARAPI_BASE_URL)%'
+
+    # Register the DatabaseConnectionService
+    App\Service\DatabaseConnectionService:
+        public: true
+
+    GuzzleHttp\Client:
+        arguments:
+            - timeout: 30
+              connect_timeout: 10
+              http_errors: false
+
+    App\Service\Client\RecommenderService:
+        arguments:
+            $recommenderUrl: '%env(RECOMMENDER_URL)%'
+    Symfony\Component\Mercure\HubInterface: '@mercure.hub.default'

@@ -1,520 +1,455 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('main.css') }}">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    {% endblock head %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="{{ asset('dashboard/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    {{ encore_entry_link_tags('app') }}
-
-    <style>
-        .nav-item .nav-link.clickable {
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .nav-item .nav-link.clickable:hover {
-            background-color: #f0f0f0;
-            color: #007bff;
-        }
-         .sidebar-collapsed {
-             width: 0;
-             overflow: hidden;
-             transition: width 0.3s ease-in-out;
-         }
-
-        .sidebar-expanded {
-            width: 250px;
-        }
-
-        .menu-container {
-            display: flex;
-        }
-        .main-sidebar {
-            transition: all 0.3s ease-in-out;
-        }
-
-        .sidebar-toggle {
-            cursor: pointer;
-        }
-
-        .main-header {
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
-        .nav-item.has-treeview > a .fa-angle-left {
-            transition: transform 0.3s ease;
-        }
-
-        .fa-rotate-90 {
-            transform: rotate(90deg);
-        }
-
-        .sidebar-collapse {
-            margin-left: -250px;
-        }
-
-        @media (min-width: 992px) {
-            .sidebar-collapse {
-                margin-left: 0;
-            }
-        }
-        .nav-item .nav-link.clickable {
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .nav-item .nav-link.clickable:hover {
-            background-color: #f0f0f0;
-            color: #007bff;
-        }
-
-        .menu-container {
-            position: fixed;
-            top: 0;
-            left: -250px; /* Move it off-screen */
-            width: 250px;
-            height: 100vh;
-            background: #343a40;
-            transition: left 0.3s ease-in-out;
-            z-index: 1000;
-            margin-top: 2.5%;
-        }
-
-        .menu-container.show {
-            left: 0; /* Bring it into view */
-        }
+    {# Block for stylesheets #}
+    {% block stylesheets %}
+    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Tempusdominus Bootstrap 4 -->
+        <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+        <!-- JQVMap -->
+        <link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ asset('admin/dist/css/adminlte.min.css') }}">
+        <!-- overlayScrollbars -->
+        <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+        <!-- Daterange picker -->
+        <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+        <!-- summernote -->
+        <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+    {% endblock stylesheets %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+{% block body %}
+    <div class="wrapper">
+        {% block header %}
+            <!-- Preloader -->
 
 
-    </style>
-{% endblock %}
-
-{% block header %}
-    <!-- Navbar -->
-
-<nav class="main-header navbar navbar-expand navbar-dark fixed-top">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
-{#                <button id="sidebarToggle" class="btn btn-primary" style="position: fixed; top: 10px; left: 10px; z-index: 1000;">#}
-                <a id="toggleSidebar" class="btn nav-link sidebar-toggle" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="index3.html" class="nav-link">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="#" class="nav-link">Contact</a>
-            </li>
-        </ul>
-
-        <!-- Right navbar links -->
-        <ul class="navbar-nav ml-auto">
-            <!-- Navbar Search -->
-            <li class="nav-item">
-                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
-                    <i class="fas fa-search"></i>
-                </a>
-                <div class="navbar-search-block">
-                    <form class="form-inline">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-                            <div class="input-group-append">
-                                <button class="btn btn-navbar" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </li>
-
-            <!-- Messages Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link     " data-toggle="dropdown" href="#">
-                    <i class="far fa-comments"></i>
-                    <span class="badge badge-danger navbar-badge">3</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Brad Diesel
-                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">Call me whenever you can...</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item clickable">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    John Pierce
-                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">I got your message bro</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <!-- Message Start -->
-                        <div class="media">
-                            <img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
-                            <div class="media-body">
-                                <h3 class="dropdown-item-title">
-                                    Nora Silvester
-                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                                </h3>
-                                <p class="text-sm">The subject goes here</p>
-                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                            </div>
-                        </div>
-                        <!-- Message End -->
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-                </div>
-            </li>
-            <!-- Notifications Dropdown Menu -->
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-toggle="dropdown" href="#">
-                    <i class="far fa-bell"></i>
-                    <span class="badge badge-warning navbar-badge">15</span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span class="dropdown-item dropdown-header">15 Notifications</span>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-envelope mr-2"></i> 4 new messages
-                        <span class="float-right text-muted text-sm">3 mins</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-users mr-2"></i> 8 friend requests
-                        <span class="float-right text-muted text-sm">12 hours</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item">
-                        <i class="fas fa-file mr-2"></i> 3 new reports
-                        <span class="float-right text-muted text-sm">2 days</span>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
-                    <i class="fas fa-expand-arrows-alt"></i>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                    <i class="fas fa-th-large"></i>
-                </a>
-            </li>
-        </ul>
-    </nav>
-    <!-- /.navbar -->
-{#    <button id="toggleSidebar" class="btn btn-primary">#}
-{#        <i class="fas fa-bars"></i> Menu#}
-{#    </button>#}
-
-{% endblock header %}
-
-{% block menu %}
-<div class="menu-container sidebar-toggle">
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="../../index3.html" class="brand-link">
-            <img src="{{ asset('build/images/avatar.1784647c.png') }}" alt="Avatar">
-            <span class="brand-text font-weight-light">SmartFix</span>
-        </a>
-        <div class="sidebar">
-            <!-- Sidebar user (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <img src="{{ asset('build/images/avatar.png') }}" alt="Avatar">
-                </div>
-                <div class="info">
-                    <a href="#" class="d-block"> nom admin </a>
-                </div>
-            </div>
-
-            <!-- Sidebar search -->
-            <div class="form-inline">
-                <div class="input-group" data-widget="sidebar-search">
-                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                    <div class="input-group-append">
-                        <button class="btn btn-sidebar">
-                            <i class="fas fa-search fa-fw"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Sidebar Menu -->
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
-                    <!-- Dashboard Item -->
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <!-- Left navbar links -->
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>Dashboard</p>
-                        </a>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                     </li>
-
-                    <!-- Users Management Menu -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link clickable">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Users Management
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview" style="display: none;">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Clients</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Mechanics</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ path('admin_list_seller') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Sellers</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <p>Car Rental</p>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="index3.html" class="nav-link">Home</a>
                     </li>
-
-                    <!-- Vehicle Menu -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link clickable">
-                            <i class="fas fa-car-alt"></i>
-                            <p>
-                                Vehicle
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview" style="display: none;">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <p>List</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Add</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Update</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Delete</p>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Contact</a>
                     </li>
+                </ul>
 
-                    <!-- Shops Menu -->
-                    <!-- Shops Menu -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link clickable">
-                            <i class="fas fa-shopping-cart"></i>
-                            <p>
-                                Shops
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview" style="display: none;">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>List</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Add</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Update</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Delete</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-
-                    <!-- Statistics Menu -->
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link clickable">
-                            <i class="nav-icon fas fa-chart-pie"></i>
-                            <p>
-                                Statistics
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview" style="display: none;">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Clients</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Shops</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Car Rental</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Mechanics</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <!-- Additional Menu Items -->
+                <!-- Right navbar links -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Navbar Search -->
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-search"></i>
-                            <p>Search</p>
+                        <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                            <i class="fas fa-search"></i>
+                        </a>
+                        <div class="navbar-search-block">
+                            <form class="form-inline">
+                                <div class="input-group input-group-sm">
+                                    <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-navbar" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                        <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                    <!-- Messages Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-comments"></i>
+                            <span class="badge badge-danger navbar-badge">3</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="{{ asset('admin/dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            Brad Diesel
+                                            <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">Call me whenever you can...</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="{{ asset('admin/dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            John Pierce
+                                            <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">I got your message bro</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <!-- Message Start -->
+                                <div class="media">
+                                    <img src="{{ asset('admin/dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                                    <div class="media-body">
+                                        <h3 class="dropdown-item-title">
+                                            Nora Silvester
+                                            <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                        </h3>
+                                        <p class="text-sm">The subject goes here</p>
+                                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                    </div>
+                                </div>
+                                <!-- Message End -->
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                        </div>
+                    </li>
+                    <!-- Notifications Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-bell"></i>
+                            <span class="badge badge-warning navbar-badge">15</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                            <span class="dropdown-item dropdown-header">15 Notifications</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-envelope mr-2"></i> 4 new messages
+                                <span class="float-right text-muted text-sm">3 mins</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-users mr-2"></i> 8 friend requests
+                                <span class="float-right text-muted text-sm">12 hours</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-file mr-2"></i> 3 new reports
+                                <span class="float-right text-muted text-sm">2 days</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                            <i class="fas fa-th-large"></i>
                         </a>
                     </li>
                 </ul>
             </nav>
-        </div>
-    </aside>
 
-    <!-- JavaScript for Toggle -->
+            <!-- /.navbar -->
+        {% endblock header %}
+
+        {% block menu %}
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="index3.html" class="brand-link">
+                    <img src="{{ asset('img/logo.png') }}" alt="smartfix Logo" >
+
+                  
+                </a>
+
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar user panel (optional) -->
+                    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                        <div class="image">
+                            <img src="{{ asset('admin/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                        </div>
+                        <div class="info">
+                            <a href="#" class="d-block">Alexander Pierce</a>
+                        </div>
+                    </div>
+
+                    <!-- SidebarSearch Form -->
+                    <div class="form-inline">
+                        <div class="input-group" data-widget="sidebar-search">
+                            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
+                                 with font-awesome or any other icon font library -->
+                            <li class="nav-item ">
+
+                                <!-- Users Management Menu -->
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link clickable">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Users Management
+                                        <i class="right fas fa-angle-left"></i>
+
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    <li class="nav-item">
+                                        <a href="{{ path('list_clients', { page: 1 }) }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Clients</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ path('admin_list_mechanic')  }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Mechanics</p>
+                                        </a>
+                                    </li>
 
 
-    <!-- Styles for Clickable Links -->
-    <style>
-        .nav-item .nav-link.clickable {
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
+                                </ul>
+                            </li>
 
-        .nav-item .nav-link.clickable:hover {
-            background-color: #f0f0f0;
-            color: #007bff;
-        }
-    </style>
-</div>
-{% endblock  %}
-{% block footer %}
-    <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.2.0
-        </div>
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">SmartFix.io</a>.</strong> All rights reserved.
-    </footer>
-{% endblock footer %}
+                            <!-- Vehicle Menu -->
+                            <li class="nav-item has-treeview">
+                                <a href="{{ path('list_cars') }}" class="nav-link clickable">
+                                    <i class="fas fa-car-alt"></i>
+                                    <p>
+                                        Cars
+                                    </p>
+                                </a>
+
+                            </li>
+
+                            <!-- garage Menu -->
+                            <li class="nav-item has-treeview">
+                                <a href="{{ path('list_cars') }}" class="nav-link clickable">
+                                    <i class="fas fa-wrench"></i>
+                                    <p>
+                                        Garages
+                                    </p>
+                                </a>
+                            </li>
+                            <!-- garage Menu -->
+                                                        <li class="nav-item has-treeview">
+                                                            <a href="#" class="nav-link clickable">
+                                                                <i class="fas fa-tools"></i>                                                                 <p>
+                                                                   Service
+                                                                    <i class="right fas fa-angle-left"></i>
+
+                                                                </p>
+                                                            </a>
+                                                            <ul class="nav nav-treeview" style="display: none;">
+                                                                <li class="nav-item">
+                                                                    <a href="{{ path('category_service_index') }}" class="nav-link">
+                                                                        <i class="far fa-circle nav-icon"></i>
+                                                                        <p>Manage Category </p>
+                                                                    </a>
+                                                                </li>
+                                                                <li class="nav-item">
+                                                                    <a href="{{ path('service_index') }}" class="nav-link">
+                                                                        <i class="far fa-circle nav-icon"></i>
+                                                                        <p>Manager Service</p>
+                                                                    </a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </li>
+
+
+                            <!-- Statistics Menu -->
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link clickable">
+                                    <i class="nav-icon fas fa-chart-pie"></i>
+                                    <p>
+                                        Statistics
+                                        <i class="right fas fa-angle-left"></i>
+                                                                         </p>
+                                </a>
+                                <ul class="nav nav-treeview" style="display: none;">
+                                    <li class="nav-item">
+                                        <a href="{{ path('chart_client') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Clients</p>
+                                        </a>
+                                    </li>
+                                    {#                            <li class="nav-item">#}
+                                    {#                                <a href="#" class="nav-link">#}
+                                    {#                                    <i class="far fa-circle nav-icon"></i>#}
+                                    {#                                    <p>Shops</p>#}
+                                    {#                                </a>#}
+                                    {#                            </li>#}
+                                    {#                            <li class="nav-item">#}
+                                    {#                                <a href="#" class="nav-link">#}
+                                    {#                                    <i class="far fa-circle nav-icon"></i>#}
+                                    {#                                    <p>Car Rental</p>#}
+                                    {#                                </a>#}
+                                    {#                            </li>#}
+                                    <li class="nav-item">
+                                        <a href="{{ path('Dashboard_Mechanic') }}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Mechanics</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- Additional Menu Items -->
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                    <i class="nav-icon fas fa-search"></i>
+                                    <p>Search</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+        {% endblock menu %}
+
+        {% block container %}
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-2">
+                            <div class="col-sm-6">
+                                <h1 class="m-0"></h1>
+                            </div><!-- /.col -->
+
+                        </div><!-- /.row -->
+                    </div><!-- /.container-fluid -->
+                </div>
+                <!-- /.content-header -->
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="container-fluid">
+                        <!-- Your page content here -->
+
+                        {% block content %}
+                            {% block chat %}
+
+                            {% endblock %}
+                        {% endblock %}
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+            <!-- /.content-wrapper -->
+        {% endblock container %}
+
+        {% block footer %}
+{#            {{ render(controller("App\\Controller\\AChatController::start")) }}#}
+
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+                All rights reserved.
+                <div class="float-right d-none d-sm-inline-block">
+                    <b>Version</b> 3.2.0
+                </div>
+            </footer>
+        {% endblock footer %}
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+{% endblock body %}
 
 {% block javascripts %}
-    {{ parent() }}
-
+    <!-- jQuery -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-        document.querySelectorAll('.nav-item.has-treeview > a').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const submenu = this.nextElementSibling;
-                submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
-            });
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    <!-- Sparkline -->
+    <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>
+    <!-- JQVMap -->
+    <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="{{ asset('plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- daterangepicker -->
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
+    <!-- Summernote -->
+    <script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('admin/dist/js/adminlte.js') }}"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="{{ asset('admin/dist/js/demo.js') }}"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="{{ asset('admin/dist/js/pages/dashboard.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            // Collapse the sidebar on page load
+            $('body').removeClass('sidebar-collapse');
+            $('body').addClass('sidebar-collapse');
+
+            // Or if using AdminLTE's pushmenu
+            $('[data-widget="pushmenu"]').PushMenu('collapse');
         });
     </script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const toggleButton = document.getElementById("toggleSidebar");
-            const sidebar = document.querySelector(".menu-container");
-
-            toggleButton.addEventListener("click", function() {
-                sidebar.classList.toggle("show"); // Toggle sidebar visibility
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $(".clickable").click(function (e) {
-                e.preventDefault(); // Prevent the default link behavior
-
-                let $submenu = $(this).next(".nav-treeview"); // Get the submenu
-                let $arrow = $(this).find(".arrow"); // Get the arrow icon
-
-                // Close other open menus (optional)
-                $(".nav-treeview").not($submenu).slideUp(300);
-                $(".clickable .arrow").not($arrow).removeClass("fa-angle-down").addClass("fa-angle-left");
-
-                // Toggle submenu
-                $submenu.slideToggle(300);
-
-                // Toggle arrow direction
-                $arrow.toggleClass("fa-angle-left fa-angle-down");
-            });
-        });
-
-
-
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{ encore_entry_script_tags('app') }} {# must match your webpack entry point #}
-
-{% endblock %}
+{% endblock javascripts %}
+</body>
+</html>

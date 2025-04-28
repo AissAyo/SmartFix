@@ -1,0 +1,33 @@
+{
+    http_port 80
+    https_port 443
+    debug
+    auto_https off
+}
+
+http://:3000 {
+    encode gzip
+    log {
+        output stdout
+        format console
+    }
+
+    handle /healthz {
+        respond "OK" 200
+    }
+
+    handle /.well-known/mercure {
+        mercure {
+            publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY}
+            subscriber_jwt {env.MERCURE_SUBSCRIBER_JWT_KEY}
+            cors_origins *
+            anonymous
+            subscriptions
+            publish_allowed_origins *
+        }
+    }
+
+    handle {
+        respond "Not Found" 404
+    }
+} 

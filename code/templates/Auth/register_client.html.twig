@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
 {% block title %}Sign Up{% endblock %}
 
@@ -36,7 +36,6 @@
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.name) }}
-
                                             </div>
                                         </div>
 
@@ -63,7 +62,6 @@
                                                     }
                                                 }) }}
                                                 {{ form_errors(signup_form.password) }}
-
                                             </div>
                                         </div>
 
@@ -95,13 +93,13 @@
 
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                {{ form_label(signup_form.profileImage, 'Profile Picture (optional)') }}
-                                                {{ form_widget(signup_form.profileImage, {
+                                                {{ form_label(signup_form.photoProfilFile, 'Profile Picture (optional)') }}
+                                                {{ form_widget(signup_form.photoProfilFile, {
                                                     'attr': {
                                                         'class': 'form-control'
                                                     }
                                                 }) }}
-                                                {{ form_errors(signup_form.profileImage) }}
+                                                {{ form_errors(signup_form.photoProfilFile) }}
                                             </div>
                                         </div>
 

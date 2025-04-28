@@ -2,7 +2,7 @@
 
 {% block title %}Add New Client{% endblock %}
 
-{% block container %}
+{% block content %}
     <div class="container py-5">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -12,7 +12,7 @@
                             <h2 class="h4 mb-0">
                                 <i class="bi bi-person-plus me-2"></i>Add New Client
                             </h2>
-                            <a href="{{ path('listclient') }}" class="btn btn-sm btn-light">
+                            <a href="{{ path('list_clients') }}" class="btn btn-sm btn-light">
                                 <i class="bi bi-arrow-left me-1"></i> Back to Clients
                             </a>
                         </div>
@@ -129,33 +129,19 @@
                             </div>
 
                             {# Roles Field #}
-                            <div class="col-md-6">
-                                <div class="form-floating mb-3">
-                                    {{ form_widget(form.roles, {
-                                        'attr': {
-                                            'class': 'form-control',
-                                            'placeholder': ' '
-                                        }
-                                    }) }}
-                                    {{ form_label(form.roles) }}
-                                    <div class="invalid-feedback">
-                                        {{ form_errors(form.roles) }}
-                                    </div>
-                                </div>
-                            </div>
 
                             {# Profile Photo #}
                             <div class="col-12">
                                 <div class="mb-3">
-                                    <label class="form-label">{{ form_label(form.ClientphotoProfilFile) }}</label>
-                                    {{ form_widget(form.ClientphotoProfilFile, {
+                                    <label class="form-label">{{ form_label(form.photoProfilFile) }}</label>
+                                    {{ form_widget(form.photoProfilFile, {
                                         'attr': {
                                             'class': 'form-control'
                                         }
                                     }) }}
                                     <small class="text-muted">JPEG, PNG or GIF (Max 2MB)</small>
                                     <div class="invalid-feedback">
-                                        {{ form_errors(form.ClientphotoProfilFile) }}
+                                        {{ form_errors(form.photoProfilFile) }}
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +152,7 @@
                                     <button type="submit" class="btn btn-danger btn-lg px-4 me-md-2">
                                         <i class="bi bi-save me-2"></i> Add Client
                                     </button>
-                                    <a href="{{ path('listclient') }}" class="btn btn-outline-secondary btn-lg px-4">
+                                    <a href="{{ path('list_clients') }}" class="btn btn-outline-secondary btn-lg px-4">
                                         Cancel
                                     </a>
                                 </div>

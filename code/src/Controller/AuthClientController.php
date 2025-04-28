@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Service\AuthClient\WhatsAppVerificationCodeSender;
 use App\Service\CRUD\ClientService;
-use App\Type\ClientType;
+use App\Type\clientauthType;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +19,7 @@ class AuthClientController extends AbstractController
     public function register(Request $request, ClientService $clientService, WhatsAppVerificationCodeSender $verificationService): Response
     {
         $client = new Client();
-        $form = $this->createForm(ClientType::class, $client);
+        $form = $this->createForm(clientauthType::class, $client);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -50,7 +50,7 @@ class AuthClientController extends AbstractController
             }
         }
 
-        return $this->render('auth/register_client.html.twig', [
+        return $this->render('Auth/register_client.html.twig', [
             'signup_form' => $form->createView(),
         ]);
     }
@@ -89,7 +89,7 @@ class AuthClientController extends AbstractController
             }
         }
 
-        return $this->render('auth/verify_code.html.twig', [
+        return $this->render('Auth/verify_code.html.twig', [
             'client' => $client,
             'error' => $request->query->get('error')
         ]);

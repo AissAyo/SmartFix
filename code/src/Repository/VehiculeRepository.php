@@ -1,43 +1,56 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Vehicule;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
-class VehiculeRepository implements VehiculeRepositoryInterface
+class VehiculeRepository extends ServiceEntityRepository
 {
-    private EntityManagerInterface $entityManager;
+    private ManagerRegistry $registry;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, Vehicule::class);
+        $this->registry = $registry;
     }
 
     public function getEntityById(int $id): ?Vehicule
     {
-        return $this->entityManager->getRepository(Vehicule::class)->find($id);
+        if ($id <= 0) {
+            // Si l'ID est invalide
+            return null;
+        }
+
+        return $this->find($id);
     }
 
     public function getAllEntities(): array
     {
-        return $this->entityManager->getRepository(Vehicule::class)->findAll();
+        return $this->findAll();
     }
 
-    public function addEntity($entity): void
+    public function addEntity(Vehicule $entity): void
     {
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->flush();
     }
 
-    public function updateEntity($entity): void
+    public function updateEntity(Vehicule $entity): void
     {
-        $this->entityManager->merge($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->merge($entity);
+        $this->getEntityManager()->flush();
     }
 
-    public function deleteEntity($entity): void
+    public function deleteEntity(Vehicule $entity): void
     {
-        $this->entityManager->remove($entity);
-        $this->entityManager->flush();
+        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->flush();
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->registry->getManager();
     }
 }

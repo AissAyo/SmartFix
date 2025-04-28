@@ -1,14 +1,17 @@
 <?php
 
-
 namespace App\Type;
 
-use App\DTO\clientSignupDTO;
+use App\Entity\Reservation;
+use App\Entity\Vehicule;
+use App\Entity\Service;
+use App\Entity\Garage;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,40 +20,59 @@ class ReservationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
-                'label' => 'Name',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter your name']
+            ->add('reservationDate', DateTimeType::class, [
+                'widget' => 'single_text',
+                'html5' => true,
+                'label' => 'Reservation Date & Time',
+                'attr' => [
+                    'class' => 'form-control',
+                    'min' => (new \DateTime())->format('Y-m-d\TH:i'),
+                ],
             ])
-            ->add('email', EmailType::class, [
-                'label' => 'Email Address',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter your email']
+            
+            
+            ->add('vehicle', EntityType::class, [
+                'class' => Vehicule::class,
+                'choice_label' => function (Vehicule $vehicle) {
+                    return sprintf(
+                        '[%d] %s - %s (%s km)',
+                        $vehicle->getId(),
+                        $vehicle->getPlateNumber(),
+                        $vehicle->getColor(),
+                        $vehicle->getMileage()
+                    );
+                },
+                'attr' => ['class' => 'form-select'],
+                'label' => 'Vehicle',
+                'query_builder' => function ($repository) {
+                    return $repository->createQueryBuilder('v')
+                        ->orderBy('v.id', 'ASC');
+                },
+                'choice_value' => 'id',
             ])
-            ->add('password', PasswordType::class, [
-                'label' => 'Password',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter your password']
+            ->add('service', EntityType::class, [
+                'class' => Service::class,
+                'choice_label' => function (Service $service) {
+                    return $service->getName() . ' - $' . $service->getPrice();
+                },
+                'attr' => ['class' => 'form-select'],
+                'label' => 'Service',
             ])
-            ->add('confirmPassword', PasswordType::class, [
-                'label' => 'Confirm Password',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Confirm your password']
-            ])
-            ->add('address', TextType::class, [
-                'label' => 'Address',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter your address']
-            ])
-            ->add('phone', TextType::class, [
-                'label' => 'Phone Number',
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Enter your phone number']
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Sign Up',
-                'attr' => ['class' => 'btn btn-primary']
+            ->add('notes', TextareaType::class, [
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 4,
+                    'placeholder' => 'Add any additional notes or requirements...',
+                ],
+                'label' => 'Notes',
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => clientSignupDTO::class,
+            'data_class' => Reservation::class,
         ]);
     }
-}
+} 

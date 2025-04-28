@@ -16,20 +16,38 @@ vich_uploader:
             namer: Vich\UploaderBundle\Naming\OrignameNamer
             delete_on_update: true
             delete_on_remove: true
+
         client_photoProfil:
-            uri_prefix: /uploads/client
-            upload_destination: '%kernel.project_dir%/public/uploads/client'
-            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            uri_prefix: /uploads/client/profiles
+            upload_destination: '%kernel.project_dir%/public/uploads/client/profiles'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer  # or OrignameNamer if you prefer original names
             delete_on_update: true
             delete_on_remove: true
 
         mechanic_logo:
-            uri_prefix: /uploads/mechanics
-            upload_destination: '%kernel.project_dir%/public/uploads/mechanics'
+            uri_prefix: /uploads/mechanics/logos
+            upload_destination: '%kernel.project_dir%/public/uploads/mechanics/logos'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
             delete_on_update: true
             delete_on_remove: true
+
+        mechanic_photoProfil:  # Corrected this mapping to reflect mechanic profile photo
+            uri_prefix: /uploads/mechanics/profiles
+            upload_destination: '%kernel.project_dir%/public/uploads/mechanics/profiles'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer  # or OrignameNamer if you prefer original names
+            delete_on_update: true
+            delete_on_remove: true
+
         user_upload:
             uri_prefix: /uploads/profiles
             upload_destination: '%kernel.project_dir%/public/uploads/profiles'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            delete_on_update: true
+            delete_on_remove: true
+
+        garage_logo: # Corrected this mapping to reflect mechanic profile photo
+            uri_prefix: /uploads/mechanics/garage
+            upload_destination: '%kernel.project_dir%/public/uploads/mechanics/garage'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer  # or OrignameNamer if you prefer original names
+            delete_on_update: true
+            delete_on_remove: true

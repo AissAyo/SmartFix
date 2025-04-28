@@ -1,97 +1,164 @@
 {% extends 'layout_mechanics.html.twig' %}
+
 {% block container %}
-
-
-{% block stylesheets %}
-<style>
-    <link rel="stylesheet" href="{{ asset('css') }}">
-
-    body {
-        background-color: #0d0d0d;
-        font-family: 'Segoe UI', sans-serif;
-        color: #f5f5f5;
-        padding: 20px;
-    }
-
-    h2 {
-        color:rgb(161, 36, 36);
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 26px;
-            padding-bottom: 10px;
-    }
-
-    .mechanic-info {
-        max-width: 800px;
-        margin: auto;
-        background-color: #1a1a1a;
-        padding: 25px 30px;
-        border-radius: 10px;
-        border: 1px solid #c90000;
-        box-shadow: 0 5px 18px rgba(201, 0, 0, 0.3);
-    }
-
-    .mechanic-info > div {
-        margin-bottom: 15px;
-        padding: 8px;
-        border-bottom: 1px solid #333;
-    }
-
-    .mechanic-info strong {
-        color: #ff4d4d;
-        display: inline-block;
-        width: 200px;
-    }
-
-    .mechanic-info img {
-        max-width: 150px;
-        max-height: 150px;
-        border-radius: 8px;
-        border: 2px solid #c90000;                              
-        margin-top: 8px;
-    }
-
-    .mechanic-info p {
-        margin: 0;
-        color: #bbb;
-    }
-</style>
-{% endblock %}
-
-
-
-{# {% block container %} #}
-<h2>Profile                             </h2>
-<div style="text-align: center; margin-top: 20px;">
-    <a href="{{ path('mechanic_edit', { id: mechanic.id }) }}" 
-       class="btn-edit-mechanic">
-        ✏️ Edit Profile
-    </a>
-</div>
-
-<div class="mechanic-info">
-    <div><strong>Full name : </strong> {{ mechanic.name }}</div>
-    <div><strong>Email:</strong> {{ mechanic.email }}</div>
-    <div><strong>Phone Number : </strong> {{ mechanic.phoneNumber }}</div>
-    <div><strong>City :</strong> {{ mechanic.city }}</div>
-    <div><strong>Address :</strong> {{ mechanic.address }}</div>
-    <div><strong>Role : </strong> {{ mechanic.roles }}</div>
-    <div><strong>Profile Picture </strong>
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-photo">
         {% if mechanic.photoProfil %}
-            <img src="{{ asset('img/avatar/' ~ mechanic.photoProfil) }}" alt="" />
+<img src="{{ asset('admin/dist/img/avatar.png') }}" alt="Profile Picture" class="profile-img" />
         {% else %}
-            <p>Aucune photo de profil disponible.</p>
+          <img src="{{ asset('img/default-avatar.png') }}" alt="Default Profile" class="profile-img" />
         {% endif %}
+      </div>
+      <div class="profile-details">
+        <h2>{{ mechanic.name }}</h2>
+        <p class="role">{{ mechanic.roles | join(', ') }}</p>
+        <a href="{{ path('mechanic_edit', { id: mechanic.id }) }}" class="edit-btn">✏️ Edit Profile</a> <!-- Bouton d'édition -->
+      </div>
     </div>
-    <div><strong>Spécialisation:</strong> {{ mechanic.specialization }}</div>
-    <div><strong>Années d'expérience:</strong> {{ mechanic.experienceYears }}</div>
-    <div><strong>Certifications:</strong> {{ mechanic.certifications }}</div>
-    <div><strong>Logo:</strong>
-        {% if mechanic.logoFile %}
-            <img src="{{ asset('img/avatar/' ~ mechanic.logo) }}" alt="Logo" />
-        {% else %}
-            <p>Aucun logo disponible.</p>
-        {% endif %}
+
+    <div class="profile-info">
+      <div class="info-section">
+        <h3>Details</h3>
+        <div><strong>Email :</strong> {{ mechanic.email }}</div>
+        <div><strong>City :</strong> {{ mechanic.city }}</div>
+        <div><strong>Adresse :</strong> {{ mechanic.address }}</div>
+      </div>
+
+      <div class="info-section">
+        <h3>personnel informations :</h3>
+        <div><strong>Specialisation :</strong> {{ mechanic.specialization }}</div>
+        <div><strong>Years of experience :</strong> {{ mechanic.experienceYears }}</div>
+        <div><strong>Certifications :</strong> {{ mechanic.certifications ? mechanic.certifications : 'Non disponible' }}</div>
+      </div>
+
+      
     </div>
-</div>
+  </div>
+
+  {% block stylesheets %}
+    <style>
+      /* Global styles */
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #121212;
+        color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      .profile-container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .profile-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 40px;
+        border-bottom: 2px solid #333;
+        padding-bottom: 20px;
+      }
+
+      .profile-photo {
+        flex-shrink: 0;
+        margin-right: 20px;
+      }
+
+      .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #c90000;
+        transition: all 0.3s ease;
+      }
+
+      .profile-img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 5px 15px rgba(201, 0, 0, 0.5);
+      }
+
+      .profile-details h2 {
+        font-size: 30px;
+        color: #ff4d4d;
+        margin: 0;
+      }
+
+      .profile-details .role {
+        color: #bbb;
+        font-size: 18px;
+      }
+
+      .profile-details .edit-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #c90000;
+        color: #fff;
+        font-weight: bold;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .profile-details .edit-btn:hover {
+        background-color: #ff4d4d;
+      }
+
+      .profile-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .info-section {
+        background-color: #2c2c2c;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .info-section:hover {
+        background-color: #333;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .info-section h3 {
+        color: #ff4d4d;
+        margin-bottom: 15px;
+        font-size: 22px;
+      }
+
+      .info-section div {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .info-section strong {
+        color: #c90000;
+      }
+
+      .small-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 10px;
+        border: 2px solid #c90000;
+      }
+
+      /* Hover effect for small images */
+      .small-img:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(201, 0, 0, 0.4);
+      }
+    </style>
+  {% endblock %}
 {% endblock %}

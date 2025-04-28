@@ -5,9 +5,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'garages')]
+#[Vich\Uploadable]
 class Garage
 {
     #[ORM\Id]
@@ -17,6 +20,9 @@ class Garage
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $emailGarage;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $GarageAddress;
 
     #[ORM\Column(type: 'float')]
     private float $rating;
@@ -30,28 +36,36 @@ class Garage
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     private ?string $workingHours = null;
 
-    #[ORM\ManyToMany(targetEntity: CategoryService::class, mappedBy: 'garages')]
+    #[ORM\Column(name: "phone_number", type: "string", length: 20, nullable: true)]
+    private ?string $phoneNumber = null;
+
+    #[Vich\UploadableField(mapping: 'garage_logo', fileNameProperty: 'LogoProfil')]
+    private ?File $LogoFile = null;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $LogoProfil = null;
+
+    #[ORM\OneToMany(targetEntity: CategoryService::class, mappedBy: 'garage')]
     private Collection $categoryServices;
 
-    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Mechanic $mechanic;
+    #[ORM\ManyToOne(targetEntity: Mechanic::class, inversedBy: 'garages', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Mechanic $mechanic = null;
 
     #[ORM\OneToMany(mappedBy: 'garage', targetEntity: Reservation::class)]
     private Collection $reservations;
 
-    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage')]
+    #[ORM\OneToOne(targetEntity: Location::class, inversedBy: 'garage', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Location $location = null;
 
-    // #[ORM\OneToMany(targetEntity: MechanicServices::class, mappedBy: 'garage')]
-    // private Collection $mechanicServices;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $City = null;
 
     public function __construct()
     {
-        $this->mechanics = new ArrayCollection();
         $this->categoryServices = new ArrayCollection();
-        $this->reservations = new ArrayCollection(); // 🔥 ajouté ici
+        $this->reservations = new ArrayCollection();
     }
 
     public function getId(): int
@@ -61,8 +75,8 @@ class Garage
 
     public function setId(int $id): self
     {
-         $this->id = $id;
-         return $this;
+        $this->id = $id;
+        return $this;
     }
 
     public function getEmailGarage(): string
@@ -73,6 +87,16 @@ class Garage
     public function setEmailGarage(string $emailGarage): void
     {
         $this->emailGarage = $emailGarage;
+    }
+
+    public function getGarageAddress(): string
+    {
+        return $this->GarageAddress;
+    }
+
+    public function setGarageAddress(string $GarageAddress): void
+    {
+        $this->GarageAddress = $GarageAddress;
     }
 
     public function getRating(): float
@@ -115,34 +139,68 @@ class Garage
         $this->workingHours = $workingHours;
     }
 
-    public function getMechanic(): Mechanic
+    public function getPhoneNumber(): ?string
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?string $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getLogoFile(): ?File
+    {
+        return $this->LogoFile;
+    }
+
+    public function setLogoFile(?File $LogoFile): void
+    {
+        $this->LogoFile = $LogoFile;
+    }
+
+    public function getLogoProfil(): ?string
+    {
+        return $this->LogoProfil;
+    }
+
+    public function setLogoProfil(?string $LogoProfil): void
+    {
+        $this->LogoProfil = $LogoProfil;
+    }
+
+    public function getMechanic(): ?Mechanic
     {
         return $this->mechanic;
     }
 
-    public function setMechanic(Mechanic $mechanic): void
+    public function setMechanic(?Mechanic $mechanic): void
     {
         $this->mechanic = $mechanic;
     }
 
-    public function getGarageServices(): Collection
+    public function getCategoryServices(): Collection
     {
-        return $this->garageServices;
+        return $this->categoryServices;
     }
 
-    public function setGarageServices(Collection $garageServices): void
+    public function addCategoryService(CategoryService $categoryService): self
     {
-        $this->garageServices = $garageServices;
+        if (!$this->categoryServices->contains($categoryService)) {
+            $this->categoryServices[] = $categoryService;
+            $categoryService->setGarage($this);
+        }
+        return $this;
     }
 
-    public function getLocation(): ?Location
+    public function removeCategoryService(CategoryService $categoryService): self
     {
-        return $this->location;
-    }
-
-    public function setLocation(?Location $location): void
-    {
-        $this->location = $location;
+        if ($this->categoryServices->removeElement($categoryService)) {
+            if ($categoryService->getGarage() === $this) {
+                $categoryService->setGarage(null);
+            }
+        }
+        return $this;
     }
 
     public function getReservations(): Collection
@@ -156,18 +214,28 @@ class Garage
             $this->reservations[] = $reservation;
             $reservation->setGarage($this);
         }
-
         return $this;
     }
 
-    public function removeReservation(Reservation $reservation): self
+    public function getLocation(): ?Location
     {
-        if ($this->reservations->removeElement($reservation)) {
-            if ($reservation->getGarage() === $this) {
-                $reservation->setGarage(null);
-            }
-        }
+        return $this->location;
+    }
 
+    public function setLocation(?Location $location): self
+    {
+        $this->location = $location;
         return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->City;
+    }
+
+    public function setCity(?string $City): void
+    {
+        $this->City = $City;
     }
 }
+

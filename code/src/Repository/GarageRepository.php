@@ -1,53 +1,34 @@
 <?php
+
 namespace App\Repository;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Garage;
-use App\Entity\Mechanic;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
-class GarageRepository 
+
+class GarageRepository extends ServiceEntityRepository
 {
     private EntityManagerInterface $entityManager;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->entityManager = $entityManager;
+        parent::__construct($registry, Garage::class);
+        $this->entityManager = $registry->getManager();
+
     }
 
-    public function getEntityById(int $id): ?Garage
+    public function getgarageByCity(): array
     {
-        return $this->entityManager->getRepository(Garage::class)->find($id);
+        // Corrected: Use $this->entityManager, not $manager
+        $query = $this->entityManager->createQuery('
+            SELECT g.City, COUNT(g.id) as city_count
+            FROM App\Entity\Garage g
+            GROUP BY g.City
+        ');
+        // if you're using Symfony with debug enabled
+        return $query->getResult();
     }
-
-    public function getAllEntities(): array
-    {
-        return $this->entityManager->getRepository(Garage::class)->findAll();
-    }
-
-    public function addEntity($entity): void
-    {
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
-    }
-
-    public function updateEntity($entity): void
-    {
-        $this->entityManager->merge($entity);
-        $this->entityManager->flush();
-    }
-
-    public function deleteEntity($entity): void
-    {
-        $this->entityManager->remove($entity);
-        $this->entityManager->flush();
-    }
-    public function getGaragesByMechanic(Mechanic $mechanic): array
-    {
-        return $this->entityManager->getRepository(Garage::class)
-            ->createQueryBuilder('g')
-            ->where('g.mechanic = :mechanic')
-            ->setParameter('mechanic', $mechanic)
-            ->getQuery()
-            ->getResult();
-    }
+    // Add custom query methods here
 }

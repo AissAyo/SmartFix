@@ -5,15 +5,18 @@
         "@hotwired/stimulus": "^3.2.2",
         "@symfony/webpack-encore": "^5.1.0",
         "bootstrap": "^5.3.5",
+        "copy-webpack-plugin": "^13.0.0",
         "core-js": "^3.41.0",
         "css-loader": "^7.1.2",
+        "file-loader": "^6.2.0",
         "jquery": "^3.7.1",
+        "node-sass": "^9.0.0",
         "postcss-loader": "^8.1.1",
         "regenerator-runtime": "^0.13.9",
         "sass": "^1.86.3",
         "sass-loader": "^16.0.5",
         "style-loader": "^4.0.0",
-        "webpack": "^5.99.5",
+        "webpack": "^5.99.6",
         "webpack-cli": "^5.1.4",
         "webpack-dev-server": "^5.2.1",
         "webpack-notifier": "^1.15.0"
@@ -25,5 +28,18 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
-    }
+    },
+    "dependencies": {
+        "bootstrap-icons": "^1.11.3",
+        "jquery-ui-dist": "^1.13.3"
+    },
+    "name": "html",
+    "version": "1.0.0",
+    "main": "webpack.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "keywords": [],
+    "author": "",
+    "description": ""
 }

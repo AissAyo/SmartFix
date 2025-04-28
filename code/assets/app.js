@@ -4,8 +4,8 @@ window.$ = $;
 window.jQuery = $;
 
 // ✅ THEN: Import other libraries that rely on jQuery
-import 'bootstrap';
-import './js/adminlte'; // This one uses jQuery too
+import './js/bootstrap.min.js';
+import './js/adminlte.js'; // This one uses jQuery too
 
 // ✅ Stimulus
 import '@hotwired/stimulus';
@@ -19,6 +19,45 @@ import './js/pricetable-toggler.js';
 // import '@fortawesome/fontawesome-free/js/all';
 
 // ✅ Correct CSS imports
-import './css/bootstrap.icon.css'; // Ensure the path is correct
+import './css/bootstrap-icons.css'; // Ensure the path is correct
 import './css/portfolio.css'; // Ensure the path is correct
-import './css/sidebar.css'; // Ensure the path is correct
+import "./css/sidebar.css"; // Ensure the path is correct
+
+import './styles/bootstrap.min.css'
+import './css/animation.css'
+import './css/style.css'
+import './css/responsive.css'
+import './css/blog.css'
+//import './styles/css/bootstrap-icons.css'
+// import './css/bootstrap-icons.css.map'
+import './css/bootstrap.min.css'
+import './css/components.css'
+import './css/contact.css'
+import './css/footer.css'
+import './css/header.css'
+import './css/global.css'
+import './css/landing.css'
+import './css/light.css'
+import './css/main.css'
+import './css/portfolio.css'
+import './css/preloader.css'
+import './css/shop.css'
+import './css/sidebar.css'
+
+// js
+
+import './js/bootstrap.min.js'
+import './js/jquery-3.6.0.min.js'
+import './js/map.js'
+import './js/theme.js'
+import './js/pricetable-toggler.js'
+import './js/client'
+
+
+// font awesome
+import './fonts/bootstrap-icons.woff'
+import './fonts/bootstrap-icons.woff2'
+//import './bootstrap.icons.css'
+//import './bootstrap.icons.css'
+//import './bootstrap.icons.css'
+//import './font/icons

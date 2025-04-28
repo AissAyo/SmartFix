@@ -19,43 +19,39 @@ class Reservation
     #[ORM\Column(type: "datetime")]
     private \DateTimeInterface $reservationDate;
 
-    #[ORM\Column(type: "integer")]
-    private int $clientId;
-
     #[ORM\Column(type: "string", length: 20)]
-    private string $status;
+    private ?string $status;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
-    private string $estimatedPrice;
+    private ?string $estimatedPrice;
 
-    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations")]
+    #[ORM\ManyToOne(targetEntity: Vehicule::class, inversedBy: "reservations", cascade: ['persist'])]
     private Vehicule $vehicle;
 
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'reservations')]
-    private Client $client;
-
-    #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'reservations')]
-    private Collection $services;
-
+    #[ORM\ManyToOne(targetEntity: Service::class, inversedBy: 'reservations', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private Service $service;
 
     #[ORM\OneToMany(targetEntity: RepairPart::class, mappedBy: 'reservation')]
-    private Collection $repairParts;
-
-    #[ORM\ManyToOne(targetEntity: Garage::class, inversedBy: 'reservations')]
-    #[ORM\JoinColumn(nullable: true)] // <= C'est ça qui manquait
-    private ?Garage $garage = null;
-    
+    private ?Collection $repairParts;
 
     #[ORM\OneToOne(targetEntity: Critique::class, mappedBy: 'reservation')]
     private ?Critique $critique = null;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Review", mappedBy="reservation", orphanRemoval=true)
+     */
+    private $reviews;
+
     public function __construct()
     {
         $this->repairParts = new ArrayCollection();
-        $this->garages = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+        $this->service = new Service(); // placeholder to satisfy typed property
+        $this->reviews = new ArrayCollection();
     }
 
     public function getId(): int
@@ -71,17 +67,6 @@ class Reservation
     public function setReservationDate(\DateTimeInterface $reservationDate): self
     {
         $this->reservationDate = $reservationDate;
-        return $this;
-    }
-
-    public function getClientId(): int
-    {
-        return $this->clientId;
-    }
-
-    public function setClientId(int $clientId): self
-    {
-        $this->clientId = $clientId;
         return $this;
     }
 
@@ -126,7 +111,7 @@ class Reservation
     public function addRepairPart(RepairPart $repairPart): self
     {
         if (!$this->repairParts->contains($repairPart)) {
-            $this->repairParts[] = $repairPart;
+            $this->repairParts->add($repairPart);
             $repairPart->setReservation($this);
         }
 
@@ -136,6 +121,7 @@ class Reservation
     public function removeRepairPart(RepairPart $repairPart): self
     {
         if ($this->repairParts->removeElement($repairPart)) {
+            // set the owning side to null (unless already changed)
             if ($repairPart->getReservation() === $this) {
                 $repairPart->setReservation(null);
             }
@@ -166,36 +152,44 @@ class Reservation
         return $this;
     }
 
-    public function getClient(): Client
+    public function getService(): Service
     {
-        return $this->client;
+        return $this->service;
     }
 
-    public function setClient(Client $client): self
+    public function setService(Service $service): self
     {
-        $this->client = $client;
+        $this->service = $service;
         return $this;
     }
 
-    public function getGarage(): Garage
+    /**
+     * @return Collection|Review[]
+     */
+    public function getReviews(): Collection
     {
-        return $this->garage;
+        return $this->reviews;
     }
 
-    public function setGarage(Garage $garage): self
+    public function addReview(Review $review): self
     {
-        $this->garage = $garage;
+        if (!$this->reviews->contains($review)) {
+            $this->reviews[] = $review;
+            $review->setReservation($this);
+        }
+
         return $this;
     }
 
-
-    public function removeGarage(Garage $garage): self
+    public function removeReview(Review $review): self
     {
-        $this->garages->removeElement($garage);
+        if ($this->reviews->removeElement($review)) {
+            // set the owning side to null (unless already changed)
+            if ($review->getReservation() === $this) {
+                $review->setReservation(null);
+            }
+        }
 
         return $this;
     }
-
-
-
 }

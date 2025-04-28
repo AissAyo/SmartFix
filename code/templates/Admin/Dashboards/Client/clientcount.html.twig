@@ -1,0 +1,374 @@
+{% block container %}
+    <div class="stats-container-counter">
+        <!-- Main Stat Card with Animation -->
+        <div class="stat-card-counter highlight-card-counter">
+            <div class="stat-card-counter-content">
+                <div class="stat-card-counter-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-card-counter-text">
+                    <p class="stat-card-counter-label">Total Clients</p>
+                    <h4 class="stat-card-counter-value" id="clientCount">{{ clientcount }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Time and Date Card with Live Updating -->
+        <div class="time-card-counter">
+            <div class="time-card-counter-header">
+                <i class="fas fa-clock"></i>
+                <h3>Local Time</h3>
+            </div>
+            <div class="time-card-counter-content">
+                <div class="time-display-counter">
+                    <span id="currentTime" class="time-counter">--:--:--</span>
+                    <span id="amPm" class="am-pm-counter">--</span>
+                </div>
+                <div id="currentDate" class="date-display-counter">Loading date...</div>
+                <div class="time-zone-counter">
+                    <i class="fas fa-globe"></i>
+                    <span id="timeZone">{{ app.request.server.get('TZ')|default('UTC') }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Mini Stats -->
+        <div class="mini-stats-grid-counter">
+
+
+
+
+        </div>
+    </div>
+
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #3f37c9;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        .stats-container-counter {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Main Stat Card */
+        .stat-card-counter {
+            background: white;
+            border-radius: 12px;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            grid-column: 1 / span 1;
+        }
+
+        .stat-card-counter.highlight-card-counter {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(67, 97, 238, 0.02) 100%);
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card-counter-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .stat-card-counter-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(67, 97, 238, 0.2) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .stat-card-counter-text {
+            flex: 1;
+        }
+
+        .stat-card-counter-label {
+            color: var(--gray);
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card-counter-value {
+            color: var(--dark);
+            margin: 0.5rem 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card-counter-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+
+        .stat-card-counter-trend .trend-up-counter {
+            color: var(--success);
+        }
+
+        .stat-card-counter-trend .trend-down-counter {
+            color: var(--danger);
+        }
+
+        /* Time Card */
+        .time-card-counter {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            grid-column: 2 / span 1;
+            border-left: 4px solid var(--info);
+        }
+
+        .time-card-counter-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .time-card-counter-header i {
+            font-size: 1.25rem;
+            color: var(--info);
+        }
+
+        .time-card-counter-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--dark);
+        }
+
+        .time-card-counter-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .time-display-counter {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-counter {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            font-family: 'Courier New', monospace;
+        }
+
+        .am-pm-counter {
+            font-size: 1.25rem;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .date-display-counter {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .time-zone-counter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .time-zone-counter i {
+            color: var(--info);
+        }
+
+        /* Mini Stats Grid */
+        .mini-stats-grid-counter {
+            grid-column: 1 / span 2;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mini-stat-card-counter {
+            background: white;
+            border-radius: 10px;
+            padding: 1.25rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .mini-stat-card-counter:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .mini-stat-icon-counter {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 0 auto 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .mini-stat-icon-counter.active-counter {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+
+        .mini-stat-icon-counter.new-counter {
+            background: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+
+        .mini-stat-icon-counter.inactive-counter {
+            background: rgba(108, 117, 125, 0.1);
+            color: var(--gray);
+        }
+
+        .mini-stat-value-counter {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .mini-stat-label-counter {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card-counter, .time-card-counter {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .mini-stat-card-counter:nth-child(1) { animation: fadeIn 0.6s ease forwards; }
+        .mini-stat-card-counter:nth-child(2) { animation: fadeIn 0.7s ease forwards; }
+        .mini-stat-card-counter:nth-child(3) { animation: fadeIn 0.8s ease forwards; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .stats-container-counter {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card-counter, .time-card-counter {
+                grid-column: 1 / span 1;
+            }
+
+            .mini-stats-grid-counter {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card-counter-value {
+                font-size: 2rem;
+            }
+
+            .time-counter {
+                font-size: 2rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Live updating time
+        function updateClock() {
+            const now = new Date();
+
+            // Format time (HH:MM:SS)
+            let hours = now.getHours();
+            const amPm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('amPm').textContent = amPm;
+
+            // Format date (Weekday, Month Day, Year)
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Initialize and update every second
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        // Count-up animation for client numbers
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = value.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Animate the numbers on load
+        document.addEventListener('DOMContentLoaded', function() {
+            animateValue('clientCount', 0, {{ clientcount }}, 1000);
+            animateValue('activeClients', 0, 1248, 1000);
+            animateValue('newClients', 0, 87, 1000);
+            animateValue('inactiveClients', 0, 342, 1000);
+        });
+    </script>
+{% endblock %}

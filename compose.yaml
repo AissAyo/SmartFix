@@ -33,23 +33,29 @@ services:
       - "8000:8000"
     command: php-fpm
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - symfony
 
   mysql:
-    image: mysql
+    image: mysql:8.0
     platform: linux/x86_64
     command: --innodb-use-native-aio=${INNODB_USE_NATIVE_AIO:-1} --sql_mode=${SQL_MODE:-"ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"}
     environment:
-      MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: symfony
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartfix
     ports:
       - "3306:3306"
     volumes:
       - mysql:/var/lib/mysql:delegated
     networks:
       - symfony
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   myadmin:
     image: phpmyadmin/phpmyadmin:5
@@ -58,26 +64,67 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - symfony
     volumes:
       - db_admin_data:/var/www/html
+
   python:
-    image: fastapi-service:latest
     build:
-      context: ./infra/
-      dockerfile: ./python/Dockerfile
+      context: ./infra/python_service
+      dockerfile: Dockerfile
     ports:
-      - "8001:8000"
-    volumes:
-      - ./python_service:/app
+      - "8001:8001"
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - DB_NAME=smartfix
+    depends_on:
+      mysql:
+        condition: service_healthy
     networks:
-     - symfony
+      - symfony
+
+  mercure:
+    image: dunglas/mercure:v0.14
+    restart: unless-stopped
+    environment:
+      SERVER_NAME: ':80'
+      MERCURE_PUBLISHER_JWT_KEY: '8f97443755930bbd1f06032d2a07fc185387c187c23d227b254fa6b6bf715946'
+      MERCURE_SUBSCRIBER_JWT_KEY: '8f97443755930bbd1f06032d2a07fc185387c187c23d227b254fa6b6bf715946'
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins *
+        anonymous
+        subscriptions
+        publish_allowed_origins *
+        demo
+      ALLOW_ANONYMOUS: 1
+      CORS_ALLOWED_ORIGINS: "*"
+      USE_FORWARDED_HEADERS: 1
+    ports:
+      - "3000:80"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - mercure_data:/data
+      - mercure_config:/config
+    networks:
+      - symfony
+
 volumes:
   db_admin_data:
   mysql:
+  mercure_data:
+  mercure_config:
 
 networks:
   symfony:
     name: symfony
+    external: true

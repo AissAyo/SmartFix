@@ -6,8 +6,13 @@ use App\Repository\MechanicRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use App\Service\NotificationsService;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\GarageType;
+use App\Type\MechanicType;
+
+
 
 class MechanicProfileController extends AbstractController
 {
@@ -43,30 +48,36 @@ class MechanicProfileController extends AbstractController
 
         ]);
     }
-    #[Route('/edit/{id}', name: 'profile_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, EntityManagerInterface $em, Security $security, Mechanic $mechanic): Response
-    {
-        // 1. Récupérer l'utilisateur connecté (le garagiste)
-        $mechanic = $security->getUser(); 
+   
+    #[Route('/edit/{id}', name: 'mechanic_edit', methods: ['GET', 'POST'])]
+public function edit(
+    Request $request,
+    EntityManagerInterface $em,
+    MechanicRepository $mechanicRepository,
+    int $id
+): Response {
+    // Récupérer l'entité Mechanic par l'ID
+    $mechanic = $mechanicRepository->getEntityById($id);
 
-      
-
-        // 3. Créer le formulaire
-        $form = $this->createForm(GarageType::class, $mechanic);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-            $this->addFlash('success', 'profile updated!');
-            return $this->redirectToRoute('profile_show');
-           $this->addFlash('info', 'garage edited.');
-
-        }
-
-        // 5. Passer le formulaire à Twig
-        return $this->render('Admin/garage/edit.html.twig', [
-            'form' => $form->createView(),
-        ]);
+    if (!$mechanic) {
+        throw $this->createNotFoundException('Mécanicien non trouvé');
     }
 
+    // Créer le formulaire avec l'entité Mechanic
+    $form = $this->createForm(MechanicType::class, $mechanic);
+    $form->handleRequest($request);
+
+    // Si le formulaire est soumis et valide, enregistrer les données
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em->flush();  // Sauvegarder les modifications dans la base de données
+        $this->addFlash('success', 'Profile updated!');
+        return $this->redirectToRoute('profile_show', ['id' => $id]);  // Redirection après mise à jour
+    }
+
+    // Passer l'entité mechanic et le formulaire à Twig
+    return $this->render('mechanics/Edit_Profile.html.twig', [
+        'form' => $form->createView(),
+        'mechanic' => $mechanic,  // Ajouter la variable mechanic ici
+    ]);
+}
 }

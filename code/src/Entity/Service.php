@@ -5,46 +5,46 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use App\Entity\CategoryService;
 
 #[ORM\Entity]
+#[ORM\Table(name: "services")]
 class Service
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $Id;
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\Column(type: "integer")]
+    private int $id;
 
-    #[ORM\Column(type: 'string', length: 100)]
-    private string $serviceName;
+    #[ORM\Column(type: "string", length: 255)]
+    private string $name;
 
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
-    private ?string $serviceCode = null;
+    #[ORM\Column(type: "text")]
+    private string $description;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2 ,nullable: true)]
-    private string $prix;
+    #[ORM\Column(type: "decimal", precision: 10, scale: 2)]
+    private string $price;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $description = null;
-
-    #[ORM\Column(type: 'string', length: 20 ,nullable: true)]
+    #[ORM\Column(type: "string", length: 20)]
     private string $status;
 
-    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services')]
-    #[ORM\JoinColumn(nullable: false)]  // Optionally add this if categoryService cannot be null
+    #[ORM\ManyToOne(targetEntity: CategoryService::class, inversedBy: 'services', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
     private CategoryService $categoryService;
 
-
-    #[ORM\ManyToMany(targetEntity: Reservation::class, inversedBy: 'services')]
-    #[ORM\JoinTable(name: 'reservation_services')] // Define join table directly
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'service')]
     private Collection $reservations;
 
-
-
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+        $this->categoryService = new categoryService();
+    }
 
 
     public function getId(): int
     {
-        return $this->Id;
+        return $this->id;
     }
 
     public function isAvailable(): bool
@@ -54,44 +54,48 @@ class Service
 
     public function updatePrice(float $newPrice): void
     {
-        $this->prix = $newPrice;
+        $this->price = $newPrice;
     }
-    public function setServiceName(string $serviceName): self
+
+    public function setName(string $name): self
     {
-        $this->serviceName = $serviceName;
+        $this->name = $name;
 
         return $this;
     }
-    public function setPrix(float $prix): self
+
+
+    public function setPrice(float $price): self
     {
-        $this->prix = $prix;
+        $this->price = $price;
 
         return $this;
     }
+
+    public function getPrice(): string
+    {
+        return $this->price;
+    }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
+
     public function setStatus(string $status): self
     {
         $this->status = $status;
 
         return $this;
     }
-    public function getServiceCode(): ?string
+
+    public function getStatus(): string
     {
-        return $this->serviceCode;
+        return $this->status;
     }
 
-
-    public function setServiceCode(?string $serviceCode): self
-    {
-        $this->serviceCode = $serviceCode;
-
-        return $this;
-    }
     public function getCategoryService(): CategoryService
     {
         return $this->categoryService;
@@ -107,32 +111,38 @@ class Service
         return $this->serviceName;
     }
 
-    public function getPrix(): string
-    {
-        return $this->prix;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getStatus(): string
-    {
-        return $this->status;
-    }
-
     public function getReservations(): Collection
     {
         return $this->reservations;
     }
 
-
-    public function setReservations(Collection $reservations): self
+    public function addReservation(Reservation $reservation): self
     {
-        $this->reservations = $reservations;
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setService($this);
+        }
         return $this;
     }
 
+    public function removeReservation(Reservation $reservation): self
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getService() === $this) {
+                $reservation->setService(null);
+            }
+        }
+        return $this;
+    }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
 }

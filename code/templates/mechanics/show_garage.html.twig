@@ -1,108 +1,134 @@
-{% block title %}Ajouter un nouveau garage{% endblock %}
 
-{% block stylesheets %}
-    <style>
-        /* Style général de la page */
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+{% block container %}
 
-        /* Titre principal */
-        .title {
-            color: #D32F2F; /* Rouge */
-            font-size: 2em;
-            text-align: center;
-        }
-
-        /* Liste des garages avec Flexbox pour les afficher en ligne */
-        .garage-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            list-style-type: none;
-            padding: 0;
-        }
-
-        /* Chaque garage est un bloc de taille égale */
-        .garage-item {
-            background-color: #F5F5F5;
-            width: calc(33.333% - 20px); /* Chaque garage occupe un tiers de la largeur */
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            transition: background-color 0.3s ease;
-            box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
-        }
-
-        .garage-item:hover {
-            background-color: #E8E8E8;
-        }
-
-        /* Détails du garage */
-        .garage-info {
-            margin-bottom: 10px;
-        }
-
-        .email, .status, .rating {
-            font-weight: bold;
-        }
-
-        /* Bouton "Voir détails" */
-        .btn-primary {
-            background-color: #D32F2F; /* Rouge */
-            color: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 1em;
-        }
-
-        .btn-primary:hover {
-            background-color: #B71C1C; /* Rouge foncé */
-        }
-
-        /* Alerte */
-        .alert-warning {
-            color: #D32F2F;
-            background-color: #F8D7DA;
-            padding: 15px;
-            border-radius: 5px;
-        }
-
-        /* Responsivité : sur petits écrans, les garages prennent toute la largeur */
-        @media (max-width: 768px) {
-            .garage-item {
-                width: 100%; /* Un garage par ligne */
-            }
-        }
-    </style>
-{% endblock %}
-
-{% block content %}
-    <div class="container">
-        <h1 class="title">Garages de {{ mechanic.name }}</h1>
+        <h1 class="title"> {{ mechanic.name }}'s garages</h1>
 
         {% if garages is empty %}
-            <p class="alert alert-warning">Aucun garage trouvé pour ce mécanicien.</p>
+            <p class="alert-warning">Aucun garage trouvé pour ce mécanicien.</p>
         {% else %}
             <ul class="garage-list">
                 {% for garage in garages %}
                     <li class="garage-item">
                         <div class="garage-info">
-                            <strong>{{ garage.name }}</strong><br>
-                            Email : <span class="email">{{ garage.emailGarage }}</span><br>
-                            Status : <span class="status">{{ garage.status }}</span><br>
-                            Rating : <span class="rating">{{ garage.rating }}</span><br>
+                            <strong>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13l2-2m0 0l7-7 7 7M13 5v6h6" />
+                                </svg>
+                                {{ garage.name }}
+                            </strong>
+                            📧 Email : <span class="email">{{ garage.emailGarage }}</span><br>
+                            📊 Status : <span class="status">{{ garage.status }}</span><br>
+                            ⭐ Rating : <span class="rating">{{ garage.rating }}</span>
                         </div>
-                        <a href="{{ path('garage_show', {'id': garage.id}) }}" class="btn btn-primary">Voir détails</a>
+                        <a href="{{ path('garage_show', {'id': garage.id}) }}" class="btn-primary">Voir détails</a>
                     </li>
                 {% endfor %}
             </ul>
         {% endif %}
-    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #1E1E1E;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #D32F2F;
+        }
+
+        .garage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        .garage-item {
+            background-color: #2A2A2A;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .garage-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .garage-info {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .garage-info strong {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .garage-info svg {
+            width: 20px;
+            height: 20px;
+            stroke: #D32F2F;
+        }
+
+        .email, .status, .rating {
+            font-weight: bold;
+            color: #ccc;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: #D32F2F;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #B71C1C;
+        }
+
+        .alert-warning {
+            background-color: #2a0000;
+            color: #ff7b7b;
+            border-left: 5px solid #D32F2F;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 {% endblock %}

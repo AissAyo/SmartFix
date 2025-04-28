@@ -1,33 +1,36 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}SmartFix{% endblock %}</title>
-    {% block stylesheets %}
-      {# <link rel="stylesheet" href="{{ asset('build/app.css') }}"> #}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+            {% block head %}
+                    <meta charset="UTF-8">
+                    <title>{% block title %}Welcome To SmartFix!{% endblock %}</title>
+
+                    <link rel="icon" href="data:image/svg+xml,
+            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+                <text y='1.2em' font-size='96'>⚫️</text>
+                <text y='1.3em' x='0.2em' font-size='76' fill='#fff'>sf</text>
+            </svg>">
+            {% endblock %}
+
+            {% block stylesheets %}
+                    {{ encore_entry_link_tags('app') }}
+            {% endblock %}
+    </head>
+
+    <body>
+    {% block body %}
+            {% block header %}{% endblock %}
+            {% block darkmode %}{% endblock %}
+            {% block menu %}{% endblock %}
+            {% block container %}{% endblock %}
+            {% block chat %}{% endblock %}
+            {% block footer %}{% endblock %}
+
+
+            {% block javascripts %}
+                    {{ encore_entry_script_tags('app') }}
+                    {% block extra_javascripts %}{% endblock %}
+            {% endblock %}
     {% endblock %}
-  </head>
-  <body>
-    <header>
-      {% block header %}
-        <h1>SmartFix Platform</h1>
-      {% endblock %}
-    </header>
-
-    <main>
-      {% block body %}
-        <p>Default content.</p>
-      {% endblock %}
-    </main>
-
-    <footer>
-      {% block footer %}
-        <p>&copy; 2025 SmartFix</p>
-      {% endblock %}
-    </footer>
-
-    {% block javascripts %}
-      {# <script src="{{ asset('build/app.js') }}"></script> #}
-    {% endblock %}
-  </body>
-</html>
+    </body>
+    </html>
