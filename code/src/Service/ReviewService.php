@@ -59,4 +59,11 @@ class ReviewService
             throw new \Exception('Error creating review: ' . $e->getMessage());
         }
     }
+
+
+    public function getReviewsByGarage(int $garageId): array
+    {
+        return $this->reviewRepository->findReviewsByGarage($garageId);
+    }
+
 }

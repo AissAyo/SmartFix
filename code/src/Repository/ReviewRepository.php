@@ -23,4 +23,19 @@ class ReviewRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findReviewsByGarage(int $garageId): array
+    {
+        return $this->createQueryBuilder('r')
+            ->join('r.reservation', 'res')
+            ->join('res.service', 's')
+            ->join('res.vehicle', 'v')
+            ->join('v.client', 'c')
+            ->join('s.categoryService', 'cs')
+            ->join('cs.garage', 'g')
+            ->where('g.id = :garageId')
+            ->setParameter('garageId', $garageId)
+            ->getQuery()
+            ->getResult();
+    }
+
 }
