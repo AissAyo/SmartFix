@@ -5,11 +5,19 @@
             <ul>
                 {% if isLoggedIn %}
                     <li><a href="{{ path('app_logout') }}">Logout</a></li>
+                      {% if isClient %}
+                          <li><a href="{{ path('app_history_client') }}">My reservations</a> <span class="value"></span></li>
+                      {% elseif isMechanic %}
+
+
+                      {% endif %}
+
                 {% else %}
-                    <li><a href="{{ path('app_login') }}">Login</a></li>
+                    <li><a href="{{ path('app_login') }}">Login as Client</a></li>
+                    <li><a href="#">sign up as Client</a></li>
+                    <li><a href="#">Login as Mechanic</a></li>
+                    <li><a href="#">sign up as Mechanic</a></li>
                 {% endif %}
-                <li><a href="shop-product.html">My commands</a> <span class="value"></span></li>
-                <li><a href="{{ path('app_history_client') }}">My reservations</a> <span class="value"></span></li>
 
             </ul>
 

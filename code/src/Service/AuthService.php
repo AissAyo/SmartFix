@@ -12,6 +12,8 @@ use App\Entity\Garagiste;
 use App\Entity\mechanic;
 use App\Entity\ServiceClient;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 
 class AuthService
@@ -54,7 +56,10 @@ class AuthService
         $session->set('user', [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'type' => $user instanceof Client ? 'client' : ($user instanceof Admin ? 'admin' : 'other')
+            'type' => $user instanceof Client ? 'client'
+                : ($user instanceof Admin ? 'admin'
+                    : ($user instanceof Mechanic ? 'mechanic'
+                        : 'other'))
         ]);
     }
 
@@ -86,10 +91,19 @@ class AuthService
         $user = $this->getUser();
         return $user ? get_class($user) : null;
     }
+    public function getUserTypeFromSession(): ?string
+    {
+        $session = $this->requestStack->getSession();
+        $userData = $session->get('user');
+
+        return $userData['type'] ?? null;
+    }
+
 
     public function isAdmin(): bool
     {
-        return $this->getUserType() === 'admin';
+        $type = $this->getUserTypeFromSession();
+        return $type === 'admin';
     }
 
     public function isClientService(): bool
@@ -97,13 +111,15 @@ class AuthService
         return $this->getUserType() === 'clientService';
     }
 
-    public function isGaragiste(): bool
+    public function isMechanic(): bool
     {
-        return $this->getUserType() === 'garagiste';
+        $type = $this->getUserTypeFromSession();
+        return $type === 'mechanic';
     }
 
     public function isClient(): bool
     {
-        return $this->getUserType() === 'client';
+        $type = $this->getUserTypeFromSession();
+        return $type === 'client';
     }
 }
